@@ -7,7 +7,7 @@ using namespace std;
 
 int main(){
 
-    cout << "ã“ã‚“ã«ã¡ã¯" << endl;
+    cout << "‚±‚ñ‚É‚¿‚Í" << endl;
     cout << "AtCoder" << endl;
 
     return 0;
