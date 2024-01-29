@@ -1,0 +1,60 @@
+ユーザ名:Centaurus
+パスワード:Horiken2
+
+
+さらに詳しく知りたい方はAtCoderの始め方(動画) https://www.youtube.com/watch?v=GlIbjsEttaY
+もしくはAtCoderの始め方(スライド) https://img.atcoder.jp/file/introduction_atcoder.pdf
+をご覧ください。
+
+問題を解いてプログラムの提出する方法
+https://atcoder.jp/contests/practice をご覧ください。
+プログラミングが全くできない人は、まずはC++の学習から始めましょう。AtCoder Programming Guide for Beginnersで勉強しましょう。
+
+プログラミングは出来るけど、何をすれば良いか分からない人は、AtCoder Beginners Selectionから、まずいくつかの問題を解いてみましょう。
+
+AtCoder Problems (有志による非公式サイト)を使うと、過去に解いた問題などを簡単に確認できます。
+
+AtCoderチャンネルで解説放送の録画を視聴することができます。
+
+
+
+1. # 過去問の傾向把握(11問)
+AtCoder Beginner Selection
+https://atcoder.jp/contests/abs
+
+2. # 過去問
+AtCoder Problems
+https://kenkoooo.com/atcoder/
+
+3. # コンテスト参加
+AtCoder Beginner Contest (通称 ABC、初級者向け)
+AtCoder Regular Contest (通称 ARC、中上級者向け)
+AtCoder Grand Contest (通称 AGC、あらゆる層向けだが最上級者も楽しめる内容)
+
+開催日時 : https://atcoder.jp/contests/
+
+
+
+
+# 非情報系学生のためのC/C++
+https://brain.cc.kogakuin.ac.jp/%7Ekanamaru/lecture/prog1/
+
+# 現役高校生がレッドコーダーになるためにやったこと
+https://findy-code.io/engineer-lab/redcoder
+
+
+# レッドコーダーが教える上達方法
+https://qiita.com/e869120/items/f1c6f98364d1443148b3#1-3-%E6%97%A9%E9%80%9F%E7%AB%B6%E3%83%97%E3%83%AD%E3%82%92%E5%A7%8B%E3%82%81%E3%81%A6%E3%81%BF%E3%82%88%E3%81%86
+
+# Aizu Online Judge (AOJ)
+    https://judge.u-aizu.ac.jp/onlinejudge/register.jsp
+    →採点してくれる？
+
+    http://judge.u-aizu.ac.jp/onlinejudge/finder.jsp?course=ITP1
+    # ITP1_1-A から ITP1_10-D までの 40 問を解くことをお勧めします。
+    茶色コーダーになるために必要なプログラミング言語の知識
+    茶色コーダーになるために必要なアルゴリズムの知識（全探索やシミュレーションなど）
+
+# APG4b
+    https://atcoder.jp/contests/apg4b/tasks/APG4b_b
+    # 採点してくれる
