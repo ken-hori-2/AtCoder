@@ -3,12 +3,13 @@
 
 # 基本的な手順
     # リモートリポジトリを先に作った場合
-        github上でリポジトリ作成 & url取得
-        git clone ~ # git init & git remote add ~ も含まれる気がする
+        <github上でリポジトリ作成 & url取得>
+        * git clone https://github.com/ken-hori-2/AtCoder.git
+        * git init & git remote add ~ も含まれる気がする
     # ローカルリポジトリを先に作った場合
         git init
         ~
-        git remote add origin git@github.com:ken-hori-2/{リモートリポジトリ名}.git # リモートリポジトリをoriginに設定
+        git remote add origin git@github.com:ken-hori-2/AtCoder.git # リモートリポジトリをoriginに設定
     
     # 以降は以下のコマンドを参考に実行
 
@@ -29,14 +30,12 @@ Requirementで列挙したライブラリなどのインストール方法を説
 pip install huga_package
 ```
 
-# Usage
-
-DEMOの実行方法など、"hoge"の基本的な使い方を説明する
+<!-- # Usage
 
 ```bash
 git clone https://github.com/ken-hori-2/AtCoder.git
 cd AtCoder
-```
+``` -->
 
 <!-- # Note -->
 
