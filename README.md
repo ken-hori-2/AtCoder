@@ -117,6 +117,7 @@ git push origin -f # 強制的にアップロード(ローカルが正)
 
 <変更内容を最終コミットの時点まで戻す> -->
 基本コマンド
+```bash
 1. git status # gitで管理している/していないファイルを確認
     > 緑色の状態 : ステージング(ファイルがgitの管理下にある状態)されている
 2. git add . # 全てのファイルをステージング (指定ファイルをgitで管理する)
@@ -124,18 +125,25 @@ git push origin -f # 強制的にアップロード(ローカルが正)
 
 4. git log # 何時何分に誰がコミットしたかわかる
 5. git push origin main # 保存したコミットをアップロード
+```
 
 最新情報をダウンロード
+```bash
 1. git pull origin
     > リモートリポジトリの最新情報をローカルに保存
+```
+
 
 ブランチの作成
+```bash
 1. git branch {ブランチ名} # ブランチの作成
 2. git checkout {ブランチ名} # 現在のブランチを切り替える
 3. git branch # ブランチ一覧を表示
     > 緑色が現在のブランチ
+```
 
 マージ
+```bash
 1. git merge {マージしたいブランチ名} # マージ先のブランチに移動する
     > mainにdevelopをマージさせたい場合 : mainに移動して "git merge develop"
     > mergeはコマンドでやる方法
@@ -161,12 +169,15 @@ git push origin -f # 強制的にアップロード(ローカルが正)
         3. git commit -m "コメント"
 
 5. git push origin # リモートにアップロード
+```
 
 上記の機能に加えて歴史を改ざん
+```bash
 1. git fetch origin
 2. git rebase origin/{ブランチ名} {ブランチ名} # origin/{ブランチ名}を {ブランチ名}にリベースする
 3. git push origin -f # 強制的にアップロード(ローカルが正)
     >綺麗な一直線に歴史を改ざんできる
+```
 
 
 変更内容を最終コミットの時点まで戻す
@@ -178,6 +189,7 @@ git push origin -f # 強制的にアップロード(ローカルが正)
 2. git checkout {ブランチ名}
 3. git stash pop # メモリ上に保存していた変更点を現在のブランチ上に追加 -->
 
+```bash
 単純に変更取り消し
 1. git reset --hard HEAD
 
@@ -220,6 +232,7 @@ git push origin -f # 強制的にアップロード(ローカルが正)
     1. git stash # resetと同じ様に変更部分を取り消し + メモリ上に保存 
     2. git checkout branch名
     3. git stash pop # メモリ上に保存していた変更点を現在のブランチ上に追加
+```
 
 
 # まとめ
