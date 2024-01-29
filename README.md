@@ -12,14 +12,14 @@
     
     # 以降は以下のコマンドを参考に実行
 
-# Features
+<!-- # Features
 
-"hoge"のセールスポイントや差別化などを説明する
+"hoge"のセールスポイントや差別化などを説明する -->
 
 # Requirement
 
-* huga 3.5.2
-* hogehuga 1.0.2
+* git version 2.39.3 (Apple Git-145)
+* Python 3.8.8
 
 # Installation
 
@@ -122,7 +122,7 @@ cd AtCoder
     ※ 自分の変更箇所以外の歴史(pull時のベース部分)リモートの最新状態に更新してくれる
     ※ ただし、自分の変更点と同じ箇所が変わっている場合は、以下のコンフリクトの対処法を行う
 
-# コンフリクトする...共同開発で同じファイルの同じ行を編集してpushしようとした場合
+    # コンフリクトする...共同開発で同じファイルの同じ行を編集してpushしようとした場合
 
     # 要はリモート側にpushされた "同じ部分の異なる変更" のどっちが正しいのか見分けがついていない状態
 
@@ -149,6 +149,11 @@ cd AtCoder
 
 # License
 
-"hoge" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
+<!-- "hoge" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
 
-"hoge" is Confidential.
+"hoge" is Confidential. -->
+
+# 参考資料
+```bash
+AtCoder_memo.txt
+```
