@@ -144,7 +144,7 @@ cd AtCoder
 
 * 作成者 ken
 * 所属
-* E-mail stmuymte@gmail.com
+* E-mail
 
 # License
 
