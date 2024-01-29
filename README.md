@@ -29,7 +29,7 @@ git clone https://github.com/ken-hori-2/AtCoder.git
 ```bash
 git init
 ```
-~
+ > ~ (git add . / commit)
 ```bash
 git remote add origin git@github.com:ken-hori-2/AtCoder.git # リモートリポジトリをoriginに設定
 ```
