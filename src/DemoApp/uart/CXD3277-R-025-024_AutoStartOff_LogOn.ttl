@@ -1,0 +1,71 @@
+DVNAME = 'CXD3277-R-025-024'
+DVPOS  = 'right'
+DVPAD  = 'B0:97:9F:60:CF:DF'
+DVGAD  = '1'
+DVOIA  = '0xFE21C9DCED9E'
+DVOIAT = '1'
+DVSIA  = '0xDFCF609F97B0'
+DVSIAT = '1'
+DVSIRK = '0x56C3D2EF 0xA51401A0 0x1B97666E 0xA0867D7C'
+NSH    = 'nsh>'
+timeout = 1
+enablekeyb 0
+LOGNAME = DVNAME
+strconcat LOGNAME '.log'
+logopen LOGNAME
+getdir CURDIR
+logwrite 'Directory   '
+logwrite CURDIR
+logwrite #13
+logwrite 'Device Name : '
+logwrite DVNAME
+logwrite #13
+getdate DATESTR
+gettime TIMESTR
+logwrite 'Date/Time  :'
+logwrite DATESTR
+logwrite '/'
+logwrite TIMESTR
+logwrite #13
+logwrite #13
+sendln 'setprop -f initapp cmdif_start'
+wait 'nsh>'
+sendln 'reboot'
+wait 'NuttShell (NSH)'
+wait 'nsh>'
+sendln 'setprop pst.device_name ' DVNAME
+wait 'nsh>'
+sendln 'setprop pst.tws_position ' DVPOS
+wait 'nsh>'
+sendln 'setprop pst.tws_pair_address ' DVPAD
+wait 'nsh>'
+sendln 'setprop pst.use_gaf_advertise ' DVGAD
+wait 'nsh>'
+sendln 'setprop ble_debug_ownbdadr'
+wait 'nsh>'
+sendln 'setprop ble_debug_lrbdadr'
+wait 'nsh>'
+sendln 'fd ble_binprop set own_identity_address ' DVOIA
+wait 'nsh>'
+sendln 'fd ble_binprop set own_identity_address_type ' DVOIAT
+wait 'nsh>'
+sendln 'fd ble_binprop set lr_set_identity_address ' DVSIA
+wait 'nsh>'
+sendln 'fd ble_binprop set lr_set_identity_address_type ' DVSIAT
+wait 'nsh>'
+sendln 'fd ble_binprop set own_sirk ' DVSIRK
+wait 'nsh>'
+sendln 'setprop -f'
+wait 'nsh>'
+sendln 'reboot'
+wait 'NuttShell (NSH)'
+wait 'nsh>'
+sendln 'setprop log_path 1'
+wait 'nsh>'
+sendln 'pstlog on'
+wait 'nsh>'
+sendln 'system_server &'
+wait 'nsh>'
+logclose
+enablekeyb 1
+end
