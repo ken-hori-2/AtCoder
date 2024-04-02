@@ -11,8 +11,8 @@ from dotenv import load_dotenv
 # .envファイルの内容を読み込見込む
 load_dotenv()
 # os.environを用いて環境変数を表示させます
-print(os.environ['API_KEY'])
-key = os.environ['API_KEY']
+print(os.environ['OpenAI_API_KEY'])
+key = os.environ['OpenAI_API_KEY']
 
 ##############
 # 音声認識関数 #
@@ -115,8 +115,16 @@ if __name__ == '__main__':
     # UserとChatGPTとの会話履歴を格納するリスト
     conversationHistory = []
     # setting = {"role": "system", "content": "句読点と読点を多く含めて応答するようにして下さい。また、1文あたりが長くならないようにして下さい。"}
+    # 通常バージョン
     setting = {"role": "system", "content": "句読点と読点を多く含めて応答するようにして下さい。また、1文あたりが長くならないようにして下さい。100文字以内でお願いします。"}
+    # 箇条書きバージョン
+    setting = {"role": "system", "content": "句読点と読点を多く含めて箇条書きで応答するようにして下さい。また、1文あたりが長くならないようにして下さい。100文字以内でお願いします。"}
     
+    # 2024/04/02 追加(試しに追加)
+    # 最初に設定を入力
+    # conversationHistory.append(setting)
+    # 2024/04/02 追加(試しに追加)
+
     ##################
     # Pyttsx3を初期化 #
     ##################
@@ -130,16 +138,20 @@ if __name__ == '__main__':
     # Ctrl-Cで中断されるまでChatGPT音声アシスタントを起動
     while True:
         
-        engine.say("Detect Combo !!")
+        # engine.say("Detect Combo !!")
+        engine.say("Detect Gesture Combination !!")
         engine.say("Please speak now")
         engine.runAndWait()
+        
         # 音声認識関数の呼び出し
-        text = recognize_speech()
+        # text = recognize_speech()
+        
+        # 定型文(プリセット)にする場合
         # text = "以下の条件の下でおいしい食べ物を教えてください。\
         #     \n条件1:和食 \
         #     \n条件2:甘い"
-        
-        # text = "本厚木駅周辺のお店 おいしいところ探して"
+        text = "本厚木駅周辺のお店 おいしいところ探して"
+        # text = "本厚木駅からみなとみらいまでの経路を教えて"
 
         if text:
             print(" >> Waiting for response from ChatGPT...")
@@ -153,7 +165,9 @@ if __name__ == '__main__':
             # ChatGPTからの応答内容を会話履歴に追加
             chatGPT_responce = {"role": "assistant", "content": res}
             conversationHistory.append(chatGPT_responce) 
-            print(conversationHistory)
+            
+            # 対話の履歴を表示
+            # print(conversationHistory)
 
             # 1回で終了する場合
             break

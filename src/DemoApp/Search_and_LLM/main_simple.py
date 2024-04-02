@@ -10,7 +10,7 @@ g = Graph()
 # g.parse("path/to/your/file.ttl", format="turtle")
 
 import subprocess
-import serialstream
+# import serialstream
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 COM="COM8"
@@ -60,7 +60,35 @@ def serial_read():
         print(data)
 
 
- 
+# ***** シリアル通信テスト *****
+import traceback
+# データ送信関数
+def send_serial(cmd): # self, cmd): 
+
+    # print("send data : {0}".format(cmd))
+    try:
+        # 改行コードを必ずつけるために、1回削除して、送信時に再度付与する
+        cmd = cmd.rstrip()
+            # 改行コードを付与　文字列をバイナリに変換して送信
+        # self.uartport.write((cmd + "\n").encode("utf-8"))
+        ser.write((cmd + "\n").encode("utf-8"))
+        # ser.write((" Input Data : " + cmd + "\n").encode("utf-8"))
+    except serial.SerialException:
+        print(traceback.format_exc())
+# データ受信関数
+def receive_serial() : # self):
+
+    try:
+        # rcvdata = self.uartport.readline()
+        rcvdata = ser.readline()
+    except serial.SerialException:
+        print(traceback.format_exc())
+
+    # 受信したバイナリデータを文字列に変換　改行コードを削除
+    return rcvdata.decode("utf-8").rstrip() 
+# ***** シリアル通信テスト *****
+
+
 # 起動を簡単に
 run_comp = "dnnrt result RUNNING"
 # 組み合わせで起動
@@ -92,9 +120,18 @@ while True:
             if Mode == 0:
                 subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'c:/Users/0107409377/Downloads/API-App/PlaceAPI.py'])
             if Mode == 1:
-                subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'c:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/uart/search.py'])
+                subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'c:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/search.py'])
             if Mode == 2:
-                subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'c:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/uart/chatGPT.py'])
+                subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'c:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/chatGPT.py'])
             break
+
+    # ***** シリアル通信テスト *****
+    send_data = "Detected_COMBO_2024"
+    send_serial(send_data)
+    time.sleep(1)
+    read_data = receive_serial()
+    print("read data : ", read_data)
+    time.sleep(1)
+    # ***** シリアル通信テスト *****
  
 ser.close()
