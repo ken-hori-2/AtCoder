@@ -1,2 +1,5 @@
 # C++の練習
 # ChatGPTのAPIを使ったアプリ作成
+
+# 2024/04/05
+# Transformerの勉強
