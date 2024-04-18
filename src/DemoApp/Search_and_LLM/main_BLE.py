@@ -13,8 +13,8 @@ import subprocess
 # import serialstream
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-COM="COM8"
-# COM="COM13"
+# COM="COM8"
+COM="COM13" # 完全BLE接続にする場合、トランシーバー用基板に送信
 bitRate=115200
 
 ser = serial.Serial(COM, bitRate, timeout=0.1)
@@ -93,6 +93,8 @@ def receive_serial() : # self):
 # 起動を簡単に
 run_comp = "dnnrt result RUNNING"
 run_comp = "dnnrt result WALKING"
+run_comp = "Value = 0x02"
+
 # 組み合わせで起動
 # run_comp = "Hop Step Jump Process"
 

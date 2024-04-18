@@ -132,6 +132,15 @@ if __name__ == '__main__':
     # 読み上げの速度を設定する
     rate = engine.getProperty('rate')
     engine.setProperty('rate', rate)
+    # #rate デフォルト値は200
+    # rate = engine.getProperty('rate')
+    # engine.setProperty('rate',200)
+
+    #volume デフォルト値は1.0、設定は0.0~1.0
+    volume = engine.getProperty('volume')
+    engine.setProperty('volume',1.0)
+
+
     # Kyokoさんに喋ってもらう(日本語)
     engine.setProperty('voice', "com.apple.ttsbundle.Kyoko-premium")
 
@@ -140,18 +149,22 @@ if __name__ == '__main__':
         
         # engine.say("Detect Combo !!")
         engine.say("Detect Gesture Combination !!")
-        engine.say("Please speak now")
+        # engine.say("Please speak now")
+        # engine.say("Please speak to me in three seconds.")
+        engine.say("Please speak in three seconds.")
         engine.runAndWait()
         
         # 音声認識関数の呼び出し
-        # text = recognize_speech()
+        text = recognize_speech()
         
         # 定型文(プリセット)にする場合
         # text = "以下の条件の下でおいしい食べ物を教えてください。\
         #     \n条件1:和食 \
         #     \n条件2:甘い"
-        text = "本厚木駅周辺のお店 おいしいところ探して"
+        # text = "本厚木駅周辺のお店 おいしいところ探して"
         # text = "本厚木駅からみなとみらいまでの経路を教えて"
+        # text = "本厚木駅周辺のレストラン 三つ 教えて"
+        # text = "おいしいシチューの作り方教えて"
 
         if text:
             print(" >> Waiting for response from ChatGPT...")
@@ -169,7 +182,7 @@ if __name__ == '__main__':
             # 対話の履歴を表示
             # print(conversationHistory)
 
-            # 1回で終了する場合
+            # 1回で終了する場合 ... 今は一回で終了
             break
     
     engine.say("Guidance End")
