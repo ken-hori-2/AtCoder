@@ -10,6 +10,7 @@ using namespace std;
 
 namespace apps {
   namespace demo {
+    
     class ConvertDetectionResultToUint8 {
         private:
             std::string Name;
@@ -20,8 +21,9 @@ namespace apps {
             std::vector<uint8_t> GetData();
             ~ConvertDetectionResultToUint8();
     };
-    // 初期化
+    // 初期化 4回も呼ばれている
     ConvertDetectionResultToUint8::ConvertDetectionResultToUint8(std::string InputName, std::vector<uint8_t> InputData){ // コントラクタ
+        std::cout << "APPNAME::" << __func__ << " > Constructor" << std::endl;
         Name = InputName;
         Data = InputData;
     }
@@ -49,6 +51,7 @@ namespace apps {
     };
     // 初期化
     GATT_DATA::GATT_DATA(std::vector<uint8_t> data, uint8_t id, uint16_t data_size){ // コンストラクタ
+        std::cout << "APPNAME::" << __func__ << " > Constructor" << std::endl;
         send_data = data;
         connection_id = id;
         size = data_size;
@@ -63,7 +66,8 @@ namespace apps {
             {"Walking", {1}},
             {"Running", {2}},
             {"Other", {200}},
-        };
+        }; // 4要素あるので、4回コンストラクタが呼ばれている
+        
         std::string Name;
         std::vector<uint8_t> Data;
 
@@ -98,55 +102,63 @@ namespace apps {
 
     // int main(){
     // namespace DemoApp{ // or SensorApp
-    class DemoApp{ // or SensorApp
-
-        bool BLE(){
-            std::cout << "APPNAME::" << __func__ << std::endl;
-
-            int classification = 2; // Running検出想定
-
-            std::vector<uint8_t> send_data(1, 100); // 初期化時にデータを格納しないとうまく動かない // std::vector<uint8_t> send_data;
-            uint8_t connection_id = 1;
-            uint16_t size = 1;
-            std::string str = "";
-
-            // GATT_DATA gatt_dataset; // send_data, connection_id, size);
-            GATT_DATA gatt_dataset(send_data, connection_id, size);
-
-            if(classification == ACTION_CLASSIFICATION_RUNNING){
-                // // TWSS_RINFO(APPNAME"::%s dnnrt result RUNNING", __func__);
-                str = "Running"; // 試しに文字列
-                std::cout << "Running Detection" << std::endl;
-            }else{
-                // // TWSS_ERR(APPNAME"::%s Unknown classification received", __func__);
-                str = "Other";
-                std::cout << "Not Detection" << std::endl;
+    class DemoApp{ // struct DemoApp
+        public:
+            DemoApp(){
+                std::cout << "> Constructor" << std::endl;
+            }
+            ~DemoApp(){
+                std::cout << "> Destructor" << std::endl;
             }
 
-            // std::cout << "Init Data > send_data: " << *send_data.data() << std::endl; // うまく表示されない
-            printf("Init Data > send_data: %d\n", *send_data.data());
+            bool BLE(){
+                std::cout << "APPNAME::" << __func__ << std::endl;
+
+                int classification = 2; // Running検出想定
+
+                std::vector<uint8_t> send_data(1, 100); // 初期化時にデータを格納しないとうまく動かない // std::vector<uint8_t> send_data;
+                uint8_t connection_id = 1;
+                uint16_t size = 1;
+                std::string str = "";
+
+                // GATT_DATA gatt_dataset; // send_data, connection_id, size);
+                GATT_DATA gatt_dataset(send_data, connection_id, size);
+
+                if(classification == ACTION_CLASSIFICATION_RUNNING){
+                    // // TWSS_RINFO(APPNAME"::%s dnnrt result RUNNING", __func__);
+                    str = "Running"; // 試しに文字列
+                    std::cout << "Running Detection" << std::endl;
+                }else{
+                    // // TWSS_ERR(APPNAME"::%s Unknown classification received", __func__);
+                    str = "Other";
+                    std::cout << "Not Detection" << std::endl;
+                }
+
+                // std::cout << "Init Data > send_data: " << *send_data.data() << std::endl; // うまく表示されない
+                printf("Init Data > send_data: %d\n", *send_data.data());
 
 
-            // "**********"
-            // 検出結果にデータ書き換え
-            gatt_dataset.SendData_StrToUint8(str, connection_id, size); // ,     convert_table);
-            // "**********"
+                // "**********"
+                // 検出結果にデータ書き換え
+                gatt_dataset.SendData_StrToUint8(str, connection_id, size); // ,     convert_table);
+                // "**********"
 
 
-            std::cout << "*****" << std::endl;
-            // std::cout << "Result Data > status: " << *gatt_dataset.GetData() << std::endl; // うまく表示されない
-            printf("Result Data > send_data: %d\n", *gatt_dataset.GetData());
+                std::cout << "*****" << std::endl;
+                // std::cout << "Result Data > status: " << *gatt_dataset.GetData() << std::endl; // うまく表示されない
+                printf("Result Data > send_data: %d\n", *gatt_dataset.GetData());
 
-            return true;
-        }
-    }
+                return true;
+            }
+    };
 
   } // demo
 } // apps
 
 int main(){
     // bool status = apps::demo::DemoApp::BLE();
-    apps::demo::DemoApp test;
+    apps::demo::DemoApp test; // (); // コンストラクタ
     bool status = test.BLE();
     std::cout << "BLE status : " << status << std::endl;
+    // デストラクタ
 }
