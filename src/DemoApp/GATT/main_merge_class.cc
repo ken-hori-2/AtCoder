@@ -2,7 +2,7 @@
 using namespace std;
 
 #define ACTION_CLASSIFICATION_RUNNING 2
-#define NUMBER_OF_ACTION 3
+#define NUMBER_OF_ACTION 4 // Otherも入れると今は4つ // 3
 
 // main文内でClassを2つ実体化するパターン
 
