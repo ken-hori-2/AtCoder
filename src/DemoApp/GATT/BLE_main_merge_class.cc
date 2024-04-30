@@ -46,6 +46,8 @@ namespace apps {
             GATT_DATA(std::vector<uint8_t> data, uint8_t id, uint16_t data_size);
             void SendData_StrToUint8(std::string str, uint8_t id, uint16_t data_size); // ,     ConvertDetectionResultToUint8* convert_table);
             uint8_t* GetData();
+            uint8_t  GetID();
+            uint16_t GetSIZE();
             std::vector<uint8_t>* GetData_vector();
             ~GATT_DATA();
     };
@@ -90,6 +92,12 @@ namespace apps {
     }
     uint8_t* GATT_DATA::GetData(){
         return send_data.data();
+    }
+    uint8_t GATT_DATA::GetID(){
+        return connection_id;
+    }
+    uint16_t GATT_DATA::GetSIZE(){
+        return size;
     }
     std::vector<uint8_t>* GATT_DATA::GetData_vector(){ // 戻り値をベクター型にする場合
         return &send_data; // .data(); // &send_dataはベクター全体の先頭アドレスとして認識されるが、.data()は先頭のuint8_tのアドレスと認識されるからエラーになるのかも
@@ -147,6 +155,9 @@ namespace apps {
                 std::cout << "*****" << std::endl;
                 // std::cout << "Result Data > status: " << *gatt_dataset.GetData() << std::endl; // うまく表示されない
                 printf("Result Data > send_data: %d\n", *gatt_dataset.GetData());
+                printf("Result Data > send_data Data : %p\n", gatt_dataset.GetData());
+                printf("Result Data > send_data ID   : %d\n", gatt_dataset.GetID());
+                printf("Result Data > send_data SIZE : %d\n", gatt_dataset.GetSIZE());
 
                 return true;
             }
@@ -155,10 +166,22 @@ namespace apps {
   } // demo
 } // apps
 
+
+namespace apps{
+    namespace demo{
+        void callback(){
+            DemoApp test; // コンストラクタ
+            bool status = test.BLE();
+            std::cout << "BLE status : " << status << std::endl;
+        }                 // デストラクタ
+    }
+}
+
 int main(){
     // bool status = apps::demo::DemoApp::BLE();
-    apps::demo::DemoApp test; // (); // コンストラクタ
-    bool status = test.BLE();
-    std::cout << "BLE status : " << status << std::endl;
-    // デストラクタ
+    // apps::demo::DemoApp test; // (); // コンストラクタ
+    // bool status = test.BLE();
+    // std::cout << "BLE status : " << status << std::endl;
+    // // デストラクタ
+    apps::demo::callback();
 }

@@ -25,6 +25,7 @@ def get_search_results(query):
        "customsearch", 
        "v1", 
        developerKey = API_KEY
+    #    developerKey = CUSTOM_SEARCH_ENGINE_ID
    )
    
    # Google Custom Search から結果を取得
@@ -33,7 +34,7 @@ def get_search_results(query):
        q = query,
        cx = CUSTOM_SEARCH_ENGINE_ID,
        lr = 'lang_ja',
-       num = 10,
+       num = 1, # 10,
        start = 1
    ).execute()
 
@@ -51,7 +52,7 @@ def summarize_search_results(result):
    result_items = []
    
    # 今回は (start =) 1 個目の結果から (num =) 10 個の結果を取得した
-   for i in range(0, 10):
+   for i in range(0, 1): # 10):
        # i番目の検索結果の部分
        result_item = result_items_part[i]
        # i番目の検索結果からそれぞれの属性の情報をResultクラスに格納して
@@ -85,13 +86,13 @@ class SearchResult:
 
 
 
-#################################
-# Pyttsx3でレスポンス内容を読み上げ #
-#################################
-def text_to_speech(text):
-    # テキストを読み上げる
-    engine.say(text)
-    engine.runAndWait()
+# #################################
+# # Pyttsx3でレスポンス内容を読み上げ #
+# #################################
+# def text_to_speech(text):
+#     # テキストを読み上げる
+#     engine.say(text)
+#     engine.runAndWait()
 
 
 # メインプロセス       
@@ -108,29 +109,30 @@ if __name__ == '__main__':
     result_items_list = summarize_search_results(result) # result_items_list には SearchResult のリストが入る
 
     # コマンドラインに検索結果の情報を出力
-    # for i in range(0, 10):
-    #     print(result_items_list[i])
-    
-
-    
-    
-    
-    
-    
-    ##################
-    # Pyttsx3を初期化 #
-    ##################
-    engine = pyttsx3.init()
-    # 読み上げの速度を設定する
-    rate = engine.getProperty('rate')
-    engine.setProperty('rate', rate)
-    # Kyokoさんに喋ってもらう(日本語)
-    engine.setProperty('voice', "com.apple.ttsbundle.Kyoko-premium")
-
-    # コマンドラインに検索結果の情報を出力
-    for i in range(1): # 3): # 10):
+    for i in range(0, 1): # 10):
         print(result_items_list[i])
-        # 1文完成ごとにテキストを読み上げる(遅延時間短縮のため)
-        sentence = result_items_list[i]
-        engine.say(sentence)
-        engine.runAndWait()
+    
+    print(result)
+
+    
+    
+    
+    
+    
+    # ##################
+    # # Pyttsx3を初期化 #
+    # ##################
+    # engine = pyttsx3.init()
+    # # 読み上げの速度を設定する
+    # rate = engine.getProperty('rate')
+    # engine.setProperty('rate', rate)
+    # # Kyokoさんに喋ってもらう(日本語)
+    # engine.setProperty('voice', "com.apple.ttsbundle.Kyoko-premium")
+
+    # # コマンドラインに検索結果の情報を出力
+    # for i in range(1): # 3): # 10):
+    #     print(result_items_list[i])
+    #     # 1文完成ごとにテキストを読み上げる(遅延時間短縮のため)
+    #     sentence = result_items_list[i]
+    #     engine.say(sentence)
+    #     engine.runAndWait()

@@ -14,7 +14,10 @@ import subprocess
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 # COM="COM8"
-COM="COM13" # 完全BLE接続にする場合、トランシーバー用基板に送信
+# COM="COM13" # 完全BLE接続にする場合、トランシーバー用基板に送信
+# COM="COM11" # 完全BLE接続にする場合、トランシーバー用基板に送信
+COM="COM17" # 完全BLE接続にする場合、トランシーバー用基板に送信
+
 bitRate=115200
 
 ser = serial.Serial(COM, bitRate, timeout=0.1)
@@ -91,9 +94,11 @@ def receive_serial() : # self):
 
 
 # 起動を簡単に
-run_comp = "dnnrt result RUNNING"
-run_comp = "dnnrt result WALKING"
-run_comp = "Value = 0x02"
+# run_comp = "dnnrt result RUNNING"
+# run_comp = "dnnrt result WALKING"
+run_comp_running = "Value = 0x02"
+run_comp_walking = "Value = 0x01"
+run_comp_stable = "Value = 0x00"
 
 # 組み合わせで起動
 # run_comp = "Hop Step Jump Process"
@@ -114,7 +119,7 @@ run_comp = "Value = 0x02"
 # Mode 4 : Google検索 & ガイダンス
 # Mode 5 : 音声認識 & ChatGPT & ガイダンス
 
-Mode = 6 # 2 # 1 # 0
+Mode = 7 # 6 # 2 # 1 # 0
 
 
 DETECT_COUNT = 0
@@ -125,7 +130,8 @@ while True:
     RecieveData = L_RecieveData.decode()
     print(RecieveData)
     
-    if run_comp in RecieveData:
+    # if run_comp_running in RecieveData:
+    if (run_comp_running in RecieveData): #  or (run_comp_walking in RecieveData): # RUNNING or WALKING で実行
         print("**********")
         # print("Detected RUNNING !!!!!")
         # print("Detected COMBO !!!!!")
@@ -145,8 +151,28 @@ while True:
                 subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Downloads/API-App/DirectionsAPI.py'])
             if Mode == 5:
                 subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Google_serch_Guidance.py'])
+            
+            # LLM Only
             if Mode == 6:
                 subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/ChatGPT.py'])
+            # LLM Schedule
+            if Mode == 7:
+                subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Schedule_and_Outlook_mask_data.py'])
+                # ここでパワポにまとめたり
+                # メールに添付して送信
+                # のコードを記述する？ -> 上記のコード内に記述すればテキストを引き継げる
+                # subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Outlook_Schedule/PowerPoint.py'])
+            # LLM Route Guidance(経路検索は別の経路案内APIから取得予定)
+            if Mode == 8:
+                subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/LLM_RouteGuidance.py'])
+            
+            # Spotify
+            # if Mode == 8:
+            #     print("********** Mode 8 **********")
+            #     if run_comp_running in RecieveData: # HOUSE MUSIC を再生
+            #         subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/ActionDetection_Play.py', 'RUNNING'])
+            #     if run_comp_walking in RecieveData: # J-POP を再生
+            #         subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/ActionDetection_Play.py', 'WALKING'])
             
             # DETECT_COUNT = 0
             # break
@@ -156,6 +182,11 @@ while True:
                 RecieveData = L_RecieveData.decode()
                 print(RecieveData)
             DETECT_COUNT = 0
+    
+    # "今はRUNNINGとWALKINGの時しか送信していないので送信できない"
+    # # Spotify一時停止用に追加
+    # if run_comp_stable in RecieveData: # HOUSE MUSIC を再生
+    #     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/ActionDetection_Play.py', 'STABLE'])
 
     # ***** シリアル通信テスト *****
     # send_data = "Detected_COMBO_2024"
