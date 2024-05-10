@@ -1,4 +1,0 @@
-# api keys
-.env
-# .envファイルをgitの管理対象から外す
-.secret/

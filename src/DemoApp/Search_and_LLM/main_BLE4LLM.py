@@ -119,7 +119,7 @@ run_comp_stable = "Value = 0x00"
 # Mode 4 : Google検索 & ガイダンス
 # Mode 5 : 音声認識 & ChatGPT & ガイダンス
 
-Mode = 7 # 6 # 2 # 1 # 0
+Mode = 7 # 8
 
 
 DETECT_COUNT = 0
@@ -135,7 +135,8 @@ while True:
         print("**********")
         # print("Detected RUNNING !!!!!")
         # print("Detected COMBO !!!!!")
-        print("Detected WALKING !!!!!")
+        # print("Detected WALKING !!!!!")
+        print("Detected Gesture !!!!!")
         DETECT_COUNT += 1
 
         if DETECT_COUNT > 3: # 20:
@@ -164,7 +165,7 @@ while True:
                 # subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Outlook_Schedule/PowerPoint.py'])
             # LLM Route Guidance(経路検索は別の経路案内APIから取得予定)
             if Mode == 8:
-                subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/LLM_RouteGuidance.py'])
+                subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/RouteSearch_API/LLM_RouteGuidance.py']) # C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/LLM_RouteGuidance.py'])
             
             # Spotify
             # if Mode == 8:

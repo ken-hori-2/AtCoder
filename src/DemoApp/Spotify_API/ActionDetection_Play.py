@@ -16,6 +16,10 @@ load_dotenv()
 
 
 # ActionDetection をトリガーとした 楽曲再生のコード
+"""
+2024/05/09 追加
+Langchain-ChatGPT/Spotify/spotify_Lib.pyの方がまとまっているコード
+"""
 
 
 
@@ -27,6 +31,8 @@ username = os.environ['UserName']
 scope = 'user-read-playback-state,playlist-read-private,user-modify-playback-state,playlist-modify-public'
 client_id = os.environ['Client_ID'] # ここに自分の client ID'
 client_secret = os.environ['Client_Secret'] # ここに自分の client seret'
+# client_id = os.environ['SPOTIFY_USER_ID'] # Client_ID'] # ここに自分の client ID'
+# client_secret = os.environ['SPOTIFY_TOKEN'] # Client_Secret'] # ここに自分の client seret'
 redirect_uri = 'http://localhost:8888/callback'
 
 # search_str = 'YOASOBI' # sys.argv[1] # 実行時の引数でキーワード入力

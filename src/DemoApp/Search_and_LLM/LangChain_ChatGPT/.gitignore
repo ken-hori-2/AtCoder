@@ -1,0 +1,10 @@
+# api keys
+# .env
+# .envファイルをgitの管理対象から外す
+# /WebAPI/**
+
+# こっちでもいいが
+# WebAPI/Secret/**
+
+# こっちでも大丈夫
+Secret/

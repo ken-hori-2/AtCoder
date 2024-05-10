@@ -10,9 +10,9 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 from dotenv import load_dotenv
 # .envファイルの内容を読み込見込む
 load_dotenv()
-# os.environを用いて環境変数を表示させます
-print(os.environ['OpenAI_API_KEY'])
-key = os.environ['OpenAI_API_KEY']
+# # os.environを用いて環境変数を表示させます
+# print(os.environ['OpenAI_API_KEY'])
+# key = os.environ['OpenAI_API_KEY']
 
 ##############
 # 音声認識関数 #
@@ -111,7 +111,7 @@ if __name__ == '__main__':
     ##################
     # ChatGPTの初期化 #
     ##################
-    openai.api_key=key # 自身のAPIキーを指定"
+    # openai.api_key=key # 自身のAPIキーを指定"
     # UserとChatGPTとの会話履歴を格納するリスト
     conversationHistory = []
     # setting = {"role": "system", "content": "句読点と読点を多く含めて応答するようにして下さい。また、1文あたりが長くならないようにして下さい。"}
@@ -161,8 +161,8 @@ if __name__ == '__main__':
 
     # ダミーデータ
     i = 0
-    work = ['A社と会議', 'Bさんと面談', 'Cの開発定例', 'D社との商談', 'Eさんの資料のレビュー', 'Fチーム定例会', 'Gチーム戦略会議', 'H部定例', 'I課定例']
-    room = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+    work = ['A社と会議', 'Bさんと面談', 'Cの開発定例', 'D社との商談', 'Eさんの資料のレビュー', 'Fチーム定例会', 'Gチーム戦略会議', 'H部定例', 'I課定例', 'J退勤', 'Kジム']
+    room = ['会議室A', '会議室B', 'TeamsC', '会議室D', 'TeamsE', 'TeamsF', '会議室G', '会議室H', 'ITeams', '移動中J', 'ジムK']
     for select_item in select_items:
         # print("件名：", select_item.subject)
         print(f"件名：予定 {work[i]}")  # 社外秘情報は伏せる
@@ -254,6 +254,9 @@ if __name__ == '__main__':
         # text = pre_Info + "今日の午後の予定は何ですか？\n時間と場所も教えて。"
         # text = pre_Info + text_speach
 
+        # 2024/05/09 追加
+        text += "直近に必要な情報のみ簡潔に教えてください。"
+
         if text:
             print(" >> Waiting for response from ChatGPT...")
             # ユーザーからの発話内容を会話履歴に追加
@@ -288,7 +291,7 @@ if __name__ == '__main__':
     # "メールに添付して送信"
     # subprocess.run([f'C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Outlook_Schedule/Outlook_Schedule/Mail.py'])
     
-    "引数での渡し方がわからなかったので、代替のやり方"
+    "引数での渡し方がわからなかったので、代替のやり方（直接ここにパワポ作成の処理を書く）"
     from pptx import Presentation
     prs=Presentation()
     from pptx.chart.data import CategoryChartData
