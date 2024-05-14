@@ -8,7 +8,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.')) # '.\\')) # './'))
 
 
 # sys.path.append(os.path.join(os.path.dirname(__file__), '../LangChain_ChatGPT/WebAPI'))
-print(sys.path)
+# print(sys.path)
 # sys.path.append(os.path.join(os.path.dirname(__file__), 'C:\\Users\\0107409377\\Desktop\\code\\AtCoder\\src\\DemoApp\\Search_and_LLM\\LangChain_ChatGPT\\WebAPI'))
 
 # sys.path.append(os.path.join(os.path.dirname(__file__), './Search_and_LLM'))
@@ -108,11 +108,11 @@ class Langchain4Judge():
         """
         天気用のツール（二つ目なので現在使っていない）
         """
-        chain_open_meteo = APIChain.from_llm_and_api_docs(
-            llm,
-            open_meteo_docs.OPEN_METEO_DOCS,
-            limit_to_domains=["https://api.open-meteo.com/"],
-        )
+        # chain_open_meteo = APIChain.from_llm_and_api_docs(
+        #     llm,
+        #     open_meteo_docs.OPEN_METEO_DOCS,
+        #     limit_to_domains=["https://api.open-meteo.com/"],
+        # )
         """
         NEWS用のツール 2024/05/05
         """
@@ -156,12 +156,12 @@ class Langchain4Judge():
             ),
             # 天気
             OpenWeatherMapQueryRun(),
-            # こっちの天気でもできる
-            Tool(
-                name="Open-Meteo-API",
-                description="Useful for when you want to get weather information from the OpenMeteo API. The input should be a question in natural language that this API can answer.",
-                func=chain_open_meteo.run,
-            ),
+            # # こっちの天気でもできる
+            # Tool(
+            #     name="Open-Meteo-API",
+            #     description="Useful for when you want to get weather information from the OpenMeteo API. The input should be a question in natural language that this API can answer.",
+            #     func=chain_open_meteo.run,
+            # ),
             WikipediaQueryRun(),
             Tool(
                 name = "Calendar",
@@ -231,7 +231,7 @@ class Langchain4Judge():
 
         return agent
     
-    def output(self, response):
+    def output(self): # , response):
         from langchain import PromptTemplate, LLMChain
         # Memory: メモリ上に会話を記録する設定
         memory_key = "chat_history"
@@ -270,7 +270,10 @@ class Langchain4Judge():
         )
         # 実行①
         # user_input = "次の文をリスト形式ではなく、[]や\{\}のない多仇の文字列にしてください。\n" + response # "What is the Japanese word for mountain？"
-        user_input = f"あなたは'PLAYBACK'または'OTHER'のどちらかで回答しなければならない。{response['output']}の文からは楽曲再生、停止などの操作を実行してると思いますか？\n楽曲操作を実行している場合は、'PLAYBACK'、楽曲操作以外を実行している場合は'OTHER'と回答してください。"
+        
+        
+        # 現在は使っていない
+        # user_input = f"あなたは'PLAYBACK'または'OTHER'のどちらかで回答しなければならない。{response['output']}の文からは楽曲再生、停止などの操作を実行してると思いますか？\n楽曲操作を実行している場合は、'PLAYBACK'、楽曲操作以外を実行している場合は'OTHER'と回答してください。"
         """
         LLM 2個目
         """

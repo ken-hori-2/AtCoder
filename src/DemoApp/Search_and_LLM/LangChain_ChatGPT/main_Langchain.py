@@ -138,11 +138,11 @@ tools = [
     # 天気
     OpenWeatherMapQueryRun(),
     # こっちの天気でもできる
-    Tool(
-        name="Open-Meteo-API",
-        description="Useful for when you want to get weather information from the OpenMeteo API. The input should be a question in natural language that this API can answer.",
-        func=chain_open_meteo.run,
-    ),
+    # Tool(
+    #     name="Open-Meteo-API",
+    #     description="Useful for when you want to get weather information from the OpenMeteo API. The input should be a question in natural language that this API can answer.",
+    #     func=chain_open_meteo.run,
+    # ),
     WikipediaQueryRun(),
     Tool(
         name = "Calendar",
@@ -269,6 +269,8 @@ Schedule
 # agent.invoke("徳川家康とはどんな人ですか？")
 # agent.invoke("Googleの直近の株価が知りたい")
 
+question = "品川の天気を教えて。" # "品川付近の天気を教えて。"(付近をつけると日本語入力されてエラーになる)
+
 """
 Output
 """
@@ -287,68 +289,70 @@ response = agent.invoke(question) # できた(その後エラーはあるが)
 # text_to_speach(response['output'])
 
 
+isUse = False
 
-from langchain import HuggingFacePipeline, PromptTemplate, LLMChain
-# Memory: メモリ上に会話を記録する設定
-memory_key = "chat_history"
-memory = ConversationBufferMemory(memory_key=memory_key, ai_prefix="")
+if isUse:
+    from langchain import HuggingFacePipeline, PromptTemplate, LLMChain
+    # Memory: メモリ上に会話を記録する設定
+    memory_key = "chat_history"
+    memory = ConversationBufferMemory(memory_key=memory_key, ai_prefix="")
 
-# Prompts: プロンプトを作成。会話履歴もinput_variablesとして指定する
-template = """
-You are an AI who responds to user Input.
-Please provide an answer to the human's question.
-Additonaly, you are having a conversation with a human based on past interactions.
+    # Prompts: プロンプトを作成。会話履歴もinput_variablesとして指定する
+    template = """
+    You are an AI who responds to user Input.
+    Please provide an answer to the human's question.
+    Additonaly, you are having a conversation with a human based on past interactions.
 
-From now on, you must communicate in Japanese.
+    From now on, you must communicate in Japanese.
 
-### 解答例
-Human: やあ！
-GPT(AI) Answer: こんにちは！
+    ### 解答例
+    Human: やあ！
+    GPT(AI) Answer: こんにちは！
 
-### 以前のチャット履歴
-{chat_history}
+    ### 以前のチャット履歴
+    {chat_history}
 
-### 
-Human:{input}
-"""
-# templateに追加してもいいかも
-# "あなたはリスト形式などではなく、また、カギかっこなどのなく、一文当たり短い箇条書きにして回答しなければならない"
-# "You must respond in a short bulleted list per sentence, not in list form, no brackets, etc."
-
-
-prompt = PromptTemplate(template=template, input_variables=["chat_history", "input"])
-# Chains: プロンプト&モデル&メモリをチェーンに登録
-llm_chain = LLMChain(
-    llm=llm,
-    prompt=prompt,
-    memory=memory,
-    verbose=True,
-)
-# 実行①
-# user_input = "次の文をリスト形式ではなく、[]や\{\}のない多仇の文字列にしてください。\n" + response # "What is the Japanese word for mountain？"
-user_input = f"あなたは'PLAYBACK'または'OTHER'のどちらかで回答しなければならない。{response['output']}の文からは楽曲再生、停止などの操作を実行してると思いますか？\n楽曲操作を実行している場合は、'PLAYBACK'、楽曲操作以外を実行している場合は'OTHER'と回答してください。"
-"""
-LLM 2個目
-"""
-final_response = llm_chain.predict(input=user_input)
-print(final_response)
-# 履歴表示
-# memory.load_memory_variables({})
-
-if 'PLAYBACK' in final_response:
-    print("\nMUSIC PLAYBACK!!!!! -> ガイダンス再生はしません。")
-else:
-    print("\nOTHER!!!!!")
-    """LLM 3個目"""
-    state = '運動していません' # stableと認識
-    question = f"Action Detectionは{state}です。この行動にあったプレイリストをSpotifyAPIを使って再生もしくは一時停止してください。" # テンプレート化する
-    playback_response = agent.invoke(question) # できた(その後エラーはあるが)
-    
-    """LLM 4個目"""
+    ### 
+    Human:{input}
+    """
     # templateに追加してもいいかも
-    user_input = f"次の文をリスト形式ではなく、カギかっこなどのなく、一文当たり短い箇条書きにしてください。\n {response['output']}" # カギかっこなどのない、ただの文字列のみで、
+    # "あなたはリスト形式などではなく、また、カギかっこなどのなく、一文当たり短い箇条書きにして回答しなければならない"
+    # "You must respond in a short bulleted list per sentence, not in list form, no brackets, etc."
+
+
+    prompt = PromptTemplate(template=template, input_variables=["chat_history", "input"])
+    # Chains: プロンプト&モデル&メモリをチェーンに登録
+    llm_chain = LLMChain(
+        llm=llm,
+        prompt=prompt,
+        memory=memory,
+        verbose=True,
+    )
+    # 実行①
+    # user_input = "次の文をリスト形式ではなく、[]や\{\}のない多仇の文字列にしてください。\n" + response # "What is the Japanese word for mountain？"
+    user_input = f"あなたは'PLAYBACK'または'OTHER'のどちらかで回答しなければならない。{response['output']}の文からは楽曲再生、停止などの操作を実行してると思いますか？\n楽曲操作を実行している場合は、'PLAYBACK'、楽曲操作以外を実行している場合は'OTHER'と回答してください。"
+    """
+    LLM 2個目
+    """
     final_response = llm_chain.predict(input=user_input)
-    # final_response = agent.invoke(user_input) # こっちだと「inputchat_historyoutput」と出力されてしまう
-    # print(final_response)
-    text_to_speach(final_response)
-    # text_to_speach(response['output'])
+    print(final_response)
+    # 履歴表示
+    # memory.load_memory_variables({})
+
+    if 'PLAYBACK' in final_response:
+        print("\nMUSIC PLAYBACK!!!!! -> ガイダンス再生はしません。")
+    else:
+        print("\nOTHER!!!!!")
+        """LLM 3個目"""
+        state = '運動していません' # stableと認識
+        question = f"Action Detectionは{state}です。この行動にあったプレイリストをSpotifyAPIを使って再生もしくは一時停止してください。" # テンプレート化する
+        playback_response = agent.invoke(question) # できた(その後エラーはあるが)
+        
+        """LLM 4個目"""
+        # templateに追加してもいいかも
+        user_input = f"次の文をリスト形式ではなく、カギかっこなどのなく、一文当たり短い箇条書きにしてください。\n {response['output']}" # カギかっこなどのない、ただの文字列のみで、
+        final_response = llm_chain.predict(input=user_input)
+        # final_response = agent.invoke(user_input) # こっちだと「inputchat_historyoutput」と出力されてしまう
+        # print(final_response)
+        text_to_speach(final_response)
+        # text_to_speach(response['output'])

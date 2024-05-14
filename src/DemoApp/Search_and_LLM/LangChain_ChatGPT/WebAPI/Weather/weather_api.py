@@ -49,6 +49,8 @@ class OpenWeatherMapQueryRun(BaseTool):
         "A wrapper around OpenWeatherMap API. "
         "Useful for fetching current weather information for a specified location. "
         "Input should be a location string (e.g. London,GB)."
+
+        "If it is entered in a language other than English, it must be translated into English before it can be entered." # 2024/05/14 追加
     )
 
     def _run(

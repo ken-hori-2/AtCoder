@@ -1,13 +1,15 @@
 import win32com.client
 import datetime
 
-import pandas as pd
 
-
-
+outlook_object = win32com.client.Dispatch("Outlook.Application").GetNameSpace("MAPI")
 
 
 class Outlook():
+
+    def release_outlook_resources(self): # , outlook_object):
+        # outlook_object = win32com.client.Dispatch("Outlook.Application").GetNameSpace("MAPI")
+        outlook_object.ReleaseComObject()
     
     def run(self):
         dt_now_str = datetime.datetime.now()
@@ -131,91 +133,11 @@ class Outlook():
     def ScheduleItem(self):
 
         return self.select_items
-    
-    def MTG_ScheduleItem(self, select_items, working_start, working_end):
-        meeting_contents = ""
-        mask_list = ["SoC", "BLANC", "昼食"] # 社外秘情報は伏せる
-        
-        
-        time_zone = []
-        meeting_list = [] # より具体的な内容
-        sep = ["START"] # , "END"]
-
-        for select_item in select_items:
-
-            meeting_time = str(select_item.Start.Format("%H%M")) # %Y/%m/%d %H:%M"))
-            
-            # if working_start <= int(meeting_time) < working_end:
-            # if working_start < int(time_now) < working_end:
-            if working_start < int(meeting_time) < working_end:
-                # next_working_start = select_item.Start.Format("%H%M")
-
-                # 社外秘情報は伏せる
-                if (not (mask_list[0] in select_item.subject)) and (not (mask_list[1] in select_item.subject)) and (not (mask_list[2] in select_item.subject)):
-
-                    meeting_contents += "\n件名：" + select_item.subject
-                    meeting_contents += "\n場所：" + select_item.location
-                    meeting_contents += "\n開始時刻：" + str(select_item.Start.Format("%Y/%m/%d %H:%M"))
-                    meeting_contents += "\n----"
-
-                    # time_zone.append([select_item.Start.Format("%H%M"), select_item.End.Format("%H%M")])
-                    time_zone.append(select_item.Start.Format("%H%M"))
-                    meeting_list.append(select_item.subject)
-        
-        MTG_Section = pd.DataFrame(data=time_zone, index=meeting_list, columns=sep)
-
-        # print(time_zone)
-        # print(MTG_Section)
-
-        return MTG_Section, meeting_contents
-    
-    def isMtgStartWithin5min(self, MTG_Section, margin, time):
-        print(MTG_Section.index)
-        num = len(MTG_Section)
-        MTG_START_LIST = []
-        ret_list = []
-        isTrue = False
-
-        for i in range(num):
-            MTG_START_LIST.append(MTG_Section["START"].iloc[i])
-        
-        print(MTG_START_LIST) # .loc[i])
-
-        print("#######################")
-        for i in range(num):
-            print(int(MTG_START_LIST[i])-margin-40)
-            print(int(MTG_START_LIST[i])+margin)
-            if int(MTG_START_LIST[i]) -margin -40 <= int(time) <= int(MTG_START_LIST[i]) +margin:
-                # print("TRUE!")
-                ret_list.append(MTG_Section.index[i])
-                isTrue = True
-         
-        print("#######################")
-        return isTrue # , ret_list
 
 
 if __name__ == "__main__":
     schedule = Outlook()
-    transit_go_start, transit_go_end, transit_back_start, transit_back_end, working_start, working_end, exercise_start, exercise_end, home_location, office_location = schedule.run()
-    # print(res)
+    # transit_go_start, transit_go_end, transit_back_start, transit_back_end, working_start, working_end, exercise_start, exercise_end, home_location, office_location = schedule.run()
+    # # print(res)
 
-
-    
-    
-    
-    
-    
-    margin = 5
-    time = "1100"
-    select_items = schedule.ScheduleItem()
-    MTG_Section, text = schedule.MTG_ScheduleItem(select_items, working_start, working_end)
-    isMtgStart = schedule.isMtgStartWithin5min(MTG_Section, margin, time)
-    print(isMtgStart)
-
-
-    print(text)
-    
-    
-    # print("\n直近の予定のみ入力する")
-    # print(meeting_contents)
-    # print(meeting_list)
+    schedule.release_outlook_resources()
