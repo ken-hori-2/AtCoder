@@ -12,12 +12,12 @@ from langchain.tools.base import BaseTool
 
 class RouteSearch(): # BaseTool): # BaseToolの記述がなくても動く
     
-    def run(self, departure_station, destination_station,     shinkansen, serach_results_priority): # オプションの引数ありバージョン
+    def run(self, departure_station, destination_station): # ,     shinkansen, serach_results_priority): # オプションの引数ありバージョン
         #経路の取得先URL
         # route_url = "https://transit.yahoo.co.jp/search/print?from="+departure_station+"&flatlon=&to="+ destination_station
 
         # オプションの引数ありバージョン
-        route_url = "https://transit.yahoo.co.jp/search/print?from="+departure_station+"&flatlon=&to="+destination_station+"&shin="+shinkansen +"&s="+serach_results_priority # 0 or 1 or 2
+        route_url = "https://transit.yahoo.co.jp/search/print?from="+departure_station+"&flatlon=&to="+destination_station # +"&shin="+shinkansen +"&s="+serach_results_priority # 0 or 1 or 2
         # print(route_url)
         #Requestsを利用してWebページを取得する
         route_response = requests.get(route_url)
@@ -107,20 +107,11 @@ class RouteSearch(): # BaseTool): # BaseToolの記述がなくても動く
         ret = []
         for i in range(len(stations)):
             ret.append(stations[i])
-            # try:
-            #     # ret.append( " | " + lines[i] + " " + fars[i])
-            #     ret.append(" " +lines[i] + " " + fars[i])
-            # except:
-            #     try:
-            #         # ret.append( " | " + lines[i] + " ---")
-            #         ret.append(" " + lines[i])
-            #     except:
-            #         pass
             try:
-                ret.append(lines[i] + " " + fars[i])
+                ret.append( " | " + lines[i] + " " + fars[i])
             except:
                 try:
-                    ret.append(lines[i])
+                    ret.append( " | " + lines[i] + " ---")
                 except:
                     pass
         

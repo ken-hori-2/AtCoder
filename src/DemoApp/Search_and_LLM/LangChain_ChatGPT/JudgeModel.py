@@ -163,11 +163,15 @@ class Langchain4Judge():
             #     func=chain_open_meteo.run,
             # ),
             WikipediaQueryRun(),
-            Tool(
-                name = "Calendar",
-                func = calendar_tool.run,
-                description="Useful for keeping track of appointments."
-            ),
+            
+            
+            # Outlookを優先させたいので、一旦Google Calendarはコメントアウト
+            # Tool(
+            #     name = "Calendar",
+            #     func = calendar_tool.run,
+            #     description="Useful for keeping track of appointments."
+            # ),
+            
             Tool(
                 name="News-API",
                 description="Use this when you want to get information about the top headlines of current news stories. The input should be a question in natural language that this API can answer.",

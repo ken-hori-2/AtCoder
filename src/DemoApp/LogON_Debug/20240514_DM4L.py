@@ -50,7 +50,8 @@ date = dt_now_str.strftime('%Y/%m/%d')
 # ここだけ変える
 real_time = '10:55' # 出社中デモ(会議直前)
 real_time = '9:00' # 通勤中デモ
-real_time = '12:00' # 昼食中デモ
+# real_time = '17:30' # 通勤中デモ
+# real_time = '12:00' # 昼食中デモ
 
 time = real_time.replace(':', '')
 time_real_version = f'{date} {real_time}'

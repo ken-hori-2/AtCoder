@@ -107,6 +107,15 @@ class Outlook():
                 print(int(working_start))
                 print(int(working_end))
                 print(office_location)
+            
+            if select_item.subject in '昼食中':
+                lunch_start = select_item.Start.Format("%H%M")
+                lunch_end = select_item.End.Format("%H%M")
+                print(select_item.subject)
+                print(int(lunch_start))
+                print(int(lunch_end))
+            
+
             if select_item.subject in '帰宅中':
                 transit_back_start = select_item.Start.Format("%H%M")
                 transit_back_end = select_item.End.Format("%H%M")
@@ -126,7 +135,7 @@ class Outlook():
         # print(select_items)
 
         # return text
-        return int(transit_go_start), int(transit_go_end), int(transit_back_start), int(transit_back_end), int(working_start), int(working_end), int(exercise_start), int(exercise_end), home_location, office_location
+        return int(transit_go_start), int(transit_go_end), int(transit_back_start), int(transit_back_end), int(working_start), int(working_end), int(exercise_start), int(exercise_end), int(lunch_start), int(lunch_end), home_location, office_location
     
     def ScheduleItem(self):
 
@@ -183,6 +192,9 @@ class Outlook():
 
         print("#######################")
         for i in range(num):
+            
+            # 30分からスタートの場合、-40にするとおかしくなる
+            
             print(int(MTG_START_LIST[i])-margin-40)
             print(int(MTG_START_LIST[i])+margin)
             if int(MTG_START_LIST[i]) -margin -40 <= int(time) <= int(MTG_START_LIST[i]) +margin:
