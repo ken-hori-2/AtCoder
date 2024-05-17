@@ -149,7 +149,7 @@ while True:
             DETECT_COUNT += 1
             
 
-        if DETECT_COUNT > 5: # 20: # 時間でもいいかも
+        if DETECT_COUNT > 1: # 5: # 20: # 時間でもいいかも
             # if Mode == 0:
             #     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Device_Contorol/Camera.py'])
             # if Mode == 1:

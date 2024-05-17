@@ -25,6 +25,9 @@ def recognize_speech():
 
     
     with sr.Microphone() as source:
+    # with sr.Microphone(device_index=4) as source: # 4:PCマイク
+
+
         recognizer.adjust_for_ambient_noise(source)
     
         while(True):
@@ -241,18 +244,32 @@ if __name__ == '__main__':
         engine.runAndWait()
         
         # 音声認識関数の呼び出し
-        # text_speach = recognize_speech()
+        text_speach = recognize_speech() # (2024/05/16 デモ動画用)
         
         # 定型文(プリセット)にする場合
         
-        time = datetime.datetime.now()
+        
+        
+        
+        
+        
+        # time = datetime.datetime.now()
+        time = datetime.datetime(2024, 5, 16, 12, 55) # Mtg (2024/05/16 デモ動画用)
+
+
+
+
+
+
+
+
         time = time.strftime('%H:%M:%S')
         pre_Info = "現在時刻は" + time + "です。\n" # dt_now + "です。"
         
         # LLMに入力
         text = pre_Info + "この後の予定は何ですか？何分後にどこに向かえばいいですか？" # 今日の15:00の予定は何ですか？どこに向かえばいいですか？
         # text = pre_Info + "今日の午後の予定は何ですか？\n時間と場所も教えて。"
-        # text = pre_Info + text_speach
+        text = pre_Info + text_speach # デモ動画用
 
         # 2024/05/09 追加
         text += "直近に必要な情報のみ簡潔に教えてください。"
@@ -281,71 +298,73 @@ if __name__ == '__main__':
 
 
 
-
-    # # 2024/04/26 追加
-    # # 会話内容のログを取ったり、調査レポートをまとめたテキストをもとにパワポ作成
-    # import subprocess
-    # "パワポ作成"
-    # # subprocess.run([f'C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Outlook_Schedule/PowerPoint.py', '{conversationHistory}'])
-    # subprocess.run([f'C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Outlook_Schedule/PowerPoint.py', {chatGPT_responce}])
-    # "メールに添付して送信"
-    # subprocess.run([f'C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Outlook_Schedule/Outlook_Schedule/Mail.py'])
+"""
+一旦パワポ作成とメール送信はコメントアウト
+"""
+    # # # 2024/04/26 追加
+    # # # 会話内容のログを取ったり、調査レポートをまとめたテキストをもとにパワポ作成
+    # # import subprocess
+    # # "パワポ作成"
+    # # # subprocess.run([f'C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Outlook_Schedule/PowerPoint.py', '{conversationHistory}'])
+    # # subprocess.run([f'C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Outlook_Schedule/PowerPoint.py', {chatGPT_responce}])
+    # # "メールに添付して送信"
+    # # subprocess.run([f'C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Outlook_Schedule/Outlook_Schedule/Mail.py'])
     
-    "引数での渡し方がわからなかったので、代替のやり方（直接ここにパワポ作成の処理を書く）"
-    from pptx import Presentation
-    prs=Presentation()
-    from pptx.chart.data import CategoryChartData
-    c_data=CategoryChartData()
-    c_data.categories=['A社','B社','C社','D社','E社','F社','G社','H社','I社', 'その他']
-    c_data.add_series('xxxx（円）',(10,15,8, 5, 17, 12, 2, 8, 15, 7))
-    sld0=prs.slides.add_slide(prs.slide_layouts[5]) # title only
-    sld0.shapes[0].text='xxxxに関する市場調査' # 見出し
-    from pptx.enum.chart import XL_CHART_TYPE
-    from pptx.util import Cm
-    sld0.shapes.add_chart(
-        XL_CHART_TYPE.COLUMN_CLUSTERED,
-        # Cm(1),Cm(3),Cm(20),Cm(15),c_data)
-        Cm(1),Cm(3),Cm(15),Cm(15),c_data)
-    txBox = sld0.shapes.add_textbox(Cm(15),Cm(5),Cm(3),Cm(3))
-    tf = txBox.text_frame		# TextFrameオブジェクトの設定
-    tf.text = "This is text inside a textbox"            # TextFrameオブジェクトはデフォルトで1つ段落を持つ
-    p = tf.add_paragraph()		                           # paragraphオブジェクトの追加作成(2段落目)
-    p.text = "This is a second paragraph that's bold"    # textプロパティによる文字列の設定
+    # "引数での渡し方がわからなかったので、代替のやり方（直接ここにパワポ作成の処理を書く）"
+    # from pptx import Presentation
+    # prs=Presentation()
+    # from pptx.chart.data import CategoryChartData
+    # c_data=CategoryChartData()
+    # c_data.categories=['A社','B社','C社','D社','E社','F社','G社','H社','I社', 'その他']
+    # c_data.add_series('xxxx（円）',(10,15,8, 5, 17, 12, 2, 8, 15, 7))
+    # sld0=prs.slides.add_slide(prs.slide_layouts[5]) # title only
+    # sld0.shapes[0].text='xxxxに関する市場調査' # 見出し
+    # from pptx.enum.chart import XL_CHART_TYPE
+    # from pptx.util import Cm
+    # sld0.shapes.add_chart(
+    #     XL_CHART_TYPE.COLUMN_CLUSTERED,
+    #     # Cm(1),Cm(3),Cm(20),Cm(15),c_data)
+    #     Cm(1),Cm(3),Cm(15),Cm(15),c_data)
+    # txBox = sld0.shapes.add_textbox(Cm(15),Cm(5),Cm(3),Cm(3))
+    # tf = txBox.text_frame		# TextFrameオブジェクトの設定
+    # tf.text = "This is text inside a textbox"            # TextFrameオブジェクトはデフォルトで1つ段落を持つ
+    # p = tf.add_paragraph()		                           # paragraphオブジェクトの追加作成(2段落目)
+    # p.text = "This is a second paragraph that's bold"    # textプロパティによる文字列の設定
 
-    # list_to_str = ','.join(conversationHistory)
-    list_to_str = ','.join([str(i) for i in conversationHistory])
-    # p.text += "\n" + 
-    p.text = list_to_str # chatGPT_responce # ,'.join(conversationHistory)  # 区切り文字を「・」にして文字列に変換 # args_text_by_llm # LLMが生成したテキスト
-    p.font.bold = True		                               # font.boldプロパティによる太文字設定
-    # prs.save('sample.pptx')
-    prs.save("C:/Users/0107409377/Desktop/data/sample.pptx")
+    # # list_to_str = ','.join(conversationHistory)
+    # list_to_str = ','.join([str(i) for i in conversationHistory])
+    # # p.text += "\n" + 
+    # p.text = list_to_str # chatGPT_responce # ,'.join(conversationHistory)  # 区切り文字を「・」にして文字列に変換 # args_text_by_llm # LLMが生成したテキスト
+    # p.font.bold = True		                               # font.boldプロパティによる太文字設定
+    # # prs.save('sample.pptx')
+    # prs.save("C:/Users/0107409377/Desktop/data/sample.pptx")
 
-    import win32com.client as win32
-    triggar = True
-    def send_mail_based_on_condition(condition):
-        try:
-            if condition:
-                outlook = win32.Dispatch("Outlook.Application")
-                mail = outlook.CreateItem(0)
-                mail.Subject = "2024/04/26 条件を満たしたため、メールを送信します"
-                mail.Body = "これは条件に基づいて送信されたメールです。\nThis report was generated and sent by chatGPT."
-                # mail.Body += "\nReport Powered by ChatGPT"
-                # mail.To = "test@example.com"
-                mail.to = 'Kenji.B.Horiuchi@sony.com; hrucknj@icloud.com'
-                mail.cc = 'stmuymte@gmail.com'
-                # mail.bcc = 'momoko@mahodo.com'
+    # import win32com.client as win32
+    # triggar = True
+    # def send_mail_based_on_condition(condition):
+    #     try:
+    #         if condition:
+    #             outlook = win32.Dispatch("Outlook.Application")
+    #             mail = outlook.CreateItem(0)
+    #             mail.Subject = "2024/04/26 条件を満たしたため、メールを送信します"
+    #             mail.Body = "これは条件に基づいて送信されたメールです。\nThis report was generated and sent by chatGPT."
+    #             # mail.Body += "\nReport Powered by ChatGPT"
+    #             # mail.To = "test@example.com"
+    #             mail.to = 'Kenji.B.Horiuchi@sony.com; hrucknj@icloud.com'
+    #             mail.cc = 'stmuymte@gmail.com'
+    #             # mail.bcc = 'momoko@mahodo.com'
 
-                # 添付ファイル
-                # attachment = "C:/Users/0107409377/Desktop/data/test_mail.txt" # "C:\\path\\to\\your\\file.txt"
-                attachment = "C:/Users/0107409377/Desktop/data/sample.pptx" # "C:\\path\\to\\your\\file.txt"
-                mail.Attachments.Add(attachment)
-                mail.Send()
+    #             # 添付ファイル
+    #             # attachment = "C:/Users/0107409377/Desktop/data/test_mail.txt" # "C:\\path\\to\\your\\file.txt"
+    #             attachment = "C:/Users/0107409377/Desktop/data/sample.pptx" # "C:\\path\\to\\your\\file.txt"
+    #             mail.Attachments.Add(attachment)
+    #             mail.Send()
 
-                print(f"メール送信に成功しました") # : {str(e)}")
-        except Exception as e:
-            print(f"メール送信に失敗しました: {str(e)}")
+    #             print(f"メール送信に成功しました") # : {str(e)}")
+    #     except Exception as e:
+    #         print(f"メール送信に失敗しました: {str(e)}")
 
-    send_mail_based_on_condition(triggar) # True)
+    # send_mail_based_on_condition(triggar) # True)
 
             
 

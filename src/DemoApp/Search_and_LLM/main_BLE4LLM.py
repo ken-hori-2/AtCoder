@@ -131,7 +131,12 @@ while True:
     print(RecieveData)
     
     # if run_comp_running in RecieveData:
-    if (run_comp_running in RecieveData): #  or (run_comp_walking in RecieveData): # RUNNING or WALKING で実行
+
+
+    # if (run_comp_running in RecieveData): #  or (run_comp_walking in RecieveData): # RUNNING or WALKING で実行
+    if (run_comp_walking in RecieveData): # デモ動画用
+
+        
         print("**********")
         # print("Detected RUNNING !!!!!")
         # print("Detected COMBO !!!!!")
@@ -183,6 +188,8 @@ while True:
                 RecieveData = L_RecieveData.decode()
                 print(RecieveData)
             DETECT_COUNT = 0
+
+            break
     
     # "今はRUNNINGとWALKINGの時しか送信していないので送信できない"
     # # Spotify一時停止用に追加

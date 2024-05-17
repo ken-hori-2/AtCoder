@@ -234,7 +234,7 @@ class Outlook():
         
         meeting_contents = ""
         # mask_list = ["SoC", "BLANC", "昼食"] # 社外秘情報は伏せる
-        mask_list = ["SoC", "BLANC", "昼食", "出社"] # 出社を追加
+        mask_list = ["SoC", "BLANC", "昼食", "出社", "AUD", "外販"] # 出社を追加
         time_zone = []
         meeting_list = [] # より具体的な内容
         sep = ["START"] # , "END"]
