@@ -451,27 +451,28 @@ if __name__ == "__main__":
     #   →ただ、LLMなどAPIをたたくのは少なめにしたいので、条件にあったらLLM起動する？）→済
     # """
     
-    # for i in range(1): # 3): # 今は3回ユーザーにフィードバックしたら終了
-    #     functional_decision.run()
+    # this
+    for i in range(1): # 3): # 今は3回ユーザーにフィードバックしたら終了
+        functional_decision.run()
 
     
     
     # デモ用
-    from UIModel import UserInterfaceModel # ユーザーとのやり取りをするモデル
-    userinterface = UserInterfaceModel()
-    # 音声認識関数の呼び出し
-    print(" >> Waiting for response from Agent...")
-    # userInput = userinterface.recognize_speech()
-    userInput = "この後の予定は何？何分後にどこに向かえばいいか教えて。"
+    # from UIModel import UserInterfaceModel # ユーザーとのやり取りをするモデル
+    # userinterface = UserInterfaceModel()
+    # # 音声認識関数の呼び出し
+    # print(" >> Waiting for response from Agent...")
+    # # userInput = userinterface.recognize_speech()
+    # userInput = "この後の予定は何？何分後にどこに向かえばいいか教えて。"
 
-    print("\n\n******************** [User Input] ********************\n", userInput)
-    try:
-        # response = 
-        functional_decision.test(userInput)
+    # print("\n\n******************** [User Input] ********************\n", userInput)
+    # try:
+    #     # response = 
+    #     functional_decision.test(userInput)
 
-        print("\n\n******************** [AI Answer] ********************\n")
-        # userinterface.text_to_speach(response['output'])
-        # print("\n******************** [AI Answer] ********************\n", response["output"])
-    except:
-        print("\n##################################################\nERROR! ERROR! ERROR!\n##################################################")
-        print("もう一度入力してください。")
+    #     print("\n\n******************** [AI Answer] ********************\n")
+    #     # userinterface.text_to_speach(response['output'])
+    #     # print("\n******************** [AI Answer] ********************\n", response["output"])
+    # except:
+    #     print("\n##################################################\nERROR! ERROR! ERROR!\n##################################################")
+    #     print("もう一度入力してください。")

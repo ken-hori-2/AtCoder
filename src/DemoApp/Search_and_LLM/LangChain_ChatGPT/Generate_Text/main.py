@@ -11,7 +11,7 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
-from langchain.chains import ConversationalRetrievalChain
+# from langchain.chains import ConversationalRetrievalChain
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -53,10 +53,10 @@ else:
     
 # インターネット上のサイトから抽出した情報をDBに入れる
 # Step 2: Save to .txt and reopen (helps prevent issues)
-with open('internet_info1.txt', 'w') as f:
+with open('internet_info1.txt', 'w', encoding='UTF-8') as f:
     f.write(html_content)
 
-with open('internet_info1.txt', 'r') as f:
+with open('internet_info1.txt', 'r', encoding='UTF-8') as f:
     text = f.read()
 
 # Step 3: Create function to count tokens
@@ -87,7 +87,7 @@ db = FAISS.from_documents(chunks+chunks3, embeddings)
 query = "ランプが点滅しているが、これは何が原因か？"
 # FAISSに対して検索。検索は文字一致ではなく意味一致で検索する(Vector, Embbeding)
 docs = db.similarity_search(query)
-docs # ここで関係のありそうなデータが返ってきていることを確認できる
+print(docs) # ここで関係のありそうなデータが返ってきていることを確認できる
 
 
 
@@ -96,7 +96,9 @@ docs # ここで関係のありそうなデータが返ってきていること�
 # map_reduce ... 得られた候補のサマリをそれぞれ生成し、そのサマリのサマリを作ってインプットとする
 # map_rerank ... 得られた候補にそれぞれスコアを振って、いちばん高いものをインプットとして回答を得る
 # refine  ... 得られた候補のサマリを生成し、次にそのサマリと次の候補の様裏を作ることを繰り返す
-chain = load_qa_chain(OpenAI(temperature=0.1,max_tokens=1000), chain_type="stuff")
+
+# chain = load_qa_chain(OpenAI(temperature=0.1,max_tokens=1000), chain_type="stuff")
+chain = load_qa_chain(OpenAI(temperature=0,max_tokens=1024), chain_type="stuff")
 # p305に記載
 #query = "ドライブのランプが赤色に点滅しているが、これは何が原因か？"
 # p134に記載
@@ -104,19 +106,20 @@ chain = load_qa_chain(OpenAI(temperature=0.1,max_tokens=1000), chain_type="stuff
 query = "バックアップにはどの様な方法がありますか？またその手順についておしえてください"
 docs = db.similarity_search(query)
 # langchainを使って検索
-chain.run(input_documents=docs, question=query)
+chain.invoke(input_documents=docs, question=query)
 
 
 
 
-# from IPython.display import display
-# import ipywidgets as widgets
+# 2024/05/20 コメントアウト
+# # from IPython.display import display
+# # import ipywidgets as widgets
 
-# vextordbをretrieverとして使うconversation chainを作成します。これはチャット履歴の管理も可能にします。
-qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0.1), db.as_retriever())
+# # vextordbをretrieverとして使うconversation chainを作成します。これはチャット履歴の管理も可能にします。
+# qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0.1), db.as_retriever())
 
 
-print(qa)
+# print(qa)
 
 
 

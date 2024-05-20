@@ -492,4 +492,4 @@ if __name__ == "__main__":
 
 
     print("\n直近の予定")
-    print(schedule.getNextMtg())
+    # print(schedule.getNextMtg()) # isWithin5min~を実行しないとエラー（self.next_mtgに書き込まれない）

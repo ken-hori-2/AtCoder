@@ -208,7 +208,7 @@ class Outlook():
 
 if __name__ == "__main__":
     schedule = Outlook()
-    transit_go_start, transit_go_end, transit_back_start, transit_back_end, working_start, working_end, exercise_start, exercise_end, home_location, office_location = schedule.run()
+    transit_go_start, transit_go_end, transit_back_start, transit_back_end, working_start, working_end, exercise_start, exercise_end, lunch_start, lunch_end, home_location, office_location = schedule.run()
     # print(res)
 
 

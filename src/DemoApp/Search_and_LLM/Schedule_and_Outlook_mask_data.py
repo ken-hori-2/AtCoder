@@ -253,7 +253,7 @@ if __name__ == '__main__':
         
         
         
-        # time = datetime.datetime.now()
+        # time = datetime.datetime.now() # this
         time = datetime.datetime(2024, 5, 16, 12, 55) # Mtg (2024/05/16 デモ動画用)
 
 
@@ -267,7 +267,7 @@ if __name__ == '__main__':
         pre_Info = "現在時刻は" + time + "です。\n" # dt_now + "です。"
         
         # LLMに入力
-        text = pre_Info + "この後の予定は何ですか？何分後にどこに向かえばいいですか？" # 今日の15:00の予定は何ですか？どこに向かえばいいですか？
+        text = pre_Info + "この後の予定は何ですか？何分後にどこに向かえばいいですか？" # 今日の15:00の予定は何ですか？どこに向かえばいいですか？ # this
         # text = pre_Info + "今日の午後の予定は何ですか？\n時間と場所も教えて。"
         text = pre_Info + text_speach # デモ動画用
 
