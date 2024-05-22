@@ -130,7 +130,14 @@ index = VectorstoreIndexCreator(
 ).from_loaders([loader])
 
 # 最初のプロンプト
-query = "Q1. 文書はユーザーの行動履歴です。このユーザーの一日の行動はどのような傾向がありますか？どのような時間や行動をするときにどんな機能を使う傾向にあるかをできるだけ、長く細かく教えて。"
+# query = "Q1. 文書はユーザーの行動履歴です。このユーザーの一日の行動はどのような傾向がありますか？どのような時間や行動をするときにどんな機能を使う傾向にあるかをできるだけ、長く細かく教えて。"
+query = """
+        あなたは人間と話すチャットボットです。ユーザーの要求に答えてください。
+        UserAction.txtはユーザーの1日の行動と使った機能です。
+        このユーザーの傾向を述べてください。(例: 1. 時間帯ごとの行動パターン: , 2. 行動状態: )
+        その後、現在が11時15分、ユーザーの行動状態がSTABLEの場合どの機能を提案するか教えてください。
+        その際、各機能の提案する確率と最終的な提案(Final Answer:)も教えてください。
+        """
 print(f"\n\n{query}")
 # answer = index.query(query, llm = OpenAI(temperature=0))
 # print(answer)
@@ -155,8 +162,15 @@ print(f"\n\n{query}")
 
 
 # with sourcesは、質問文と参考にしたデータのファイル名も表示してくれる
-answer_with_sources = index.query_with_sources(query, llm = OpenAI(temperature=0))
-print(answer_with_sources)
+from langchain_openai import ChatOpenAI
+llm=ChatOpenAI(
+    # model="gpt-4o",
+    model="gpt-3.5-turbo",
+    temperature=0 # 出力する単語のランダム性（0から2の範囲） 0であれば毎回返答内容固定
+) # チャット特化型モデル
+
+answer_with_sources = index.query_with_sources(query, llm = llm)
+print(answer_with_sources['answer'])
 
 # query = "Q2. GPT4は第何世代のモデル？"
 # query = "今日の東京の天気は？"
