@@ -231,6 +231,8 @@ class Langchain4Judge():
             agent_kwargs=agent_kwargs,
             verbose=True,
             handle_parsing_errors=True, # パースエラーを例外処理で回避
+
+            max_iterations=10 # これがあるとagentのイタレーションに制限をかけられる
         )
 
         return agent

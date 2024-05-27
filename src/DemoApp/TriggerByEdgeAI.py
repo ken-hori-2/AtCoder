@@ -26,7 +26,9 @@ import signal
 class Trigger():
 
     def run(self):
-        COM="COM17" # 完全BLE接続にする場合、トランシーバー用基板に送信
+        # COM="COM17" # 完全BLE接続にする場合、トランシーバー用基板に送信
+        COM="COM16" # Dongleとの通信
+
         bitRate=115200
         ser = serial.Serial(COM, bitRate, timeout=0.1)
         # import serialstream

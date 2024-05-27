@@ -12,11 +12,16 @@ from langchain.memory import ConversationBufferMemory
 from langchain.agents import load_tools
 from dotenv import load_dotenv
 # .envファイルの内容を読み込見込む
-load_dotenv('WebAPI\\Secret\\.env')
+load_dotenv('WebAPI\\Secret\\.env') # たぶんload_dotenv()のみでいい
 
 
 # agent の使用する LLM
+# llm=ChatOpenAI(
+#     temperature=0 # 出力する単語のランダム性（0から2の範囲） 0であれば毎回返答内容固定
+# ) # チャット特化型モデル
 llm=ChatOpenAI(
+    # model="gpt-4o",
+    model="gpt-3.5-turbo",
     temperature=0 # 出力する単語のランダム性（0から2の範囲） 0であれば毎回返答内容固定
 ) # チャット特化型モデル
 # llm = OpenAI(temperature=0)
@@ -400,7 +405,8 @@ for i in range(1): # 3):
 
 
     # 音声認識関数の呼び出し
-    # text = userinterface.recognize_speech()
+    # text = userinterface.recognize_speech() # 音声認識をする場合
+
     # text = "本厚木駅から品川駅までの経路を教えて。"
     text = "本厚木駅から品川駅までの乗換回数の少ない経路を時刻も含めて教えて。"
     # text = "今日の天気は？"

@@ -42,14 +42,14 @@ class Outlook():
 
         i = 0
         text = ""
-        # transit_go_start = ""
-        # transit_go_end = ""
-        # working_start = ""
-        # working_end = ""
-        # transit_back_start = ""
-        # transit_back_end = ""
-        # exercise_start = ""
-        # exercise_end = ""
+        # self.transit_go_start = ""
+        # self.transit_go_end = ""
+        # self.working_start = ""
+        # self.working_end = ""
+        # self.transit_back_start = ""
+        # self.transit_back_end = ""
+        # self.exercise_start = ""
+        # self.exercise_end = ""
         
         self.home_location = "玉川学園前" # 家の場所（出発地点）
         self.office_location = ""
@@ -307,15 +307,19 @@ class Outlook():
             """ or """
             # print(MTG_START_LIST[i]-margin)
             # print(MTG_START_LIST[i]+margin)
-            if MTG_START_LIST[i] -margin <= time <= MTG_START_LIST[i] +margin: # マージンなので、前後5分は含む
-                # print("TRUE!")
-                # ret_list.append(self.MTG_Section.index[i])
+            try:
+                if MTG_START_LIST[i] -margin <= time <= MTG_START_LIST[i] +margin: # マージンなので、前後5分は含む
+                    # print("TRUE!")
+                    # ret_list.append(self.MTG_Section.index[i])
 
-                self.next_mtg = self.MTG_Section.index[i]
+                    self.next_mtg = self.MTG_Section.index[i]
 
-                
-                # ret_list.append(MTG_START_LIST[i])
-                isTrue = True
+                    
+                    # ret_list.append(MTG_START_LIST[i])
+                    isTrue = True
+            except:
+                print("\n\n\n\n\n[Schedule_new.py] isMtgStartWithin5min() ... MTG_START_LIST[i] is Error !!!!!")
+                print("予定表にないため、MTG_ScheduleItem()実行時に値が格納されていない\n\n\n\n\n")
          
         # print("#######################")
         self.ret_list = ret_list
@@ -341,8 +345,12 @@ class Outlook():
         # print("lunch end = ", self.lunch_end)
 
         # if lunch_start -margin <= time <= lunch_end +margin: # <=(終了時刻も含む)
-        if self.lunch_start -margin <= time < self.lunch_end +margin: # <(終了時刻は含まない)
-            isTrue = True
+        try:
+            if self.lunch_start -margin <= time < self.lunch_end +margin: # <(終了時刻は含まない)
+                isTrue = True
+        except:
+            print("\n\n\n\n\n[Schedule_new.py] isLunchStartWithin5min() ... self.lunch_start is Error !!!!!")
+            print("予定表にないため、run()実行時に値が格納されていない\n\n\n\n\n")
 
         return isTrue # , ret_list
     
@@ -363,8 +371,12 @@ class Outlook():
         # print("working end = ", self.working_end)
 
         # if working_start -margin <= time <= working_end +margin: # <=(終了時刻も含む)
-        if self.working_start -margin <= time < self.working_end +margin: # <(終了時刻は含まない)
-            isTrue = True
+        try:
+            if self.working_start -margin <= time < self.working_end +margin: # <(終了時刻は含まない)
+                isTrue = True
+        except:
+            print("\n\n\n\n\n[Schedule_new.py] isWorking() ... self.working_start is Error !!!!!")
+            print("予定表にないため、run()実行時に値が格納されていない\n\n\n\n\n")
 
         return isTrue # , ret_lists
     
@@ -384,8 +396,12 @@ class Outlook():
         # print("transiting go end = ", self.transit_go_end)
 
         # if transiting_start -margin <= time <= transiting_end +margin: # <=(終了時刻も含む)
-        if self.transit_go_start -margin <= time < self.transit_go_end +margin: # <(終了時刻は含まない)
-            isTrue = True
+        try:
+            if self.transit_go_start -margin <= time < self.transit_go_end +margin: # <(終了時刻は含まない)
+                isTrue = True
+        except:
+            print("\n\n\n\n\n[Schedule_new.py] isTransitingGo() ... self.transit_go_start is Error !!!!!")
+            print("予定表にないため、run()実行時に値が格納されていない\n\n\n\n\n")
 
         return isTrue # , ret_list
     
@@ -405,8 +421,12 @@ class Outlook():
         # print("transiting back end = ", self.transit_back_end)
 
         # if transiting_start -margin <= time <= transiting_end +margin: # <=(終了時刻も含む)
-        if self.transit_back_start -margin <= time < self.transit_back_end +margin: # <(終了時刻は含まない)
-            isTrue = True
+        try:
+            if self.transit_back_start -margin <= time < self.transit_back_end +margin: # <(終了時刻は含まない)
+                isTrue = True
+        except:
+            print("\n\n\n\n\n[Schedule_new.py] isTransitingBack() ... self.transit_back_start is Error !!!!!")
+            print("予定表にないため、run()実行時に値が格納されていない\n\n\n\n\n")
 
         return isTrue # , ret_list
     
@@ -426,8 +446,12 @@ class Outlook():
         # print("excercise end = ", self.exercise_end)
 
         # if transiting_start -margin <= time <= transiting_end +margin: # <=(終了時刻も含む)
-        if self.exercise_start -margin <= time < self.exercise_end +margin: # <(終了時刻は含まない)
-            isTrue = True
+        try:
+            if self.exercise_start -margin <= time < self.exercise_end +margin: # <(終了時刻は含まない)
+                isTrue = True
+        except:
+            print("\n\n\n\n\n[Schedule_new.py] isExercising() ... self.exercise_start is Error !!!!!")
+            print("予定表にないため、run()実行時に値が格納されていない\n\n\n\n\n")
 
         return isTrue # , ret_list
 
