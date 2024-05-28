@@ -85,6 +85,10 @@ class OutlookSchedule(): # BaseTool): # BaseToolの記述がなくても動く
                 self.transit_go_end = datetime.datetime.strptime(self.transit_go_end, "%Y/%m/%d %H:%M") # 形式に沿って文字列をdatetime型に変換
 
 
+                text += "\n出発駅：" + self.home_location
+
+
+
             if select_item.subject in '出社中':
                 self.working_start = select_item.Start.Format("%Y/%m/%d %H:%M") # "%H%M")
                 self.working_end = select_item.End.Format("%Y/%m/%d %H:%M") # "%H%M")
@@ -102,6 +106,8 @@ class OutlookSchedule(): # BaseTool): # BaseToolの記述がなくても動く
                 self.working_end = datetime.datetime.strptime(self.working_end, "%Y/%m/%d %H:%M") # 形式に沿って文字列をdatetime型に変換
 
                 self.MTG_ScheduleItem()
+
+                text += "\n目的駅：" + self.office_location
             
             if select_item.subject in '昼食中':
                 self.lunch_start = select_item.Start.Format("%Y/%m/%d %H:%M") # "%H%M")
@@ -181,11 +187,30 @@ class OutlookSchedule(): # BaseTool): # BaseToolの記述がなくても動く
                 meeting_contents += "\n場所：" + select_item.location
                 meeting_contents += "\n開始時刻：" + str(select_item.Start.Format("%Y/%m/%d %H:%M"))
                 meeting_contents += "\n終了時刻：" + str(select_item.End.Format("%Y/%m/%d %H:%M"))
+                # 2024/05/28 追加
+                if (select_item.subject in "出勤 通勤"):
+                    meeting_contents += "\n出発地：" + self.home_location
+                    meeting_contents += "\n目的地：" + self.office_location
+                elif (select_item.subject in "帰宅"):
+                    meeting_contents += "\n目的地：" + self.home_location
+                    meeting_contents += "\n出発地：" + self.office_location
+                # 2024/05/28 追加
                 meeting_contents += "\n----"
 
                 # time_zone.append([select_item.Start.Format("%H%M"), select_item.End.Format("%H%M")])
                 time_zone.append(select_item.Start.Format("%Y/%m/%d %H:%M")) # "%H%M"))
                 meeting_list.append(select_item.subject)
+            
+            
+            # # 2024/05/28 追加
+            # if (select_item.subject in "出勤 通勤"):
+            #     meeting_contents += "\n出発地：" + self.home_location
+            #     meeting_contents += "\n目的地：" + self.office_location
+            # elif (select_item.subject in "帰宅"):
+            #     meeting_contents += "\n目的地：" + self.home_location
+            #     meeting_contents += "\n出発地：" + self.office_location
+            # # elif (select_item.subject in "出社"):
+            # # 2024/05/28 追加
 
         # print("#####")
         # print("meeting : ", meeting_contents)

@@ -25,7 +25,11 @@ class Outlook():
         
         self.select_items = [] # 指定した期間内の予定を入れるリスト
 
-        dt_now = datetime.datetime.now()
+        # 2024/05/28 一旦コメントアウト
+        # dt_now = datetime.datetime.now()
+        dt_now = datetime.datetime(2024, 5, 24, 8, 00) # テスト用
+
+
         start_date = datetime.date(dt_now.year, dt_now.month, dt_now.day)
         end_date = datetime.date(dt_now.year, dt_now.month, dt_now.day + 1)
         strStart = start_date.strftime('%m/%d/%Y %H:%M %p')

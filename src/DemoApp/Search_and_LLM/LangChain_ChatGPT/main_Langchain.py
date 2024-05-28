@@ -157,11 +157,15 @@ tools = [
     #     func=chain_open_meteo.run,
     # ),
     WikipediaQueryRun(),
-    Tool(
-        name = "Calendar",
-        func = calendar_tool.run,
-        description="Useful for keeping track of appointments."
-    ),
+    
+    
+    # Outlookを優先させたいので、一旦Google Calendarはコメントアウト
+    # Tool(
+    #     name = "Calendar",
+    #     func = calendar_tool.run,
+    #     description="Useful for keeping track of appointments."
+    # ),
+
     Tool(
         name="News-API",
         description="Use this when you want to get information about the top headlines of current news stories. The input should be a question in natural language that this API can answer.",
@@ -182,7 +186,6 @@ tools = [
     ScheduleQueryRun() # 2024/05/28 追加
 
 ]
-
 # agent が使用する memory の作成
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
@@ -297,7 +300,7 @@ agent = initialize_agent( # 非推奨
     verbose=True,
     handle_parsing_errors=True, # パースエラーを例外処理で回避
 
-    max_iterations=5 # これがあるとagentのイタレーションに制限をかけられる
+    max_iterations=10 # 5 # これがあるとagentのイタレーションに制限をかけられる
 )
 
 
@@ -454,6 +457,10 @@ for i in range(1): # 3):
     # dt_now = datetime.datetime(2024, 5, 24, 8, 00)
     dt_now = datetime.datetime(2024, 5, 24, 10, 50)
     text = "現在時刻は" + str(dt_now) + "です。" + "次の予定を教えて。" + "何分後にどこに向かえばいい？" # "今日の予定は何ですか？
+    #####
+    dt_now = datetime.datetime(2024, 5, 24, 8, 30)
+    # text = "家から会社までの経路教えて。予定から調べて教えて。"
+    text = "現在時刻は" + str(dt_now) + "です。" + "今日の予定から経路情報を簡潔に教えて。"
     #####
 
     

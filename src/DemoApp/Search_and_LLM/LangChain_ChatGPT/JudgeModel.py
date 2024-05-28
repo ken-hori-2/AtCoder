@@ -83,6 +83,12 @@ engine.setProperty('volume',1.0)
 engine.setProperty('voice', "com.apple.ttsbundle.Kyoko-premium")
 
 
+# 2024/05/28 追加
+from UIModel_copy import UserInterfaceModel # ユーザーとのやり取りをするモデル
+userinterface = UserInterfaceModel()
+# from langchain_community.tools.human.tool import HumanInputRun
+
+
 
 class Langchain4Judge():
     def text_to_speach(self, response):
@@ -157,7 +163,8 @@ class Langchain4Judge():
             Tool(
                 name = "Search",
                 func=search.run,
-                description="useful for when you need to answer questions about current events"
+                # description="useful for when you need to answer questions about current events"
+                description = "Useful when you need to answer questions about current events. It can also be used to solve a problem when you can't find the answer by searching using other tools."
             ),
             Tool(
                 name="Calculator",
@@ -197,6 +204,8 @@ class Langchain4Judge():
             MusicPlaybackQueryRun(),
             LocalizationQueryRun(),
             RestaurantSearchQueryRun(),
+
+            # HumanInputRun(), # ユーザーに入力を求める
 
             ScheduleQueryRun() # 2024/05/28 追加
 
@@ -354,22 +363,59 @@ if __name__ == "__main__":
 
     
     
-    # 予定表 # 2024/05/28 追加
+    
     import datetime
-    # dt_now = datetime.datetime.now() # 現在時刻
-    # dt_now = datetime.datetime(2024, 5, 24, 8, 00)
-    dt_now = datetime.datetime(2024, 5, 24, 10, 50)
-    text = "現在時刻は" + str(dt_now) + "です。" + "次の予定を教えて。" + "何分後にどこに向かえばいい？" # "今日の予定は何ですか？
-    Input = text
-    #####
+
+    for i in range(1):
+        # 予定表 # 2024/05/28 追加
+        # dt_now = datetime.datetime.now() # 現在時刻
+        # dt_now = datetime.datetime(2024, 5, 24, 8, 00)
+        ##### 予定確認デモ
+        dt_now = datetime.datetime(2024, 5, 24, 10, 50)
+        text = "現在時刻は" + str(dt_now) + "です。" + "次の予定を教えて。" + "何分後にどこに向かえばいい？" # "今日の予定は何ですか？
+        Input = text
+        ##### 経路案内デモ
+        dt_now = datetime.datetime(2024, 5, 24, 8, 30)
+        # text = "家から会社までの経路教えて。予定から調べて教えて。"
+        text = "現在時刻は" + str(dt_now) + "です。" + "今日の予定から経路情報を簡潔に教えて。"
+        Input = text
+        ##### プロンプト生成デモ
+        dt_now = datetime.datetime(2024, 5, 24, 8, 30)
+        text = "現在時刻は" + str(dt_now) + "です。" \
+               + "ユーザーに関する情報が足りない場合は予定を参照して。" \
+               + "Prompt：最寄りの駅から目的地までの最短経路を教えて。" # プロンプト生成(3.5-turbo)
+             # + "Prompt：経路検索を行いたいです。出発地と目的地を指定して、最適なルートと所要時間を教えてください。" # プロンプト生成(4o)
+        Input = text
+        ##### 予定が5分以内にあるか（これでもいいが、常時起動は実行金額が高くなりすぎる）
+        dt_now = datetime.datetime(2024, 5, 24, 10, 55)
+        text = "現在時刻は" + str(dt_now) + "です。" + "次の予定は5分以内に始まりますか？あるかないかで答えて。"\
+               + "ユーザーに関する情報が足りない場合は予定を参照して。" 
+        Input = text
+        ##### 音声入力デモ
+        # 音声認識関数の呼び出し（現在時刻のみ事前に入力する）
+        # text += userinterface.recognize_speech() # 音声認識をする場合
 
 
 
 
-    response = agent.invoke(Input) # できた(その後エラーはあるが)
-    # text_to_speach(final_response)
+        if text:
+            print(" >> Waiting for response from Agent...")
+            """
+            Output
+            """
+            print("\n\n******************** [User Input] ********************\n", text)
+            try:
+                response = agent.invoke(Input) # できた(その後エラーはあるが)
+                # text_to_speach(final_response)
 
-    model.text_to_speach(response['output'])
+                print("\n\n******************** [AI Answer] ********************\n")
+                # model.text_to_speach(response['output'])
+                userinterface.text_to_speach(response['output'])
+            except:
+                print("\n##################################################\nERROR! ERROR! ERROR!\n##################################################")
+                print("もう一度入力してください。")
+    
+    
     # 2024/05/28 コメントアウト
     # final_response, llm_chain = model.output(response)
     # if 'PLAYBACK' in final_response:

@@ -1,0 +1,71 @@
+出勤, WALKING, 楽曲再生
+
+定例会議, WALKING, 楽曲再生
+
+昼食, WALKING, 楽曲再生
+
+仕事中, WALKING, 楽曲再生
+
+帰宅, WALKING, 楽曲再生
+
+None, STABLE, 天気情報
+
+昼食, STABLE, 楽曲再生/動画視聴
+
+ジム, RUNNING, 楽曲再生
+
+None, STABLE, 動画視聴
+
+None, STABLE, ニュース閲覧
+
+昼食, STABLE, 楽曲再生/動画視聴
+
+ジム, RUNNING, 楽曲再生
+
+None, STABLE, 動画視聴
+
+None, STABLE, ニュース閲覧
+
+昼食, STABLE, 楽曲再生/動画視聴
+
+ジム, RUNNING, 楽曲再生
+
+None, STABLE, 動画視聴
+
+昼食, STABLE, レストラン検索
+
+昼食, STABLE, 楽曲再生/動画視聴
+
+ジム, RUNNING, 楽曲再生
+
+None, STABLE, 動画視聴
+
+None, STABLE, ニュース閲覧
+
+昼食, STABLE, 楽曲再生/動画視聴
+
+ジム, RUNNING, 楽曲再生
+
+None, STABLE, 動画視聴
+
+出勤, WALKING, 経路検索
+
+定例会議, WALKING, 経路検索
+
+昼食, WALKING, 経路検索
+
+外出, WALKING, 経路検索
+
+帰宅, WALKING, 経路検索
+
+昼食, WALKING, 経路検索
+
+会議, WALKING, 会議情報
+
+進捗報告, STABLE, 会議情報
+
+目標面談, WALKING, 会議情報
+
+定例, WALKING, 会議情報
+
+情報共有, WALKING, 会議情報

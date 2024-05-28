@@ -530,55 +530,6 @@ class DecisionMaking():
                 ret = self.GymTrainingApp(Action_List, trigger, agent, model)
             else:
                 print(f"現在の予定はありません。")
-    
-
-
-
-
-    # def test(self, userInput):
-    #     # デモ動画用
-    #     ##################################################################################################################
-    #     """
-    #     Langchainの定義
-    #     """
-    #     model = Langchain4Judge()
-    #     # """
-    #     # EdgeAIによるトリガーの定義
-    #     # """
-    #     # trigger = Trigger()
-    #     # ここのパスが重要 (DM4L.pyはDemoApp/にあるので、その直下のSearch_and_LLM/から指定)
-    #     credentials_file = "Search_and_LLM\\LangChain_ChatGPT\\WebAPI\\Secret\\credentials.json"
-    #     agent = model.run(credentials_file) # ここでAPI叩いている
-    #     ##################################################################################################################
-    #     # 予定管理アプリ
-    #     text = "本日" +  str(dt_now) + "の会議の予定は以下です。"
-    #     text += self.schedule.getMeetingContents()
-    #     """ 追加 """
-
-    #     # time = dt_now.strftime('%Y/%m/%d %H:%M') # %Y年%m月%d日%H時%M分') # dt_now.strftime('%H時%M分') # xx時xx分:0815
-    #     pre_Info = "\n現在時刻は" + str(dt_now) + "です。\n" # dt_now + "です。"
-        
-    #     # 直近の会議の名前は教える
-    #     # text += pre_Info + "直近の予定は" + self.schedule.getNextMtg() + "です。何分後にどこに向かえばいいか教えて。"
-    #     # text += "直近に必要な情報のみ簡潔に教えて。" # 時刻の計算は計算機で正確に算出しなければならない。"
-    #     text += userInput
-
-    #     Input = text
-    #     # print(f"Input Text は 「{Input}」 です。")
-    #     print("\n\n******************** [AI Answer] ********************\n")
-    #     response = agent.invoke(Input)
-
-    #     # model.text_to_speach(response['output'])
-    #     """LLM 追加"""
-    #     if ('{' in response['output']) or ('}' in response['output']): # カギかっこなどが文字列に含まれる場合 # ただし、全角文字のカッコには対応できない
-    #         llm_chain = model.output()
-    #         user_input = f"次の文をカギかっこなどのなく、一文当たり短い箇条書きにして。最後に以上ですと言って。\n{response['output']}\n"
-    #         final_response = llm_chain.predict(input=user_input)
-    #         model.text_to_speach(final_response)
-    #         # text_to_speach(response['output'])
-    #     else:
-    #         print("{{ または }} は含まれていないため、出力形式修正用のLLMは呼び出しません。")
-    #         model.text_to_speach(response['output'])
 
 
 
@@ -612,25 +563,3 @@ if __name__ == "__main__":
     # this
     for i in range(1): # 3): # 今は3回ユーザーにフィードバックしたら終了
         functional_decision.run()
-
-    
-    
-    # デモ用
-    # from UIModel import UserInterfaceModel # ユーザーとのやり取りをするモデル
-    # userinterface = UserInterfaceModel()
-    # # 音声認識関数の呼び出し
-    # print(" >> Waiting for response from Agent...")
-    # # userInput = userinterface.recognize_speech()
-    # userInput = "この後の予定は何？何分後にどこに向かえばいいか教えて。"
-
-    # print("\n\n******************** [User Input] ********************\n", userInput)
-    # try:
-    #     # response = 
-    #     functional_decision.test(userInput)
-
-    #     print("\n\n******************** [AI Answer] ********************\n")
-    #     # userinterface.text_to_speach(response['output'])
-    #     # print("\n******************** [AI Answer] ********************\n", response["output"])
-    # except:
-    #     print("\n##################################################\nERROR! ERROR! ERROR!\n##################################################")
-    #     print("もう一度入力してください。")

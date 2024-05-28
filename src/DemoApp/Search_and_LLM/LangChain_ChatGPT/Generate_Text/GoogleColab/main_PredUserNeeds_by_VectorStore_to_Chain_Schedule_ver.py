@@ -3,6 +3,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 """
+2024/05/28
+Scheduleバージョン
+
 2024/05/24
 Prediction_UserNeeds.py の改善版 (VectorStoreを追加して保管されているユーザーの履歴を参照し、ニーズを分析させる)
 
@@ -35,8 +38,8 @@ from langchain.indexes import VectorstoreIndexCreator
 from langchain_community.document_loaders import TextLoader
 # from langchain.document_loaders import CSVLoader # csvはこっち
 from langchain_community.document_loaders import CSVLoader
-# loader = TextLoader('./UserAction2_mini_loop.txt', encoding='utf8')
-loader = TextLoader('./userdata.txt', encoding='utf8')
+# loader = TextLoader('./UserAction2_mini_loop_Schedule.txt', encoding='utf8')
+loader = TextLoader('./userdata_schedule.txt', encoding='utf8')
 # 100文字のチャンクで区切る
 text_splitter = CharacterTextSplitter(        
     separator = "\n\n",
@@ -51,10 +54,11 @@ index = VectorstoreIndexCreator(
 ).from_loaders([loader])
 query = """
         あなたはニーズを予測する専門家です。以下に答えて。
-        txtファイルの文書はユーザーの「どの時刻に、どの行動状態で、どの機能を使用したか」の履歴です。
+        txtファイルの文書はユーザーの「どんな予定の時に、どの行動状態で、どの機能を使用したか」の履歴です。
         このユーザーの傾向を分析・予測し箇条書きでまとめて。
-        (例：朝の時間帯(xx:xx - xx:xx): ,午前中(xx:xx - xx:xx), 昼の時間帯(xx:xx - xx:xx), 午後(xx:xx - xx:xx), 夕方(xx:xx - xx:xx), 夜の時間帯(xx:xx - xx:xx))
         """
+        # (例：予定ごとの使う機能の傾向)
+        # """
         # (例1：朝の時間帯(xx:xx - xx:xx): ,午前中(xx:xx - xx:xx), 昼の時間帯(xx:xx - xx:xx), 午後(xx:xx - xx:xx), 夕方(xx:xx - xx:xx), 夜の時間帯(xx:xx - xx:xx))
         # (例2：行動状態ごとの使う機能の傾向)
         # """
@@ -63,30 +67,35 @@ answer = index.query(query, llm=llm_4o)
 
 
 prompt_2 = PromptTemplate(
-    input_variables=["UserNeeds", "time", "UserAction"],
-    # ユーザーの傾向を加味して機能を提案するLLM
-    template =  """
-                あなたはユーザーに合う機能を提案する専門家です。
-                ユーザーの傾向は「{UserNeeds}」です。
+    input_variables=["UserNeeds", "schedule", "UserAction"],
+    # 行動状態ありバージョン
+    template = """
+               あなたはユーザーに合う機能を提案する専門家です。
+               ユーザーの傾向は「{UserNeeds}」です。
 
-                現在が{time}、ユーザーの行動状態が{UserAction}の場合、どの機能を提案するかこのユーザーの傾向を加味して予測して。
-                その際、各機能の提案する確率と最終的な提案(Final Answer:)、その理由も教えて。
-                あなたが提案できる機能は、
-                "会議情報", "楽曲再生", "経路検索", "リアルタイム情報検索", "レストラン検索", "ニュース情報", "天気情報"
-                です。
-                """
-    
-    # ユーザーの傾向から提案タイミングを予測するLLM
-    # template =  """
-    #             あなたはユーザーに合う機能を適切なタイミングで提案する専門家です。
-    #             ユーザーの傾向は「{UserNeeds}」です。
-    #             ユーザーの傾向からユーザーが機能を使いそうなタイミングを時刻を指定して教えて。時刻が連続する場合はその時刻周辺で最も適切な時刻を指定して。
-    #             (例 ... 時刻：) 
-    #             """ # 同じ機能が連続する場合はマージして。数分単位で連続する場合
-    #             # ユーザーの傾向からユーザーのニーズが発生しそうなタイミングを時刻を指定して教えて。時刻が連続する場合は最も適切だと考えられる時刻を指定して。
-    #             # 時刻：
-    #             # """
-    # 上記二つのいずれかがよさそう
+               現在の予定が{schedule}、ユーザーの行動状態が{UserAction}の場合、どの機能を提案するかこのユーザーの傾向を加味して予測して。
+               その際、各機能の提案する確率と最終的な提案(Final Answer:)、その理由も教えて。
+               あなたが提案できる機能は、
+               "会議情報", "楽曲再生", "経路検索", "リアルタイム情報検索", "レストラン検索", "ニュース情報", "天気情報"
+               です。
+               """
+    # 行動状態無しバージョン、傾向無しバージョン
+    # template = """
+    #            あなたはユーザーに合う機能を提案する専門家です。
+
+    #            現在の予定が{schedule}の場合、どの機能を提案しますか？
+    #            その際、各機能の提案する確率と最終的な提案(Final Answer:)、その理由も教えて。
+    #            あなたが提案できる機能は、
+    #            "会議情報", "楽曲再生", "経路検索", "リアルタイム情報検索", "レストラン検索", "ニュース情報", "天気情報"
+    #            です。
+    #            会議時にSTABLEの場合は会議が長引いていることが多いです。
+    #            """
+
+    """
+    # どちらともユーザーの傾向がないとあまり精度良くない
+    """
+
+
 )
 chain_2 = LLMChain(llm=llm_4o, prompt=prompt_2, output_key="output")
 # chain_2 = prompt_2 | llm_4o # 新しいやり方
@@ -96,19 +105,24 @@ chain_2 = LLMChain(llm=llm_4o, prompt=prompt_2, output_key="output")
 from langchain.chains import SequentialChain
 overall_chain = SequentialChain(
     chains=[chain_2],
-    input_variables=["UserNeeds", "time", "UserAction"],
+    input_variables=["UserNeeds", "schedule", "UserAction"],
     # output_variables=["response"], # あくまで辞書型のなんていう要素に出力が格納されるかの変数
     verbose=True,
 )
 response = overall_chain({
     "UserNeeds" : answer,
-    "time" : "11時41分",
+    "schedule" : "通勤",
+    # "schedule" : "昼食",
+    # "schedule" : "定例",
+    # "schedule" : "進捗確認",
+    # "schedule" : "面談",
+    # "UserAction" : "STABLE",
     "UserAction" : "WALKING",
 })
 print("\n--------------------------------------------------")
 print("User Needs: \n", response['UserNeeds'])
 print("\n--------------------------------------------------")
-print("time: ", response['time'])
+print("schedule: ", response['schedule'])
 print("User Action: ", response['UserAction'])
 print("\n--------------------------------------------------")
 print("Output: ", response['output'])
@@ -140,7 +154,7 @@ print("\n--------------------------------------------------")
 # prompt_1 = PromptTemplate(
 #     # input_variables=["job"],
 #     # template="{job}に一番オススメのプログラミング言語は?\nプログラミング言語：",
-#     input_variables=["time", "UserAction"],
+#     input_variables=["schedule", "UserAction"],
 #     template =  """
 #                 あなたはニーズを予測する専門家です。以下に答えて。
 #                 txtファイルの文書はユーザーの「どの時刻に、どの行動状態で、どの機能を使用したか」の履歴です。
@@ -153,9 +167,9 @@ print("\n--------------------------------------------------")
 # prompt_2 = PromptTemplate(
 #     # input_variables=["job"],
 #     # template="{job}の平均年収は？\n平均年収：",
-#     input_variables=["time", "UserAction"],
+#     input_variables=["schedule", "UserAction"],
 #     template =  """
-#                 現在が{time}、ユーザーの行動状態が{UserAction}の場合、どの機能を提案するかこのユーザーの傾向を加味して予測して。
+#                 現在が{schedule}、ユーザーの行動状態が{UserAction}の場合、どの機能を提案するかこのユーザーの傾向を加味して予測して。
 #                 その際、各機能の提案する確率と最終的な提案(Final Answer:)、その理由も教えて。
 #                 あなたが提案できる機能は、
 #                 "会議情報", "楽曲再生", "経路検索", "リアルタイム情報検索", "レストラン検索", "ニュース情報", "天気情報"
@@ -173,13 +187,13 @@ print("\n--------------------------------------------------")
 # from langchain.chains import SequentialChain
 # overall_chain = SequentialChain(
 #     chains=[concat_chain],
-#     input_variables=["time", "UserAction"],
+#     input_variables=["schedule", "UserAction"],
 #     # output_variables=["response"], # あくまで辞書型のなんていう要素に出力が格納されるかの変数
 #     verbose=True,
 # )
 
 # response = overall_chain({
-#     "time" : "11時41分",
+#     "schedule" : "11時41分",
 #     "UserAction" : "WALKING",
 # })
 

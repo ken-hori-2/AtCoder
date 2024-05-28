@@ -27,6 +27,9 @@ class ScheduleQueryRun(BaseTool):
     description: str = (
         "This function is useful for retrieving schedule information from a specified outlook appointment list."
         "Get information about the next meeting."
+        # 2024/05/28
+        "It also helps users to know their departure station and destination station, which is necessary when searching for routes to commute or travel." # ユーザーが通勤や移動する際の経路検索時に必要な、出発地や目的地を知るのにも役立ちます。
+        "This is especially useful when the starting point or destination is unknown." # 特に出発地や目的地が不明な時に役立ちます。
     )
 
     def _run(

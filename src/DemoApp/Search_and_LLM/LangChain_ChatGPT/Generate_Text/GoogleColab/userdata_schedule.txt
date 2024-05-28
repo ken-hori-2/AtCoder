@@ -1,0 +1,41 @@
+通勤, WALKING, 経路検索
+
+通勤, STABLE, 楽曲再生
+
+仕事, WALKING, 会議情報
+
+昼食, STABLE, レストラン検索
+
+昼食, STABLE, 楽曲再生
+
+仕事, WALKING, 会議情報
+
+帰宅, WALKING, 経路検索
+
+ジム, WALKING, 楽曲再生
+
+通勤, WALKING, 経路検索
+
+通勤, STABLE, 楽曲再生
+
+昼食, STABLE, レストラン検索
+
+仕事, STABLE, 会議情報
+
+帰宅, WALKING, 経路検索
+
+ジム, RUNNING, 楽曲再生
+
+通勤, WALKING, 経路検索
+
+通勤, STABLE, 楽曲再生
+
+昼食, STABLE, レストラン検索
+
+昼食, WALKING, 経路検索
+
+昼食, STABLE, 楽曲再生
+
+帰宅, WALKING, 経路検索
+
+ジム, RUNNING, 楽曲再生
