@@ -20,8 +20,8 @@ load_dotenv('WebAPI\\Secret\\.env') # たぶんload_dotenv()のみでいい
 #     temperature=0 # 出力する単語のランダム性（0から2の範囲） 0であれば毎回返答内容固定
 # ) # チャット特化型モデル
 llm=ChatOpenAI(
-    # model="gpt-4o",
-    model="gpt-3.5-turbo",
+    model="gpt-4o",
+    # model="gpt-3.5-turbo",
     temperature=0 # 出力する単語のランダム性（0から2の範囲） 0であれば毎回返答内容固定
 ) # チャット特化型モデル
 # llm = OpenAI(temperature=0)
@@ -39,6 +39,7 @@ from WebAPI.RouteSearch.route_api import RouteSearchQueryRun
 from WebAPI.Spotify.spotify_api import MusicPlaybackQueryRun
 from WebAPI.RestaurantSearch.hotpepper_api import RestaurantSearchQueryRun
 from WebAPI.Localization.place_api import LocalizationQueryRun
+from WebAPI.Schedule.OutlookSchedule_api import ScheduleQueryRun # 2024/05/28 追加
 # # カレントディレクトリの取得(作業中のフォルダ)
 # current_dir = os.getcwd()
 # print(current_dir)
@@ -178,6 +179,8 @@ tools = [
 
     HumanInputRun(), # ユーザーに入力を求める
 
+    ScheduleQueryRun() # 2024/05/28 追加
+
 ]
 
 # agent が使用する memory の作成
@@ -235,7 +238,7 @@ agent_kwargs = {
 
     開始!ここからの会話は全て日本語で行われる。
 
-    ### 解答形式は以下のようにしなければならない。
+    ### 解答例
     [Human]: やあ！
     [AI]: こんにちは！
     
@@ -247,6 +250,7 @@ agent_kwargs = {
     {agent_scratchpad}
     """,
 }
+# 解答形式は以下のようにしなければならない。 # 2024/05/28 変更点
 
 ##### 2024/05/16 #####
 # from langchain import HuggingFacePipeline, PromptTemplate, LLMChain
@@ -425,6 +429,7 @@ for i in range(1): # 3):
     # elif i == 2:
     #     # text = "目的地は品川駅です。検索結果を詳細に教えて。"
     #     text = "目的地は品川駅です。検索結果を詳細に教えて。" + "乗換回数の少ない経路を教えて。" # 安い経路を教えて。速い経路を教えて。 # 表示の優先度の確認
+    
     # レストラン検索
     # if i == 0:
     #     text = "レストランを教えて。"
@@ -432,6 +437,7 @@ for i in range(1): # 3):
     #     text = "現在地は本厚木駅です。レストラン情報を教えて。"
     # elif i == 2:
     #     break
+    
     # 楽曲再生（ガイダンスはしないようにする）
     # if i == 0:
     #     text = "楽曲再生して。" # 初回はSTABLEで停止操作になる
@@ -439,6 +445,18 @@ for i in range(1): # 3):
     #     text = "ウォーキングにあう曲をお願い。"
     # elif i == 2:
     #     text = "ランニングにあう曲を再生して。"
+
+    
+    
+    # 予定表 # 2024/05/28 追加
+    import datetime
+    # dt_now = datetime.datetime.now() # 現在時刻
+    # dt_now = datetime.datetime(2024, 5, 24, 8, 00)
+    dt_now = datetime.datetime(2024, 5, 24, 10, 50)
+    text = "現在時刻は" + str(dt_now) + "です。" + "次の予定を教えて。" + "何分後にどこに向かえばいい？" # "今日の予定は何ですか？
+    #####
+
+    
 
     question = text
 

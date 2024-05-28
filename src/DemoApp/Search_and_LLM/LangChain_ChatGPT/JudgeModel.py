@@ -1,5 +1,10 @@
 
 # C:\Users\0107409377\Desktop\code\AtCoder\src\DemoApp\Search_and_LLM\LangChain-ChatGPT\main_Langchain.py　のコピー、JUDGE_func.py用にClass化した編集バージョン
+# このファイルを直接実行する場合のみ必要
+from dotenv import load_dotenv
+# load_dotenv()
+load_dotenv('WebAPI\\Secret\\.env') # たぶんload_dotenv()のみでいい
+# このファイルを直接実行する場合のみ必要
 
 import os
 import sys
@@ -32,7 +37,12 @@ mainファイルで一回読み込んでいるのでいらない
 # # .envファイルの内容を読み込見込む
 # load_dotenv()
 # agent の使用する LLM
+# llm=ChatOpenAI(
+#     temperature=0 # 出力する単語のランダム性（0から2の範囲） 0であれば毎回返答内容固定
+# ) # チャット特化型モデル
 llm=ChatOpenAI(
+    model="gpt-4o",
+    # model="gpt-3.5-turbo",
     temperature=0 # 出力する単語のランダム性（0から2の範囲） 0であれば毎回返答内容固定
 ) # チャット特化型モデル
 # llm = OpenAI(temperature=0)
@@ -50,6 +60,7 @@ from WebAPI.RouteSearch.route_api import RouteSearchQueryRun
 from WebAPI.Spotify.spotify_api import MusicPlaybackQueryRun
 from WebAPI.RestaurantSearch.hotpepper_api import RestaurantSearchQueryRun
 from WebAPI.Localization.place_api import LocalizationQueryRun
+from WebAPI.Schedule.OutlookSchedule_api import ScheduleQueryRun # 2024/05/28 追加
 
 from WebAPI.Calendar.GCalTool import GoogleCalendarTool
 
@@ -187,23 +198,55 @@ class Langchain4Judge():
             LocalizationQueryRun(),
             RestaurantSearchQueryRun(),
 
+            ScheduleQueryRun() # 2024/05/28 追加
+
         ]
         # agent が使用する memory の作成
         memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
         # テンプレート
+        # agent_kwargs = {
+        #     "suffix": 
+        #     """
+        #     あなたはユーザーの入力に応答するスペシャリストです。
+        #     人間の要求に答えてください。
+        #     その際に適切なツールを使いこなして回答してください。
+        #     さらに、あなたは過去のやりとりに基づいて人間と会話をしています。
+
+        #     開始!ここからの会話は全て日本語で行われる。
+
+        #     ### 解答例
+        #     Human: やあ！
+        #     GPT(AI) Answer: こんにちは！
+            
+        #     ### 以前のチャット履歴
+        #     {chat_history}
+
+        #     ###
+        #     Human: {input}
+        #     {agent_scratchpad}
+        #     """,
+
+            
+        # }
         agent_kwargs = {
             "suffix": 
             """
-            あなたはユーザーの入力に応答するスペシャリストです。
+            あなたはユーザーの入力に応答するAIです。
             人間の要求に答えてください。
             その際に適切なツールを使いこなして回答してください。
             さらに、あなたは過去のやりとりに基づいて人間と会話をしています。
 
+            
+            
+            必要なら人間に追加の入力を求めてください。
+
+
+
             開始!ここからの会話は全て日本語で行われる。
 
             ### 解答例
-            Human: やあ！
-            GPT(AI) Answer: こんにちは！
+            [Human]: やあ！
+            [AI]: こんにちは！
             
             ### 以前のチャット履歴
             {chat_history}
@@ -212,9 +255,9 @@ class Langchain4Judge():
             Human: {input}
             {agent_scratchpad}
             """,
-
-            
         }
+        # 解答形式は以下のようにしなければならない。 # 2024/05/28 変更点
+
         # 最終回答：ここに文字列のみで最終回答をしてください。
 
 
@@ -302,28 +345,47 @@ if __name__ == "__main__":
     Output
     """
     model = Langchain4Judge()
-    agent = model.run()
+    # ここのパスが重要 (DM4L.pyはDemoApp/にあるので、その直下のSearch_and_LLM/から指定)
+    credentials_file = "WebAPI\\Secret\\credentials.json"
+    agent = model.run(credentials_file)
 
     state = '走っている'
     Input = f"Action Detectionは{state}です。この行動にあったプレイリストをSpotifyAPIを使って再生もしくは一時停止してください。" # テンプレート化する
+
+    
+    
+    # 予定表 # 2024/05/28 追加
+    import datetime
+    # dt_now = datetime.datetime.now() # 現在時刻
+    # dt_now = datetime.datetime(2024, 5, 24, 8, 00)
+    dt_now = datetime.datetime(2024, 5, 24, 10, 50)
+    text = "現在時刻は" + str(dt_now) + "です。" + "次の予定を教えて。" + "何分後にどこに向かえばいい？" # "今日の予定は何ですか？
+    Input = text
+    #####
+
+
+
+
     response = agent.invoke(Input) # できた(その後エラーはあるが)
     # text_to_speach(final_response)
 
-    final_response, llm_chain = model.output(response)
-    if 'PLAYBACK' in final_response:
-        print("\nMUSIC PLAYBACK!!!!! -> ガイダンス再生はしません。")
-    else:
-        print("\nOTHER!!!!!")
-        """LLM 3個目"""
-        state = '運動していません' # stableと認識
-        question = f"Action Detectionは{state}です。この行動にあったプレイリストをSpotifyAPIを使って再生もしくは一時停止してください。" # テンプレート化する
-        playback_response = agent.invoke(question) # できた(その後エラーはあるが)
+    model.text_to_speach(response['output'])
+    # 2024/05/28 コメントアウト
+    # final_response, llm_chain = model.output(response)
+    # if 'PLAYBACK' in final_response:
+    #     print("\nMUSIC PLAYBACK!!!!! -> ガイダンス再生はしません。")
+    # else:
+    #     print("\nOTHER!!!!!")
+    #     """LLM 3個目"""
+    #     state = '運動していません' # stableと認識
+    #     question = f"Action Detectionは{state}です。この行動にあったプレイリストをSpotifyAPIを使って再生もしくは一時停止してください。" # テンプレート化する
+    #     playback_response = agent.invoke(question) # できた(その後エラーはあるが)
         
-        """LLM 4個目"""
-        # templateに追加してもいいかも
-        user_input = f"次の文をリスト形式ではなく、カギかっこなどのなく、一文当たり短い箇条書きにしてください。\n {response['output']}" # カギかっこなどのない、ただの文字列のみで、
-        final_response = llm_chain.predict(input=user_input)
-        # final_response = agent.invoke(user_input) # こっちだと「inputchat_historyoutput」と出力されてしまう
-        # print(final_response)
-        model.text_to_speach(final_response)
-        # text_to_speach(response['output'])
+    #     """LLM 4個目"""
+    #     # templateに追加してもいいかも
+    #     user_input = f"次の文をリスト形式ではなく、カギかっこなどのなく、一文当たり短い箇条書きにしてください。\n {response['output']}" # カギかっこなどのない、ただの文字列のみで、
+    #     final_response = llm_chain.predict(input=user_input)
+    #     # final_response = agent.invoke(user_input) # こっちだと「inputchat_historyoutput」と出力されてしまう
+    #     # print(final_response)
+    #     model.text_to_speach(final_response)
+    #     # text_to_speach(response['output'])
