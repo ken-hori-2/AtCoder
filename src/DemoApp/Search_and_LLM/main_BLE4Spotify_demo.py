@@ -19,6 +19,11 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 COM="COM17" # 完全BLE接続にする場合、トランシーバー用基板に送信
 COM="COM16" # 完全BLE接続にする場合、ドングル基板に送信
 
+
+
+
+# 最新版のSDKでは検出結果が一つ前の結果と変わらないと出力されないようになったので、キューをためたり、前と異なる結果がったらということを判定しなくていい
+
 bitRate=115200
 
 ser = serial.Serial(COM, bitRate, timeout=0.1)
@@ -123,8 +128,8 @@ run_comp_stable = "Value = 0x00"
 Mode = 9 # 8 # 7 # 6 # 2 # 1 # 0
 
 
-DETECT_COUNT = 0
-Pre_RecieveData = run_comp_running # stable
+# DETECT_COUNT = 0
+# Pre_RecieveData = run_comp_running # stable
 
 while True:
 
@@ -134,23 +139,28 @@ while True:
     
     # if run_comp_running in RecieveData:
     if (run_comp_running in RecieveData) or (run_comp_walking in RecieveData) or (run_comp_stable in RecieveData): # RUNNING or WALKING で実行
-        print("**********")
-        # print("Detected RUNNING !!!!!")
-        # print("Detected COMBO !!!!!")
-        # print("Detected WALKING !!!!!")
-        print("Detect : ", RecieveData)
-        if RecieveData in Pre_RecieveData:
+        # print("**********")
+        # # print("Detected RUNNING !!!!!")
+        # # print("Detected COMBO !!!!!")
+        # # print("Detected WALKING !!!!!")
+        # print("Detect : ", RecieveData)
+        # if RecieveData in Pre_RecieveData:
             
-            for i in range(100): # 残っている検出結果をリリースする
-                L_RecieveData=ser.readline()
-                RecieveData = L_RecieveData.decode()
-                print(RecieveData)
-            DETECT_COUNT = 0
-        else:
-            DETECT_COUNT += 1
+        #     # for i in range(100): # 残っている検出結果をリリースする
+        #     #     L_RecieveData=ser.readline()
+        #     #     RecieveData = L_RecieveData.decode()
+        #     #     print(RecieveData)
+        #     # for i in range(10): # 残っている検出結果をリリースする
+        #     #     L_RecieveData=ser.readline()
+        #     #     RecieveData = L_RecieveData.decode()
+        #     #     print(RecieveData)
+        #     # DETECT_COUNT = 0
+        #     pass
+        # else:
+        #     DETECT_COUNT += 1
             
 
-        if DETECT_COUNT > 1: # 5: # 20: # 時間でもいいかも
+        # if DETECT_COUNT > 0: # 1: # 5: # 20: # 時間でもいいかも
             # if Mode == 0:
             #     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Device_Contorol/Camera.py'])
             # if Mode == 1:
@@ -179,26 +189,30 @@ while True:
                 print("********** Mode : Spotify **********")
 
                 # 同じ状態が継続しているか判別するために1つ前に検出された状態を格納する
-                Pre_RecieveData = RecieveData
+                # Pre_RecieveData = RecieveData
                 
                 # Spotify一時停止用に追加
                 if run_comp_stable in RecieveData:
+                    # RecieveData = run_comp_stable
                     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/ActionDetection_Play.py', 'STABLE'])
                 # HOUSE MUSIC を再生
                 if run_comp_running in RecieveData:
+                    # RecieveData = run_comp_running
                     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/ActionDetection_Play.py', 'RUNNING'])
                 # J-POP を再生
                 if run_comp_walking in RecieveData:
+                    # RecieveData = run_comp_walking
                     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/ActionDetection_Play.py', 'WALKING'])
             
+            # # DETECT_COUNT = 0
+            # # break
+            # # time.sleep(3)
+            # for i in range(100): # 残っている検出結果をリリースする
+            #     L_RecieveData=ser.readline()
+            #     RecieveData = L_RecieveData.decode()
+            #     print(RecieveData)
             # DETECT_COUNT = 0
-            # break
-            # time.sleep(3)
-            for i in range(100): # 残っている検出結果をリリースする
-                L_RecieveData=ser.readline()
-                RecieveData = L_RecieveData.decode()
-                print(RecieveData)
-            DETECT_COUNT = 0
+            # # RecieveData = run_comp_stable
     
     # Pre_RecieveData = RecieveData
     

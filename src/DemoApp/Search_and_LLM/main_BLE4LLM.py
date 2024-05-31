@@ -17,6 +17,7 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 # COM="COM13" # 完全BLE接続にする場合、トランシーバー用基板に送信
 # COM="COM11" # 完全BLE接続にする場合、トランシーバー用基板に送信
 COM="COM17" # 完全BLE接続にする場合、トランシーバー用基板に送信
+COM="COM16" # 完全BLE接続にする場合、ドングル基板に送信
 
 bitRate=115200
 

@@ -120,11 +120,10 @@ run_comp_stable = "Value = 0x00"
 # Mode 4 : Google検索 & ガイダンス
 # Mode 5 : 音声認識 & ChatGPT & ガイダンス
 
-Mode = 9 # 8 # 7 # 6 # 2 # 1 # 0
+Mode = 7 # 8
 
 
 DETECT_COUNT = 0
-Pre_RecieveData = run_comp_running # stable
 
 while True:
 
@@ -133,63 +132,54 @@ while True:
     print(RecieveData)
     
     # if run_comp_running in RecieveData:
-    if (run_comp_running in RecieveData) or (run_comp_walking in RecieveData) or (run_comp_stable in RecieveData): # RUNNING or WALKING で実行
+
+
+    # if (run_comp_running in RecieveData): #  or (run_comp_walking in RecieveData): # RUNNING or WALKING で実行
+    if (run_comp_walking in RecieveData): # デモ動画用
+
+        
         print("**********")
         # print("Detected RUNNING !!!!!")
         # print("Detected COMBO !!!!!")
         # print("Detected WALKING !!!!!")
-        print("Detect : ", RecieveData)
-        if RecieveData in Pre_RecieveData:
-            
-            for i in range(100): # 残っている検出結果をリリースする
-                L_RecieveData=ser.readline()
-                RecieveData = L_RecieveData.decode()
-                print(RecieveData)
-            DETECT_COUNT = 0
-        else:
-            DETECT_COUNT += 1
-            
+        print("Detected Gesture !!!!!")
+        DETECT_COUNT += 1
 
-        if DETECT_COUNT > 1: # 5: # 20: # 時間でもいいかも
-            # if Mode == 0:
-            #     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Device_Contorol/Camera.py'])
-            # if Mode == 1:
-            #     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/search.py'])
+        if DETECT_COUNT > 0: # 3: # 20:
+            if Mode == 0:
+                subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Device_Contorol/Camera.py'])
+            if Mode == 1:
+                subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/search.py'])
             
             
-            # if Mode == 3:
-            #     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Downloads/API-App/PlaceAPI.py'])
-            # if Mode == 4:
-            #     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Downloads/API-App/DirectionsAPI.py'])
-            # if Mode == 5:
-            #     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Google_serch_Guidance.py'])
+            if Mode == 3:
+                subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Downloads/API-App/PlaceAPI.py'])
+            if Mode == 4:
+                subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Downloads/API-App/DirectionsAPI.py'])
+            if Mode == 5:
+                subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Google_serch_Guidance.py'])
             
-            # # LLM Only
-            # if Mode == 6:
-            #     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/ChatGPT.py'])
+            # LLM Only
+            if Mode == 6:
+                subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/ChatGPT.py'])
             # LLM Schedule
-            # if Mode == 7:
-            #     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Schedule_and_Outlook_mask_data.py'])
+            if Mode == 7:
+                subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Schedule_and_Outlook_mask_data.py'])
+                # ここでパワポにまとめたり
+                # メールに添付して送信
+                # のコードを記述する？ -> 上記のコード内に記述すればテキストを引き継げる
+                # subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/Outlook_Schedule/PowerPoint.py'])
             # LLM Route Guidance(経路検索は別の経路案内APIから取得予定)
-            # if Mode == 8:
-            #     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/RouteSearch_API/LLM_RouteGuidance.py']) # C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/LLM_RouteGuidance.py'])
+            if Mode == 8:
+                subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Search_and_LLM/RouteSearch_API/LLM_RouteGuidance.py']) # C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/LLM_RouteGuidance.py'])
             
             # Spotify
-            if Mode == 9:
-                print("********** Mode : Spotify **********")
-
-                # 同じ状態が継続しているか判別するために1つ前に検出された状態を格納する
-                Pre_RecieveData = RecieveData
-                
-                # Spotify一時停止用に追加
-                if run_comp_stable in RecieveData:
-                    subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/ActionDetection_Play.py', 'STABLE'])
-                # HOUSE MUSIC を再生
-                if run_comp_running in RecieveData:
-                    subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/ActionDetection_Play.py', 'RUNNING'])
-                # J-POP を再生
-                if run_comp_walking in RecieveData:
-                    subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/ActionDetection_Play.py', 'WALKING'])
+            # if Mode == 8:
+            #     print("********** Mode 8 **********")
+            #     if run_comp_running in RecieveData: # HOUSE MUSIC を再生
+            #         subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/ActionDetection_Play.py', 'RUNNING'])
+            #     if run_comp_walking in RecieveData: # J-POP を再生
+            #         subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/ActionDetection_Play.py', 'WALKING'])
             
             # DETECT_COUNT = 0
             # break
@@ -199,10 +189,10 @@ while True:
                 RecieveData = L_RecieveData.decode()
                 print(RecieveData)
             DETECT_COUNT = 0
+
+            break
     
-    # Pre_RecieveData = RecieveData
-    
-    
+    # "今はRUNNINGとWALKINGの時しか送信していないので送信できない"
     # # Spotify一時停止用に追加
     # if run_comp_stable in RecieveData: # HOUSE MUSIC を再生
     #     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/ActionDetection_Play.py', 'STABLE'])

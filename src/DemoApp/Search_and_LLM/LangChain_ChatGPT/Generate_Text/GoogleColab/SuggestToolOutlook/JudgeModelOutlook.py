@@ -2,22 +2,18 @@
 # C:\Users\0107409377\Desktop\code\AtCoder\src\DemoApp\Search_and_LLM\LangChain-ChatGPT\main_Langchain.py　のコピー、JUDGE_func.py用にClass化した編集バージョン
 # このファイルを直接実行する場合のみ必要
 from dotenv import load_dotenv
-# load_dotenv()
-load_dotenv('WebAPI\\Secret\\.env') # たぶんload_dotenv()のみでいい
+load_dotenv()
+# load_dotenv('WebAPI\\Secret\\.env') # たぶんload_dotenv()のみでいい
 # このファイルを直接実行する場合のみ必要
-
 import os
 import sys
-# sys.path.append(os.path.join(os.path.dirname(__file__), '../LangChain_ChatGPT'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '.')) # '.\\')) # './'))
-
-
-# sys.path.append(os.path.join(os.path.dirname(__file__), '../LangChain_ChatGPT/WebAPI'))
-# print(sys.path)
+# sys.path.append(os.path.join(os.path.dirname(__file__), '../../../WebAPI'))
+from pathlib import Path
+sys.path.append(str(Path('__file__').resolve().parent.parent)) # LangChain_ChatGPTまでのパス
+# sys.path.append(os.path.join(os.path.dirname(__file__), 'WebAPI'))
+print(sys.path)
 # sys.path.append(os.path.join(os.path.dirname(__file__), 'C:\\Users\\0107409377\\Desktop\\code\\AtCoder\\src\\DemoApp\\Search_and_LLM\\LangChain_ChatGPT\\WebAPI'))
-
 # sys.path.append(os.path.join(os.path.dirname(__file__), './Search_and_LLM'))
-
 
 from langchain.agents import initialize_agent, Tool
 from langchain.agents import AgentType
@@ -28,25 +24,6 @@ from langchain_openai import ChatOpenAI # 新しいやり方
 # Memory
 from langchain.memory import ConversationBufferMemory
 from langchain.agents import load_tools
-
-
-"""
-mainファイルで一回読み込んでいるのでいらない
-"""
-# from dotenv import load_dotenv
-# # .envファイルの内容を読み込見込む
-# load_dotenv()
-# agent の使用する LLM
-# llm=ChatOpenAI(
-#     temperature=0 # 出力する単語のランダム性（0から2の範囲） 0であれば毎回返答内容固定
-# ) # チャット特化型モデル
-llm=ChatOpenAI(
-    model="gpt-4o",
-    # model="gpt-3.5-turbo",
-    temperature=0 # 出力する単語のランダム性（0から2の範囲） 0であれば毎回返答内容固定
-) # チャット特化型モデル
-# llm = OpenAI(temperature=0)
-
 # Tool
 from langchain_google_community import GoogleSearchAPIWrapper # 新しいやり方
 # agent が使用するGoogleSearchAPIWrapperのツールを作成
@@ -61,12 +38,26 @@ from WebAPI.Spotify.spotify_api import MusicPlaybackQueryRun
 from WebAPI.RestaurantSearch.hotpepper_api import RestaurantSearchQueryRun
 from WebAPI.Localization.place_api import LocalizationQueryRun
 from WebAPI.Schedule.OutlookSchedule_api import ScheduleQueryRun # 2024/05/28 追加
-
 from WebAPI.Calendar.GCalTool import GoogleCalendarTool
-
-
 from langchain.chains.api.base import APIChain
 from langchain.chains.api import news_docs, open_meteo_docs, podcast_docs, tmdb_docs
+
+
+"""
+モデルもどこか一か所にまとめる
+"""
+llm_4o=ChatOpenAI(
+    model="gpt-4o",
+    # model="gpt-3.5-turbo",
+    temperature=0 # 出力する単語のランダム性（0から2の範囲） 0であれば毎回返答内容固定
+)
+llm_3p5t=ChatOpenAI(
+    # model="gpt-4o",
+    model="gpt-3.5-turbo",
+    temperature=0 # 出力する単語のランダム性（0から2の範囲） 0であれば毎回返答内容固定
+)
+
+
 
 ##################
 # Pyttsx3を初期化 #
@@ -395,23 +386,10 @@ if __name__ == "__main__":
         dt_now = datetime.datetime(2024, 5, 24, 8, 30)
         text = "現在時刻は" + str(dt_now) + "です。" + "最適な経路を教えて。"\
                 + "ユーザーに関する情報が足りない場合は予定を参照して。"  # プロンプト生成(4o)
-        
-        dt_now = datetime.datetime(2024, 5, 24, 8, 30)
-        text = "現在時刻は" + str(dt_now) + "です。" + "楽曲再生して。"\
-                + "ユーザーに関する情報が足りない場合は予定を参照して。"  # プロンプト生成(4o)
-        dt_now = datetime.datetime(2024, 5, 24, 8, 30)
-        text = "現在時刻は" + str(dt_now) + "です。" + "レストラン検索して。"\
-                + "ユーザーに関する情報が足りない場合は予定を参照して。"  # プロンプト生成(4o)
         Input = text
-
-        # Input = "今日の本厚木の天気は？"
         ##### 音声入力デモ
         # 音声認識関数の呼び出し（現在時刻のみ事前に入力する）
         # text += userinterface.recognize_speech() # 音声認識をする場合
-
-        # if ("終わり" in text) or ("終了" in text) or ("いらない" in text):
-        #     userinterface.text_to_speach("会話を終了します。\n")
-        #     break
 
 
 

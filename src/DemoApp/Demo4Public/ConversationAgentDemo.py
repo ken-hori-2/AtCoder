@@ -357,99 +357,63 @@ if __name__ == "__main__":
     # ここのパスが重要 (DM4L.pyはDemoApp/にあるので、その直下のSearch_and_LLM/から指定)
     credentials_file = "WebAPI\\Secret\\credentials.json"
     agent = model.run(credentials_file)
-
-    state = '走っている'
-    Input = f"Action Detectionは{state}です。この行動にあったプレイリストをSpotifyAPIを使って再生もしくは一時停止してください。" # テンプレート化する
-
-    
-    
     
     import datetime
+    from TriggerHeadGesture import Trigger
+    """
+    EdgeAIによるトリガーの定義
+    """
+    trigger = Trigger()
 
-    for i in range(1):
-        # 予定表 # 2024/05/28 追加
-        # dt_now = datetime.datetime.now() # 現在時刻
-        # dt_now = datetime.datetime(2024, 5, 24, 8, 00)
-        ##### 予定確認デモ
-        dt_now = datetime.datetime(2024, 5, 24, 10, 50)
-        text = "現在時刻は" + str(dt_now) + "です。" + "次の予定を教えて。" + "何分後にどこに向かえばいい？" # "今日の予定は何ですか？
-        Input = text
-        ##### 経路案内デモ
+    print("***** センシング中 *****")
+    UserActionState = trigger.run()
+    # UserActionState = "WALKING" # テスト用
+    # UserActionState = "STABLE" # テスト用
+    print("DNN検出結果：", UserActionState)
+    print("***** センシング終了 *****")
+
+    if "HeadGesture" in UserActionState:
+        userinterface.text_to_speach("ジェスチャーを検知しました。\n")
+
+
+        text = ""
+        question = ""
+        # dt_now = datetime.datetime.now()
         dt_now = datetime.datetime(2024, 5, 24, 8, 30)
-        # text = "家から会社までの経路教えて。予定から調べて教えて。"
-        text = "現在時刻は" + str(dt_now) + "です。" + "今日の予定から経路情報を簡潔に教えて。"
-        Input = text
-        ##### プロンプト生成デモ
-        dt_now = datetime.datetime(2024, 5, 24, 8, 30)
-        text = "現在時刻は" + str(dt_now) + "です。" \
-               + "ユーザーに関する情報が足りない場合は予定を参照して。" \
-               + "Prompt：最寄りの駅から目的地までの最短経路を教えて。" # プロンプト生成(3.5-turbo)
-             # + "Prompt：経路検索を行いたいです。出発地と目的地を指定して、最適なルートと所要時間を教えてください。" # プロンプト生成(4o)
-        Input = text
-        ##### 予定が5分以内にあるか（これでもいいが、常時起動は実行金額が高くなりすぎる）
-        dt_now = datetime.datetime(2024, 5, 24, 10, 55)
-        text = "現在時刻は" + str(dt_now) + "です。" + "次の予定は5分以内に始まりますか？あるかないかで答えて。"\
-               + "ユーザーに関する情報が足りない場合は予定を参照して。" 
-        
-        # テスト
-        dt_now = datetime.datetime(2024, 5, 24, 8, 30)
-        text = "現在時刻は" + str(dt_now) + "です。" + "最適な経路を教えて。"\
-                + "ユーザーに関する情報が足りない場合は予定を参照して。"  # プロンプト生成(4o)
-        
-        dt_now = datetime.datetime(2024, 5, 24, 8, 30)
-        text = "現在時刻は" + str(dt_now) + "です。" + "楽曲再生して。"\
-                + "ユーザーに関する情報が足りない場合は予定を参照して。"  # プロンプト生成(4o)
-        dt_now = datetime.datetime(2024, 5, 24, 8, 30)
-        text = "現在時刻は" + str(dt_now) + "です。" + "レストラン検索して。"\
-                + "ユーザーに関する情報が足りない場合は予定を参照して。"  # プロンプト生成(4o)
-        Input = text
 
-        # Input = "今日の本厚木の天気は？"
-        ##### 音声入力デモ
-        # 音声認識関数の呼び出し（現在時刻のみ事前に入力する）
-        # text += userinterface.recognize_speech() # 音声認識をする場合
+        for i in range(5):
+            # ##### 音声入力デモ
+            # # 音声認識関数の呼び出し（現在時刻のみ事前に入力する）
+            # # text += userinterface.recognize_speech() # 音声認識をする場合
+            userinterface.text_to_speach("Please Speak in 3 seconds\n")
+            print("入力してください。\n")
+            text = userinterface.recognize_speech() # 音声認識をする場合
 
-        # if ("終わり" in text) or ("終了" in text) or ("いらない" in text):
-        #     userinterface.text_to_speach("会話を終了します。\n")
-        #     break
+            # # 記憶保持の確認
+            # if i == 0:
+            #     text = "私の名前は「けん」です。25歳です。"
+            # elif i == 1:
+            #     text = "私の名前を教えて。"
+            # elif i == 2:
+            #     text = "私の年齢を教えて。"
+            # elif i == 3:
+            #     break
 
+            if text:
 
-
-
-        if text:
-            print(" >> Waiting for response from Agent...")
-            """
-            Output
-            """
-            print("\n\n******************** [User Input] ********************\n", text)
-            try:
-                response = agent.invoke(Input) # できた(その後エラーはあるが)
-                # text_to_speach(final_response)
-
-                print("\n\n******************** [AI Answer] ********************\n")
-                # model.text_to_speach(response['output'])
-                userinterface.text_to_speach(response['output'])
-            except:
-                print("\n##################################################\nERROR! ERROR! ERROR!\n##################################################")
-                print("もう一度入力してください。")
-    
-    
-    # 2024/05/28 コメントアウト
-    # final_response, llm_chain = model.output(response)
-    # if 'PLAYBACK' in final_response:
-    #     print("\nMUSIC PLAYBACK!!!!! -> ガイダンス再生はしません。")
-    # else:
-    #     print("\nOTHER!!!!!")
-    #     """LLM 3個目"""
-    #     state = '運動していません' # stableと認識
-    #     question = f"Action Detectionは{state}です。この行動にあったプレイリストをSpotifyAPIを使って再生もしくは一時停止してください。" # テンプレート化する
-    #     playback_response = agent.invoke(question) # できた(その後エラーはあるが)
-        
-    #     """LLM 4個目"""
-    #     # templateに追加してもいいかも
-    #     user_input = f"次の文をリスト形式ではなく、カギかっこなどのなく、一文当たり短い箇条書きにしてください。\n {response['output']}" # カギかっこなどのない、ただの文字列のみで、
-    #     final_response = llm_chain.predict(input=user_input)
-    #     # final_response = agent.invoke(user_input) # こっちだと「inputchat_historyoutput」と出力されてしまう
-    #     # print(final_response)
-    #     model.text_to_speach(final_response)
-    #     # text_to_speach(response['output'])
+                if ("終わり" in text) or ("終了" in text) or ("いらない" in text):
+                    userinterface.text_to_speach("会話を終了します。\n")
+                    break
+                else:
+                    print("\n\n******************** [User Input] ********************\n", text)
+                    question = "現在時刻は" + str(dt_now) + "です。" + text\
+                    + "ユーザーに関する情報が足りない場合は予定を参照して。"  # プロンプト生成(4o)
+                
+                    print(" >> Waiting for response from Agent...")
+                    try:
+                        response = agent.invoke(question) # できた(その後エラーはあるが)
+                        print("\n\n******************** [AI Answer] ********************\n")
+                        userinterface.text_to_speach(response['output'])
+                    except:
+                        print("\n##################################################\nERROR! ERROR! ERROR!\n##################################################")
+                        print("もう一度入力してください。")
