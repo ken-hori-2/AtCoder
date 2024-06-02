@@ -12,7 +12,7 @@ import time
 dt_now = datetime.datetime.now() # 現在時刻
 # print(dt_now)
 start_date = datetime.date(dt_now.year, dt_now.month, dt_now.day)
-print(dt_now)
+print(start_date)
 dt_now += datetime.timedelta(days=1)
 # dt_now += timedelta(days=1)
 end_date = datetime.date(dt_now.year, dt_now.month, dt_now.day) # 月末だと、同じ月の次の日がないのでエラーになる

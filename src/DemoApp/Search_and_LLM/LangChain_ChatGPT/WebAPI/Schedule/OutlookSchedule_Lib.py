@@ -31,9 +31,10 @@ class OutlookSchedule(): # BaseTool): # BaseToolの記述がなくても動く
         # dt_now = datetime.datetime(2024, 5, 24, 8, 00)
 
         start_date = datetime.date(dt_now.year, dt_now.month, dt_now.day)
-        end_date = datetime.date(dt_now.year, dt_now.month, dt_now.day + 1) # 月末だと、同じ月の次の日がないのでエラーになる
-        # 条件分岐で指定しないといけないかも
-        # end_date = datetime.date(dt_now.year, dt_now.month, dt_now.day) # 月末だと、同じ月の次の日がないのでエラーになる
+        # end_date = datetime.date(dt_now.year, dt_now.month, dt_now.day + 1) # 月末だと、同じ月の次の日がないのでエラーになる
+
+        dt_now += datetime.timedelta(days=1)
+        end_date = datetime.date(dt_now.year, dt_now.month, dt_now.day)
         
         strStart = start_date.strftime('%m/%d/%Y %H:%M %p')
         strEnd = end_date.strftime('%m/%d/%Y %H:%M %p')
