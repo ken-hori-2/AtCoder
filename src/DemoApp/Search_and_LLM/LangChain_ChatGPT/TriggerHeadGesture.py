@@ -46,7 +46,7 @@ class Trigger():
         run_comp_walking = "Value = 0x01"
         run_comp_stable = "Value = 0x00"
 
-        # DETECT_COUNT = 0
+        DETECT_COUNT = 0
         DETECT_COUNT_STABLE = 0
         DETECT_COUNT_MOVING = 0
 
@@ -73,6 +73,12 @@ class Trigger():
             
             if HeadGesture in RecieveData:
                 action_result = 'HeadGesture'
+                # return action_result
+                DETECT_COUNT += 1
+            # else:
+            #     DETECT_COUNT = 0
+            
+            if DETECT_COUNT > 1: # 3: # >= 5: # 時間でもいいかも
                 return action_result
             
             # if (run_comp_running in RecieveData) or (run_comp_walking in RecieveData) or (run_comp_stable in RecieveData): # RUNNING or WALKING で実行

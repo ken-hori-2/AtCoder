@@ -202,7 +202,7 @@ class Langchain4Judge():
             # )
             RouteSearchQueryRun(),
             MusicPlaybackQueryRun(),
-            LocalizationQueryRun(),
+            # LocalizationQueryRun(), # エラー回避
             RestaurantSearchQueryRun(),
 
             # HumanInputRun(), # ユーザーに入力を求める
@@ -368,6 +368,7 @@ if __name__ == "__main__":
     for i in range(5):
         print("***** センシング中 *****")
         UserActionState = trigger.run()
+        # UserActionState = "HeadGesture"
         # UserActionState = "WALKING" # テスト用
         # UserActionState = "STABLE" # テスト用
         print("DNN検出結果：", UserActionState)
@@ -379,8 +380,15 @@ if __name__ == "__main__":
 
             text = ""
             question = ""
-            dt_now = datetime.datetime.now()
+            """
+            デモするユースケースに応じて手動で時刻を設定する
+            """
+            # dt_now = datetime.datetime.now()
             # dt_now = datetime.datetime(2024, 5, 24, 8, 30)
+            dt_now = datetime.datetime(2024, 6, 3, 8, 30)
+            """
+            デモするユースケースに応じて手動で時刻を設定する
+            """
 
             for i in range(5):
                 # ##### 音声入力デモ
@@ -389,6 +397,14 @@ if __name__ == "__main__":
                 # userinterface.text_to_speach("Please Speak in 3 seconds\n")
                 print("入力してください。\n")
                 text = userinterface.recognize_speech() # 音声認識をする場合
+                
+                # text = "現在の日本の総理大臣は？"
+                # text = "今日の東京の天気は？"
+                # text = "次の予定を教えて。" + "何分後にどこに向かえばいい？"
+                # text = "今日の経路情報を簡潔に教えて。" # 駅名を指定してもOK
+                # text = "今日のおすすめのレストラン3つ教えて"
+
+                # text = "ランニングに合う楽曲を再生して。"
 
                 # # 記憶保持の確認
                 # if i == 0:
@@ -418,3 +434,7 @@ if __name__ == "__main__":
                         # except:
                         #     print("\n##################################################\nERROR! ERROR! ERROR!\n##################################################")
                         #     print("もう一度入力してください。")
+                    
+
+                    # break # test
+        # break # test

@@ -341,14 +341,20 @@ if __name__ == "__main__":
     """
     trigger = Trigger()
 
+    """
+    デモするユースケースに応じて手動で時刻を設定する
+    """
     # これらはデモアプリ起動のために使う
     # dt_now = datetime.datetime(2024, 5, 24, 8, 30)
 
 
-    dt_now = datetime.datetime(2024, 5, 24, 7, 55) # 天気(walk:route, stable:music)
+    # dt_now = datetime.datetime(2024, 5, 24, 7, 55) # 天気(walk:route, stable:music)
     dt_now = datetime.datetime(2024, 5, 24, 8, 15) # 出勤(walk:route, stable:music)
     dt_now = datetime.datetime(2024, 5, 24, 10, 55) # 定例
     dt_now = datetime.datetime(2024, 5, 24, 11, 55) # 昼食(walk:restaurant, stable:music)
+    """
+    デモするユースケースに応じて手動で時刻を設定する
+    """
 
 
 

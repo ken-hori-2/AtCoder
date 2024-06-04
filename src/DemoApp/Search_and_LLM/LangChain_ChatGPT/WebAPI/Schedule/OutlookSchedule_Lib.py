@@ -26,9 +26,16 @@ class OutlookSchedule(): # BaseTool): # BaseToolの記述がなくても動く
         items.Sort("[Start]")
         self.select_items = [] # 指定した期間内の予定を入れるリスト
 
+        """
+        デモするユースケースに応じて手動で時刻を設定する
+        """
         # 2024/05/28 変更点
-        dt_now = datetime.datetime.now() # 現在時刻
-        # dt_now = datetime.datetime(2024, 5, 24, 8, 00)
+        # dt_now = datetime.datetime.now() # 現在時刻
+        # dt_now = datetime.datetime(2024, 5, 24, 8, 30) # 00)
+        dt_now = datetime.datetime(2024, 6, 3, 8, 30)
+        """
+        デモするユースケースに応じて手動で時刻を設定する
+        """
 
         start_date = datetime.date(dt_now.year, dt_now.month, dt_now.day)
         # end_date = datetime.date(dt_now.year, dt_now.month, dt_now.day + 1) # 月末だと、同じ月の次の日がないのでエラーになる
@@ -185,7 +192,7 @@ class OutlookSchedule(): # BaseTool): # BaseToolの記述がなくても動く
                 
             # 社外秘情報は伏せる
             # mask_listに出社を追加
-            if (not (mask_list[0] in select_item.subject)) and (not (mask_list[1] in select_item.subject)) and (not (mask_list[2] in select_item.subject)) and (not (mask_list[3] in select_item.subject)):
+            if (not (mask_list[0] in select_item.subject)) and (not (mask_list[1] in select_item.subject)) and (not (mask_list[2] in select_item.subject)) and (not (mask_list[3] in select_item.subject)) and (not (mask_list[4] in select_item.subject)) and (not (mask_list[5] in select_item.subject)):
 
                 meeting_contents += "\n件名：" + select_item.subject
                 meeting_contents += "\n場所：" + select_item.location
