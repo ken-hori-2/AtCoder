@@ -367,8 +367,8 @@ if __name__ == "__main__":
 
     for i in range(5):
         print("***** センシング中 *****")
-        UserActionState = trigger.run()
-        # UserActionState = "HeadGesture"
+        # UserActionState = trigger.run()
+        UserActionState = "HeadGesture"
         # UserActionState = "WALKING" # テスト用
         # UserActionState = "STABLE" # テスト用
         print("DNN検出結果：", UserActionState)
