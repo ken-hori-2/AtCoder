@@ -1,5 +1,6 @@
 # ファイルパスを指定
-file_path = './userdata.txt'
+# file_path = './userdata.txt'
+file_path = './dataset.txt'
 
 # 空のリストを作成
 data = []

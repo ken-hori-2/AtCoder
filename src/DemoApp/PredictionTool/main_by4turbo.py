@@ -25,53 +25,67 @@ import torch.optim as optim
 #     ("19:20", "RUNNING", "楽曲再生"),
 #     ("20:00", "STABLE", "動画視聴")
 # ]
-data = [
-    ("9:10", "WALKING", "楽曲再生"),
-    ("10:30", "WALKING", "会議情報"),
-    ("12:30", "STABLE", "楽曲再生"),
-    ("15:30", "WALKING", "会議情報"),
-    ("17:45", "WALKING", "楽曲再生"),
-    ("7:30", "STABLE", "天気情報"),
-    ("11:58", "STABLE", "レストラン検索"),
-    ("12:45", "STABLE", "会議情報"),
-    ("19:00", "RUNNING", "楽曲再生"),
-    ("20:00", "STABLE", "動画視聴"),
-    ("7:15", "STABLE", "ニュース閲覧"),
-    ("12:10", "WALKING", "レストラン検索"),
-    ("12:30", "STABLE", "楽曲再生"),
-    ("19:20", "RUNNING", "楽曲再生"),
-    ("20:00", "STABLE", "動画視聴"),
-    ("7:30", "STABLE", "ニュース閲覧"),
-    ("12:50", "STABLE", "会議情報"),
-    ("19:50", "RUNNING", "楽曲再生"),
-    ("20:00", "STABLE", "動画視聴"),
-    ("12:01", "STABLE", "レストラン検索"),
-    ("12:30", "STABLE", "楽曲再生"),
-    ("19:00", "RUNNING", "楽曲再生"),
-    ("20:00", "STABLE", "動画視聴"),
-    ("7:30", "STABLE", "ニュース閲覧"),
-    ("12:02", "STABLE", "レストラン検索"),
-    ("12:30", "STABLE", "楽曲再生"),
-    ("19:00", "RUNNING", "楽曲再生"),
-    ("20:00", "STABLE", "動画視聴"),
-    ("8:00", "WALKING", "経路検索"),
-    ("8:45", "WALKING", "経路検索"),
-    ("8:15", "WALKING", "経路検索"),
-    ("12:05", "WALKING", "レストラン検索"),
-    ("17:30", "WALKING", "経路検索"),
-    ("18:00", "WALKING", "経路検索"),
-    ("8:25", "WALKING", "経路検索"),
-    ("9:00", "STABLE", "楽曲再生"),
-    ("9:10", "STABLE", "楽曲再生"),
-    ("12:08", "WALKING", "レストラン検索"),
-    ("19:35", "RUNNING", "楽曲再生"),
-    ("19:25", "RUNNING", "楽曲再生"),
-    ("8:15", "WALKING", "経路検索"),
-    ("9:57", "STABLE", "会議情報"),
-    ("10:55", "STABLE", "会議情報"),
-    ("12:08", "WALKING", "レストラン検索"),
-    ("14:55", "STABLE", "会議情報")
-]
+
+
+# data = [
+#     ("9:10", "WALKING", "楽曲再生"),
+#     ("10:30", "WALKING", "会議情報"),
+#     ("12:30", "STABLE", "楽曲再生"),
+#     ("15:30", "WALKING", "会議情報"),
+#     ("17:45", "WALKING", "楽曲再生"),
+#     ("7:30", "STABLE", "天気情報"),
+#     ("11:58", "STABLE", "レストラン検索"),
+#     ("12:45", "STABLE", "会議情報"),
+#     ("19:00", "RUNNING", "楽曲再生"),
+#     ("20:00", "STABLE", "動画視聴"),
+#     ("7:15", "STABLE", "ニュース閲覧"),
+#     ("12:10", "WALKING", "レストラン検索"),
+#     ("12:30", "STABLE", "楽曲再生"),
+#     ("19:20", "RUNNING", "楽曲再生"),
+#     ("20:00", "STABLE", "動画視聴"),
+#     ("7:30", "STABLE", "ニュース閲覧"),
+#     ("12:50", "STABLE", "会議情報"),
+#     ("19:50", "RUNNING", "楽曲再生"),
+#     ("20:00", "STABLE", "動画視聴"),
+#     ("12:01", "STABLE", "レストラン検索"),
+#     ("12:30", "STABLE", "楽曲再生"),
+#     ("19:00", "RUNNING", "楽曲再生"),
+#     ("20:00", "STABLE", "動画視聴"),
+#     ("7:30", "STABLE", "ニュース閲覧"),
+#     ("12:02", "STABLE", "レストラン検索"),
+#     ("12:30", "STABLE", "楽曲再生"),
+#     ("19:00", "RUNNING", "楽曲再生"),
+#     ("20:00", "STABLE", "動画視聴"),
+#     ("8:00", "WALKING", "経路検索"),
+#     ("8:45", "WALKING", "経路検索"),
+#     ("8:15", "WALKING", "経路検索"),
+#     ("12:05", "WALKING", "レストラン検索"),
+#     ("17:30", "WALKING", "経路検索"),
+#     ("18:00", "WALKING", "経路検索"),
+#     ("8:25", "WALKING", "経路検索"),
+#     ("9:00", "STABLE", "楽曲再生"),
+#     ("9:10", "STABLE", "楽曲再生"),
+#     ("12:08", "WALKING", "レストラン検索"),
+#     ("19:35", "RUNNING", "楽曲再生"),
+#     ("19:25", "RUNNING", "楽曲再生"),
+#     ("8:15", "WALKING", "経路検索"),
+#     ("9:57", "STABLE", "会議情報"),
+#     ("10:55", "STABLE", "会議情報"),
+#     ("12:08", "WALKING", "レストラン検索"),
+#     ("14:55", "STABLE", "会議情報")
+# ]
+file_path = './userdata.txt' # 自分のデータセット
+# file_path = './dataset.txt' # ランダムに生成したデータセット
+# 空のリストを作成
+data = []
+# ファイルを開いて各行を読み込む
+with open(file_path, 'r', encoding='utf-8') as file:
+    for line in file:
+        # 改行文字を削除し、カンマで分割
+        parts = line.strip().split(', ')
+        # 分割したデータをタプルに変換してリストに追加
+        if len(parts) == 3:  # データが3つの部分に分割されていることを確認
+            data.append((parts[0], parts[1], parts[2]))
 
 # 時刻を分に変換する関数
 def time_to_minutes(time_str):
@@ -123,7 +137,8 @@ targets = torch.tensor([tool_to_index[tool] for _, _, tool in data], dtype=torch
 print("targets: ", targets)
 
 # モデルの定義
-class ToolPredictor(nn.Module):
+# class ToolPredictor(nn.Module):
+class PredictionModel(nn.Module):
     # def __init__(self):
     #     super(ToolPredictor, self).__init__()
     #     # self.fc1 = nn.Linear(2, 10)
@@ -138,7 +153,8 @@ class ToolPredictor(nn.Module):
     #     x = self.fc2(x)
     #     return x
     def __init__(self):
-        super(ToolPredictor, self).__init__()
+        # super(ToolPredictor, self).__init__()
+        super(PredictionModel, self).__init__()
         self.fc1 = nn.Linear(4, 128) # 2, 128)  # 入力層の次元を調整
         self.fc2 = nn.Linear(128, 256)
         self.dropout = nn.Dropout(0.5)  # ドロップアウト層を追加
@@ -155,7 +171,8 @@ class ToolPredictor(nn.Module):
         return x
 
 # モデルのインスタンス化
-model = ToolPredictor()
+# model = ToolPredictor()
+model = PredictionModel()
 
 # 損失関数と最適化手法
 criterion = nn.CrossEntropyLoss()

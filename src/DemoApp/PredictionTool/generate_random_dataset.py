@@ -20,6 +20,24 @@ for _ in range(1000):
     tool = random.choice(tools)
     data.append((time, state, tool))
 
-# 結果を表示（最初の10件のみ）
-for i in range(10):
-    print(data[i])
+# # 結果を表示（最初の10件のみ）
+# # for i in range(10):
+# for i in range(1000):
+#     print(data[i])
+
+
+
+
+# ファイルに出力する関数
+def output_to_file(data, file_name):
+    with open(file_name, 'w', encoding='utf-8') as file:
+        for entry in data:
+            file.write(', '.join(entry) + '\n')
+
+# ファイル名を指定
+file_name = 'dataset.txt'
+
+# データセットをファイルに出力
+output_to_file(data, file_name)
+
+print(f'{len(data)}件のデータを"{file_name}"に出力しました。')
