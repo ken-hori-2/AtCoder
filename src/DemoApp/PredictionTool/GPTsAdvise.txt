@@ -185,3 +185,30 @@ model = SimpleNN()
 ```
 
 これらのテクニックを組み合わせて使用することで、過学習を防ぎ、モデルの汎化能力を向上させることができます。PyTorchでは、モデルの設計やトレーニングプロセスの各ステップで、これらの手法を取り入れることが可能です。
+
+
+
+
+分類問題において、モデルの最終出力層でsoftmax関数を適用することは一般的です。
+softmax関数は、モデルの出力を確率分布に変換し、各クラスに属する確率を表現します。
+ただし、PyTorchでは`nn.CrossEntropyLoss`損失関数を使用する際、この損失関数が内部でsoftmaxを適用するため、モデルの出力層にsoftmaxを明示的に適用する必要はありません。
+
+モデルの訓練時には、直接ロジット（softmax前の出力）を`nn.CrossEntropyLoss`に渡します。
+一方で、モデルの評価時や予測時には、確率を得たい場合にsoftmax関数を適用することがあります。
+
+以下に、評価時や予測時にsoftmax関数を適用するコードを示します。
+
+```python
+# モデルの評価時や予測時
+model.eval()  # モデルを評価モードに設定
+with torch.no_grad():
+    outputs = model(inputs)
+    probabilities = torch.softmax(outputs, dim=1)  # 各クラスに属する確率を計算
+    predicted_classes = torch.argmax(probabilities, dim=1)  # 最も確率の高いクラスを予測
+```
+
+このコードでは、`torch.softmax`関数を使用して、モデルの出力にsoftmaxを適用し、各クラスに属する確率を計算しています。
+`dim=1`は、確率を計算する次元を指定しており、各サンプルのクラスに対する確率を計算します。
+その後、`torch.argmax`関数を使用して、最も確率の高いクラスのインデックス（つまり予測されたクラス）を取得しています。
+
+訓練時にはsoftmaxを適用する必要はなく、`nn.CrossEntropyLoss`が内部で処理を行いますが、予測確率が必要な場合は上記のようにsoftmaxを適用します。

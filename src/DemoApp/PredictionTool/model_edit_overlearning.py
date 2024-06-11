@@ -162,7 +162,8 @@ model = PredictionModel()
 criterion = nn.CrossEntropyLoss()
 # optimizer = optim.SGD(model.parameters(), lr=0.01)
 learning_rate = 0.001
-optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+# optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=5e-4) # 重み付けが大きくなりすぎないようにする
 
 
 
@@ -195,8 +196,8 @@ early_stopping = EarlyStopping(patience=20, min_delta=0.001)
 # 学習プロセス
 # epochs = 1000
 # epochs = 15000 # 10000
-epochs = 5000 # 1000 # 1 # 00
-# epochs = 1000
+# epochs = 5000 # 1000 # 1 # 00
+epochs = 1000
 # match_count_list = []
 # prediction_list = []
 # 正答率
