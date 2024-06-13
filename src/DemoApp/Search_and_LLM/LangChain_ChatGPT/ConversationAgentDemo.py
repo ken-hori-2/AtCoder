@@ -57,7 +57,10 @@ from WebAPI.Wikipedia.wikipedia_api import WikipediaQueryRun
 from langchain.agents import load_tools, AgentExecutor, Tool, create_react_agent # 新しいやり方
 # from Calendar.google_calendar_api import GoogleCalendarTool
 from WebAPI.RouteSearch.route_api import RouteSearchQueryRun
+
 from WebAPI.Spotify.spotify_api import MusicPlaybackQueryRun
+# from WebAPI.Spotify.spotify_api_Recommend_version import MusicPlaybackQueryRun
+
 from WebAPI.RestaurantSearch.hotpepper_api import RestaurantSearchQueryRun
 from WebAPI.Localization.place_api import LocalizationQueryRun
 from WebAPI.Schedule.OutlookSchedule_api import ScheduleQueryRun # 2024/05/28 追加

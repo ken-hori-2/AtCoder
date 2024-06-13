@@ -59,7 +59,8 @@ class Trigger():
         Pre_RecieveData = None # run_comp_running # とりあえずRUNNING状態を初期状態に格納
 
 
-        HeadGesture = "Value = 0x02"
+        # HeadGesture = "Value = 0x02"
+        HeadGesture = "Value = 0x05" # リコメンド用に変更
         
         
 

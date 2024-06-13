@@ -16,7 +16,8 @@ from langchain_core.tools import BaseTool
 
 # 予定表×行動デモ用にアップテンポな曲のみ再生
 # from Spotify.spotify_Lib import MusicPlayback
-from Spotify.spotify_Lib_Recommend_version import MusicPlayback
+# from Spotify.spotify_Lib_Recommend_version import MusicPlayback
+from Spotify.spotify_Lib_Recommend_version_Change_by_Action import MusicPlayback
 
 class MusicPlaybackQueryRun(BaseTool):
     """Tool that queries the Spotify(PlayBack) API."""
@@ -29,18 +30,22 @@ class MusicPlaybackQueryRun(BaseTool):
     name: str = "music-playback"
     description: str = (
         "This function is useful for playing back music."
+
+        # 提案デモ用に引数を指定させるような説明を追加（楽曲再生モード指定...モードを三つ作成）
+        "Input should be a playback_mode string (e.g. LinkedActionsMode, HouseMusicMode, RelaxMusicMode)."
+
+
+
+
+
+
+
         # "The input must be a single string representing the state of behavior of the person listening to the song.The state of the user's behavior must be one of three choices: 'stable,' 'walking' or 'running'. (e.g. running)"
         
         
         # 提案デモはコメントアウト
         # "The input must be a single string representing the result of the action detection.The action detection result must be one of the following three: 'STABLE,' 'WALKING' or 'RUNNING'. (e.g. RUNNING)"
         
-
-
-
-
-
-
 
         # "The input must be two location strings, one for the origin station and one for the destination station (e.g., Yokohama, Tokyo)."
         
@@ -71,12 +76,16 @@ class MusicPlaybackQueryRun(BaseTool):
         # shinkansen: str, # オプションの引数ありバージョン
         # search_results_priority: str, # オプションの引数ありバージョン2
 
+        playback_mode: str, # 提案デモ用（楽曲再生モード指定）
+
         run_manager: Optional[CallbackManagerForToolRun] = None
     ) -> str:
         """Use the Route Search tool."""
         # return self.api_wrapper.run(location)
         # return self.music_playback.run(action_detection)
-        return self.music_playback.run() # 提案デモ用
+        
+        # return self.music_playback.run() # 提案デモ用
+        return self.music_playback.run(playback_mode) # 提案デモ用（楽曲再生モード指定）
     
 
         # return self.yahoo_search.run(departure_station, destination_station,     shinkansen, search_results_priority) # オプションの引数ありバージョン

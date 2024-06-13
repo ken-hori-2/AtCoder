@@ -1,0 +1,18 @@
+
+通勤, STABLE, 楽曲再生:HouseMusic
+
+昼食, STABLE, 楽曲再生:RelaxMusic
+
+運動, WALKING, 楽曲再生:PlaybackLinkedToActions
+
+通勤, STABLE, 楽曲再生:HouseMusic
+
+運動, RUNNING, 楽曲再生:PlaybackLinkedToActions
+
+通勤, STABLE, 楽曲再生:HouseMusic
+
+昼食, STABLE, 楽曲再生:RelaxMusic
+
+昼食, STABLE, 楽曲再生:RelaxMusic
+
+運動, RUNNING, 楽曲再生:PlaybackLinkedToActions

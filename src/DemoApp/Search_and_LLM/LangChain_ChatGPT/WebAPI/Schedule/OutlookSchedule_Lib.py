@@ -32,7 +32,8 @@ class OutlookSchedule(): # BaseTool): # BaseToolの記述がなくても動く
         # 2024/05/28 変更点
         # dt_now = datetime.datetime.now() # 現在時刻
         # dt_now = datetime.datetime(2024, 5, 24, 8, 30) # 00)
-        dt_now = datetime.datetime(2024, 6, 3, 8, 30)
+        # dt_now = datetime.datetime(2024, 6, 3, 8, 30) # 部定例用
+        dt_now = datetime.datetime(2024, 6, 12, 19, 5) # 参照したい日付だけ知れればいい
         """
         デモするユースケースに応じて手動で時刻を設定する
         """

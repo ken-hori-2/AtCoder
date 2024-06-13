@@ -12,7 +12,7 @@
 
 帰宅, WALKING, 経路検索
 
-ジム, WALKING, 楽曲再生
+運動, WALKING, 楽曲再生
 
 通勤, WALKING, 経路検索
 
@@ -24,7 +24,7 @@
 
 帰宅, WALKING, 経路検索
 
-ジム, RUNNING, 楽曲再生
+運動, RUNNING, 楽曲再生
 
 通勤, WALKING, 経路検索
 
@@ -38,6 +38,6 @@
 
 帰宅, WALKING, 経路検索
 
-ジム, RUNNING, 楽曲再生
+運動, RUNNING, 楽曲再生
 
 昼食, WALKING, レストラン検索
