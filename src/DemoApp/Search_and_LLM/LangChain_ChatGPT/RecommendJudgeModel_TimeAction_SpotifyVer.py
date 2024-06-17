@@ -81,7 +81,7 @@ userinterface = UserInterfaceModel()
 dt_now = datetime.datetime(2024, 6, 17, 8, 30)    # 出勤(stable:楽曲再生[house-music], walking:経路検索)
 # dt_now = datetime.datetime(2024, 6, 17, 10, 55) # 定例(stable, walk:会議情報)
 # dt_now = datetime.datetime(2024, 6, 17, 12, 5)  # 昼食(walk:restaurant, stable:music[relax-music])
-# dt_now = datetime.datetime(2024, 6, 17, 19, 5)  # ジム(run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
+dt_now = datetime.datetime(2024, 6, 17, 19, 5)  # ジム(run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
 
 
 class Langchain4Judge():
@@ -153,7 +153,7 @@ class Langchain4Judge():
             #     func=chain_open_meteo.run,
             # ),
 
-            
+
             WikipediaQueryRun(),
             
             
@@ -498,7 +498,7 @@ if __name__ == "__main__":
                     print("\n\n【テスト】現在時刻：", dt_now_for_time_action)
                     recommend_playlist_time_action = RecommendSpotifyPlaylist(dt_now_for_time_action, UserActionState)
                     recommend_playlist_time_action.getUserTrends()
-                    suggested_playlist = recommend_tool_time_action.getToolAnswer()
+                    suggested_playlist = recommend_playlist_time_action.getToolAnswer()
                     # a 予定を使うバージョン
                     # ・ユーザーの傾向から再生モードを決定（db[予定/行動/機能]から傾向取得、現在時刻から予定取得、行動状態→入力）
 

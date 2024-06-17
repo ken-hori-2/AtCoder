@@ -79,9 +79,9 @@ userinterface = UserInterfaceModel()
 # runningは基本的に運動中と認識されやすい
 # dt_now = datetime.datetime(2024, 6, 17, 7, 10)    # 天気情報（今日より前の日付だとエラーになるかも）
 dt_now = datetime.datetime(2024, 6, 17, 8, 00) # 30)    # 出勤(stable:楽曲再生[house-music], walking:経路検索)
-# dt_now = datetime.datetime(2024, 6, 17, 10, 55) # 定例(stable, walk:会議情報)
+dt_now = datetime.datetime(2024, 6, 17, 10, 55) # 定例(stable, walk:会議情報)
 # dt_now = datetime.datetime(2024, 6, 17, 12, 5)  # 昼食(walk:restaurant, stable:music[relax-music])
-# dt_now = datetime.datetime(2024, 6, 17, 19, 5)  # ジム(run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
+dt_now = datetime.datetime(2024, 6, 17, 19, 5)  # ジム(run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
 
 class Langchain4Judge():
 

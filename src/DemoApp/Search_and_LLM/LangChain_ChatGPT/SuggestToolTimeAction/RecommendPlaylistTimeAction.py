@@ -41,8 +41,8 @@ class RecommendSpotifyPlaylist():
         sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
         # loader = TextLoader('./SuggestToolOutlook/userdata_schedule.txt', encoding='utf8')
         # # loader = TextLoader('./userdata_schedule.txt', encoding='utf8') # 単体テスト用 (SuggestToolOutlook\GeneratePrompt_具体的な提案の検討.py)
-        loader = TextLoader('./SuggestToolTimeAction/userdata_spotify_playlist.txt', encoding='utf8')
-        # loader = TextLoader('./userdata_spotify_playlist.txt', encoding='utf8') # 単体テスト用
+        loader_playlist = TextLoader('./SuggestToolTimeAction/userdata_spotify_playlist.txt', encoding='utf8')
+        # loader_playlist = TextLoader('./userdata_spotify_playlist.txt', encoding='utf8') # 単体テスト用
 
         # 100文字のチャンクで区切る
         text_splitter = CharacterTextSplitter(        
@@ -51,28 +51,31 @@ class RecommendSpotifyPlaylist():
             chunk_overlap = 0,
             length_function = len,
         )
-        self.index = VectorstoreIndexCreator(
+        self.index_playlist = VectorstoreIndexCreator(
             vectorstore_cls=Chroma, # Default
             embedding=OpenAIEmbeddings(), # Default
             text_splitter=text_splitter, # text_splitterのインスタンスを使っている
-        ).from_loaders([loader])
+        ).from_loaders([loader_playlist])
 
         self.dt_now_for_time_action = dt_now_for_time_action
         self.UserActionState = UserActionState # "WALKING"
         
     def getUserTrends(self):
         query = """
-                あなたはニーズを予測する専門家です。以下に答えて。
-                txtファイルの文書はユーザーの「どの時刻に、どの行動状態で、どの機能を使用したか」の履歴です。
-                このユーザーの傾向を分析・予測し箇条書きでまとめて。
+                あなたは楽曲再生プレイリストのニーズを予測する専門家です。以下に答えて。
+                このtxtファイルの文書はユーザーの「どの時刻に、どの行動状態で、どのプレイリストを使用したか」の履歴です。
+                このユーザーの傾向を「userdata_spotify_playlist.txt」の情報だけで分析・予測し箇条書きでまとめて。
                 """
+                # userdata_spotify_playlist.txtだけといってもベクトル化されているせいか前の情報も反映されてしまう
+
                 # (例：朝の時間帯(xx:xx - xx:xx): ,午前中(xx:xx - xx:xx), 昼の時間帯(xx:xx - xx:xx), 午後(xx:xx - xx:xx), 夕方(xx:xx - xx:xx), 夜の時間帯(xx:xx - xx:xx))
                 # """
         
                 # (例1：朝の時間帯(xx:xx - xx:xx): ,午前中(xx:xx - xx:xx), 昼の時間帯(xx:xx - xx:xx), 午後(xx:xx - xx:xx), 夕方(xx:xx - xx:xx), 夜の時間帯(xx:xx - xx:xx))
                 # (例2：行動状態ごとの使う機能の傾向)
                 # """
-        self.UserTrendAnswer = self.index.query(query, llm=llm_4o)
+        self.UserTrendAnswer = self.index_playlist.query(query, llm=llm_4o)
+        # self.UserTrendAnswer = self.index.query(query, llm=llm_3p5t)
         return self.UserTrendAnswer # classに結果は保持されるからなくてもいいかも
 
 
@@ -124,7 +127,7 @@ class RecommendSpotifyPlaylist():
             "UserAction" : self.UserActionState,
         })
         print("\n--------------------------------------------------")
-        print("User Needs: \n", response['UserNeeds'])
+        print("User Needs (Playlist): \n", response['UserNeeds'])
         print("\n--------------------------------------------------")
         print("time: ", response['time'])
         print("User Action: ", response['UserAction'])
