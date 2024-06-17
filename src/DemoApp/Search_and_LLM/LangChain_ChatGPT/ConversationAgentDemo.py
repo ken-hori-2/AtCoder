@@ -58,8 +58,8 @@ from langchain.agents import load_tools, AgentExecutor, Tool, create_react_agent
 # from Calendar.google_calendar_api import GoogleCalendarTool
 from WebAPI.RouteSearch.route_api import RouteSearchQueryRun
 
-from WebAPI.Spotify.spotify_api import MusicPlaybackQueryRun
-# from WebAPI.Spotify.spotify_api_Recommend_version import MusicPlaybackQueryRun
+# from WebAPI.Spotify.spotify_api import MusicPlaybackQueryRun
+from WebAPI.Spotify.spotify_api_Recommend_version import MusicPlaybackQueryRun
 
 from WebAPI.RestaurantSearch.hotpepper_api import RestaurantSearchQueryRun
 from WebAPI.Localization.place_api import LocalizationQueryRun
@@ -386,9 +386,15 @@ if __name__ == "__main__":
             """
             デモするユースケースに応じて手動で時刻を設定する
             """
-            # dt_now = datetime.datetime.now()
-            # dt_now = datetime.datetime(2024, 5, 24, 8, 30)
-            dt_now = datetime.datetime(2024, 6, 3, 8, 30)
+            # # dt_now = datetime.datetime.now()
+            # # dt_now = datetime.datetime(2024, 5, 24, 8, 30)
+
+            # 部定例デモ
+            # dt_now = datetime.datetime(2024, 6, 3, 8, 30)
+
+            dt_now = datetime.datetime(2024, 6, 12, 19, 5) # ジム(run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
+            # dt_now = datetime.datetime(2024, 6, 12, 12, 5) # 昼食（ゆっくり休みたい）                          # リラックスモード
+            dt_now = datetime.datetime(2024, 6, 12, 8, 00) # 出勤（気分上げたい）                                # アップテンポモード
             """
             デモするユースケースに応じて手動で時刻を設定する
             """
@@ -399,7 +405,8 @@ if __name__ == "__main__":
                 # # text += userinterface.recognize_speech() # 音声認識をする場合
                 # userinterface.text_to_speach("Please Speak in 3 seconds\n")
                 print("入力してください。\n")
-                text = userinterface.recognize_speech() # 音声認識をする場合
+                # text = userinterface.recognize_speech() # 音声認識をする場合
+                text = "楽曲再生して。" # "アップテンポな曲を再生して。"
                 
                 # text = "現在の日本の総理大臣は？"
                 # text = "今日の東京の天気は？"

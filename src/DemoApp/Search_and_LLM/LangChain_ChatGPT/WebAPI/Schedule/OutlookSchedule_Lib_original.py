@@ -12,7 +12,7 @@ import pandas as pd
 
 class OutlookSchedule(): # BaseTool): # BaseToolの記述がなくても動く
     
-    def run(self, dt_now_arg):
+    def run(self):
         # dt_now_str = datetime.datetime.now()
         # dt_now_str = dt_now_str.strftime('%Y年%m月%d日 %H:%M:%S')
         # # dt_now_str= "2024年05月08日 07:40:20"
@@ -29,23 +29,15 @@ class OutlookSchedule(): # BaseTool): # BaseToolの記述がなくても動く
         """
         デモするユースケースに応じて手動で時刻を設定する
         """
-        # # 2024/05/28 変更点
-        # # dt_now = datetime.datetime.now() # 現在時刻
-        # # dt_now = datetime.datetime(2024, 5, 24, 8, 30) # 00)
-        # # dt_now = datetime.datetime(2024, 6, 3, 8, 30) # 部定例用
-        # dt_now = datetime.datetime(2024, 6, 12, 19, 5) # 参照したい日付だけ知れればいい
+        # 2024/05/28 変更点
+        # dt_now = datetime.datetime.now() # 現在時刻
+        # dt_now = datetime.datetime(2024, 5, 24, 8, 30) # 00)
+        # dt_now = datetime.datetime(2024, 6, 3, 8, 30) # 部定例用
+        dt_now = datetime.datetime(2024, 6, 12, 19, 5) # 参照したい日付だけ知れればいい
 
-        # dt_now = datetime.datetime(2024, 6, 13, 8, 00) # 参照したい日付だけ知れればいい
+        dt_now = datetime.datetime(2024, 6, 13, 8, 00) # 参照したい日付だけ知れればいい
 
-        # dt_now = datetime.datetime(2024, 6, 17, 8, 00) # 参照したい日付だけ知れればいい
-        #############################
-        # 2024/6/17 日時指定version #
-        #############################
-        dt_now = datetime.datetime.strptime(dt_now_arg, "%Y-%m-%d %H:%M:%S") # 文字列からdatetime型
-        # dt_now = dt_now_arg # 参照したい日付だけ知れればいい
-        #############################
-        # 2024/6/17 日時指定version #
-        #############################
+        dt_now = datetime.datetime(2024, 6, 17, 8, 00) # 参照したい日付だけ知れればいい
 
 
         """
@@ -335,9 +327,7 @@ if __name__ == "__main__":
     
     outlook_schedule = OutlookSchedule()
     # result = 
-    dt_now = str(datetime.datetime(2024, 6, 17, 8, 00))
-    # dt_now = datetime.datetime(2024, 6, 17, 8, 00)
-    outlook_schedule.run(dt_now)
+    outlook_schedule.run()
     # print(result)
     print("-----")
     outlook_schedule.MTG_ScheduleItem()

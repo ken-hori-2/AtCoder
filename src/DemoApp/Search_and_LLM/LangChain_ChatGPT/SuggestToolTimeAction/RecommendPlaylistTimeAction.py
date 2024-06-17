@@ -20,6 +20,9 @@ from langchain.chains import SequentialChain
 # 2024/05/30
 # LangChain_ChatGPT\Generate_Text\GoogleColab\main_PredUserNeeds_by_VectorStore_to_Chain.py のクラス化
 
+"""
+モデルもどこか一か所にまとめる
+"""
 llm_4o=ChatOpenAI(
     model="gpt-4o",
     # model="gpt-3.5-turbo",
@@ -31,12 +34,16 @@ llm_3p5t=ChatOpenAI(
     temperature=0 # 出力する単語のランダム性（0から2の範囲） 0であれば毎回返答内容固定
 ) # チャット特化型モデル
 
-
-class RecommendTool():
+class RecommendSpotifyPlaylist():
     def __init__(self, dt_now_for_time_action, UserActionState):
-        # loader = TextLoader('./UserAction2_mini_loop.txt', encoding='utf8')
-        loader = TextLoader('./SuggestToolTimeAction/userdata.txt', encoding='utf8')
-        # loader = TextLoader('./userdata.txt', encoding='utf8') # 単体テスト用
+        import sys
+        # JudgeModel.pyから呼び出すときに必要
+        sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
+        # loader = TextLoader('./SuggestToolOutlook/userdata_schedule.txt', encoding='utf8')
+        # # loader = TextLoader('./userdata_schedule.txt', encoding='utf8') # 単体テスト用 (SuggestToolOutlook\GeneratePrompt_具体的な提案の検討.py)
+        loader = TextLoader('./SuggestToolTimeAction/userdata_spotify_playlist.txt', encoding='utf8')
+        # loader = TextLoader('./userdata_spotify_playlist.txt', encoding='utf8') # 単体テスト用
+
         # 100文字のチャンクで区切る
         text_splitter = CharacterTextSplitter(        
             separator = "\n\n",
@@ -59,10 +66,9 @@ class RecommendTool():
                 txtファイルの文書はユーザーの「どの時刻に、どの行動状態で、どの機能を使用したか」の履歴です。
                 このユーザーの傾向を分析・予測し箇条書きでまとめて。
                 """
-                # 2024/6/17 一旦コメントアウト
                 # (例：朝の時間帯(xx:xx - xx:xx): ,午前中(xx:xx - xx:xx), 昼の時間帯(xx:xx - xx:xx), 午後(xx:xx - xx:xx), 夕方(xx:xx - xx:xx), 夜の時間帯(xx:xx - xx:xx))
                 # """
-                
+        
                 # (例1：朝の時間帯(xx:xx - xx:xx): ,午前中(xx:xx - xx:xx), 昼の時間帯(xx:xx - xx:xx), 午後(xx:xx - xx:xx), 夕方(xx:xx - xx:xx), 夜の時間帯(xx:xx - xx:xx))
                 # (例2：行動状態ごとの使う機能の傾向)
                 # """
@@ -90,39 +96,29 @@ class RecommendTool():
                     あなたはユーザーに合う機能を提案する専門家です。
                     ユーザーの傾向は「{UserNeeds}」です。
 
-                    現在が{time}、ユーザーの行動状態が{UserAction}の場合、どの機能を提案するかこのユーザーの傾向を加味して最終的な提案(Final Answer:)のみを教えて。
+                    現在の時刻が{time}、ユーザーの行動状態が{UserAction}の場合、どの機能を提案するかこのユーザーの傾向を加味して最終的な提案(Final Answer:)のみを教えて。
                     あなたが提案できる機能は、
-                    "会議情報", "楽曲再生", "経路検索", "リアルタイム情報検索", "レストラン検索", "ニュース情報", "天気情報"
+                    "楽曲再生:HouseMusic", "楽曲再生:RelaxMusic", "楽曲再生:PlaybackLinkedToActions"
                     です。
                     ###
                     Final Answer:
                     """
-            # 機能のみ提案させるバージョン
-
-
-    
-            # ユーザーの傾向から提案タイミングを予測するLLM
-            # template =  """
-            #             あなたはユーザーに合う機能を適切なタイミングで提案する専門家です。
-            #             ユーザーの傾向は「{UserNeeds}」です。
-            #             ユーザーの傾向からユーザーが機能を使いそうなタイミングを時刻を指定して教えて。時刻が連続する場合はその時刻周辺で最も適切な時刻を指定して。
-            #             (例 ... 時刻：) 
-            #             """ # 同じ機能が連続する場合はマージして。数分単位で連続する場合
-            #             # ユーザーの傾向からユーザーのニーズが発生しそうなタイミングを時刻を指定して教えて。時刻が連続する場合は最も適切だと考えられる時刻を指定して。
-            #             # 時刻：
-            #             # """
-            # 上記二つのいずれかがよさそう
+            """
+            ユーザーの傾向がないとあまり精度良くない
+            """
         )
-        chain_2 = LLMChain(llm=llm_4o, prompt=prompt_2, output_key="output")
-        # chain_2 = prompt_2 | llm_4o # 新しいやり方
-
-        overall_chain = SequentialChain(
+        chain_2 = LLMChain(llm=llm_4o, prompt=prompt_2, output_key="output") # chain_2 = prompt_2 | llm_4o # 新しいやり方
+        self.overall_chain = SequentialChain(
             chains=[chain_2],
             input_variables=["UserNeeds", "time", "UserAction"],
             # output_variables=["response"], # あくまで辞書型のなんていう要素に出力が格納されるかの変数
             verbose=True,
         )
-        response = overall_chain({
+        # initから移動⇑
+
+        
+
+        response = self.overall_chain({
             "UserNeeds" : self.UserTrendAnswer,
             "time" : self.dt_now_for_time_action,
             "UserAction" : self.UserActionState,
@@ -139,24 +135,43 @@ class RecommendTool():
         Suggested_Tool = response['output']
 
         return Suggested_Tool
+        # return Suggested_Tool, self.UserTrendAnswer # 傾向も渡す場合
 
 if __name__ == "__main__":
-    import datetime
-    # dt_now_for_time_action = datetime.datetime(2024, 5, 24, 11, 41) # 11時41分"
-    # margin = 5
-    # margin = datetime.timedelta(minutes=margin)
-    dt_now_for_time_action = datetime.timedelta(hours=8, minutes=36) # 経路案内
-    # dt_now_for_time_action = datetime.timedelta(hours=10, minutes=41) # 経路案内
-    # dt_now_for_time_action = datetime.timedelta(hours=11, minutes=58) # レストラン検索
-    # dt_now_for_time_action = datetime.timedelta(hours=17, minutes=28) # 楽曲再生
-    # dt_now_for_time_action = datetime.timedelta(hours=17, minutes=58) # 経路案内
-    
-    UserActionState = "WALKING"
-    recommend_tool = RecommendTool(dt_now_for_time_action, UserActionState)
 
-    recommend_tool.getUserTrends()
-    suggested_tool = recommend_tool.getToolAnswer()
+    # from Within5min import CheckScheduleTime
+    import datetime
+    # dt_now = datetime.datetime(2024, 5, 24, 8, 30)
+    # dt_now = datetime.datetime(2024, 5, 24, 10, 55)
+    dt_now = datetime.datetime(2024, 6, 12, 19, 5) # ジム(run:up tempo, walk:slow tempo, stable:stop) # 行動検出と連動モード
+    dt_now = datetime.datetime(2024, 6, 12, 12, 5) # 昼食（ゆっくり休みたい）                          # リラックスモード
+    dt_now = datetime.datetime(2024, 6, 12, 8, 30) # 出勤（気分上げたい）                              # アップテンポモード
+
+    print("***** センシング中 *****")
+    # UserActionState = trigger.run()
+    # UserActionState = "WALKING" # テスト用
+    UserActionState = "STABLE" # テスト用
+    print("DNN検出結果：", UserActionState)
+    print("***** センシング終了 *****")
+    
+    # check_schedule = CheckScheduleTime(dt_now)
+    # recommend_tool = RecommendSpotifyPlaylist(UserActionState)
+    # recommend_tool.getUserTrends()
+    # suggested_tool = recommend_tool.getToolAnswer(check_schedule)
+    
+    dt_now_for_time_action = datetime.timedelta(hours=dt_now.hour, minutes=dt_now.minute) # 経路案内 # datetime.timedelta(hours=17, minutes=58) # 経路案内
+    print("\n\n【テスト】現在時刻：", dt_now_for_time_action)
+    recommend_tool_time_action = RecommendSpotifyPlaylist(dt_now_for_time_action, UserActionState)
+    recommend_tool_time_action.getUserTrends()
+    suggested_tool = recommend_tool_time_action.getToolAnswer()
 
     print("\n--------------------------------------------------")
     print(suggested_tool)
     print("--------------------------------------------------")
+
+    if "PlaybackLinkedToActions" in suggested_tool:
+        print("PlaybackLinkedToActionsモードに移行します。")
+    if "HouseMusic" in suggested_tool:
+        print("アップテンポな楽曲再生モードに移行します。")
+    if "RelaxMusic" in suggested_tool:
+        print("リラックスな楽曲再生モードに移行します。")

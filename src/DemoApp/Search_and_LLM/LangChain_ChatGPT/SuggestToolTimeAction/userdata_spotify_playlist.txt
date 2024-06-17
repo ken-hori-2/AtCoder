@@ -1,0 +1,18 @@
+
+8:45, STABLE, 楽曲再生:HouseMusic
+
+12:30, STABLE, 楽曲再生:RelaxMusic
+
+19:00, WALKING, 楽曲再生:PlaybackLinkedToActions
+
+8:00, STABLE, 楽曲再生:HouseMusic
+
+19:20, RUNNING, 楽曲再生:PlaybackLinkedToActions
+
+8:15, STABLE, 楽曲再生:HouseMusic
+
+12:20, STABLE, 楽曲再生:RelaxMusic
+
+12:35, STABLE, 楽曲再生:RelaxMusic
+
+18:55, RUNNING, 楽曲再生:PlaybackLinkedToActions

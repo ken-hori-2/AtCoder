@@ -50,12 +50,8 @@ class RouteSearchQueryRun(BaseTool):
         # "Departure and arrival stations must be entered in Japanese."
     )
 
-    # def __init__(self, dt_now):
-    #     self.dt_now_arg = dt_now
-
     def _run(
         self, 
-        dt_now_arg, # エラーになる可能性がある（省略事実引数を使うとエラー回避できる）
         departure_station: str,
         destination_station: str, 
         
@@ -66,11 +62,10 @@ class RouteSearchQueryRun(BaseTool):
     ) -> str:
         """Use the Route Search tool."""
         # return self.api_wrapper.run(location)
-        # dt_now_arg = self.dt_now_arg
-        return self.yahoo_search.run(dt_now_arg, departure_station, destination_station,     shinkansen, search_results_priority) # オプションの引数ありバージョン
+        return self.yahoo_search.run(departure_station, destination_station,     shinkansen, search_results_priority) # オプションの引数ありバージョン
     
     
     # これがないと動かない
-    async def _arun(self, dt_now_arg, departure_station: str, destination_station: str, shinkansen: str, search_results_priority: str) -> str: # オプションの引数ありバージョン
+    async def _arun(self, departure_station: str, destination_station: str, shinkansen: str, search_results_priority: str) -> str: # オプションの引数ありバージョン
         """Use the Route Search tool asynchronously."""
         raise NotImplementedError("RouteSearchQueryRun does not support async")

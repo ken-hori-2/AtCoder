@@ -34,7 +34,6 @@ class ScheduleQueryRun(BaseTool):
 
     def _run(
         self, 
-        dt_now_arg, # エラーになる可能性がある（省略事実引数を使うとエラー回避できる）
 
         run_manager: Optional[CallbackManagerForToolRun] = None
     ) -> str:
@@ -42,12 +41,12 @@ class ScheduleQueryRun(BaseTool):
         # return self.api_wrapper.run(location)
         # return self.yahoo_search.run(departure_station, destination_station,     shinkansen, search_results_priority) # オプションの引数ありバージョン
         # return self.outlook_schedule.run()
-        self.outlook_schedule.run(dt_now_arg)
+        self.outlook_schedule.run()
         self.outlook_schedule.MTG_ScheduleItem()
         return self.outlook_schedule.getMeetingContents()
     
     
     # これがないと動かない
-    async def _arun(self, dt_now_arg, departure_station: str, destination_station: str, shinkansen: str, search_results_priority: str) -> str: # オプションの引数ありバージョン
+    async def _arun(self, departure_station: str, destination_station: str, shinkansen: str, search_results_priority: str) -> str: # オプションの引数ありバージョン
         """Use the Schedule Information tool asynchronously."""
         raise NotImplementedError("RouteSearchQueryRun does not support async")

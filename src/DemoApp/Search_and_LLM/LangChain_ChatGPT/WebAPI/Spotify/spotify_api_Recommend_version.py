@@ -34,6 +34,8 @@ class MusicPlaybackQueryRun(BaseTool):
         # 提案デモ用に引数を指定させるような説明を追加（楽曲再生モード指定...モードを三つ作成）
         "Input should be a playback_mode string (e.g. LinkedActionsMode, HouseMusicMode, RelaxMusicMode)."
 
+        # 会話エージェント用にアップテンポな曲を求められたらHouseMusic、くつろぎたいならRelaxMusicを指定するように説明するのもあり。
+
 
 
 
@@ -60,8 +62,8 @@ class MusicPlaybackQueryRun(BaseTool):
     #    "Therefore, a total of four arguments must be specified, three for each of the three claws and the fourth is initialized with the character type number 0 if not specified."
        
        # 出力形式を指定
-    #    "When responding, write the final answer at the beginning, followed by the output in list format."
-    )
+    #    "When responding, write the final answer at the beginning, followed bythe output in list format."
+    ) 
 
     def _run(
         self, 

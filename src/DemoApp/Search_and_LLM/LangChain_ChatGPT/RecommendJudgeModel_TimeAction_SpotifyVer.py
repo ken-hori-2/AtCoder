@@ -78,10 +78,11 @@ userinterface = UserInterfaceModel()
 """
 # runningは基本的に運動中と認識されやすい
 # dt_now = datetime.datetime(2024, 6, 17, 7, 10)    # 天気情報（今日より前の日付だとエラーになるかも）
-dt_now = datetime.datetime(2024, 6, 17, 8, 00) # 30)    # 出勤(stable:楽曲再生[house-music], walking:経路検索)
+dt_now = datetime.datetime(2024, 6, 17, 8, 30)    # 出勤(stable:楽曲再生[house-music], walking:経路検索)
 # dt_now = datetime.datetime(2024, 6, 17, 10, 55) # 定例(stable, walk:会議情報)
 # dt_now = datetime.datetime(2024, 6, 17, 12, 5)  # 昼食(walk:restaurant, stable:music[relax-music])
 # dt_now = datetime.datetime(2024, 6, 17, 19, 5)  # ジム(run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
+
 
 class Langchain4Judge():
 
@@ -90,7 +91,7 @@ class Langchain4Judge():
         天気用のツール（二つ目なので現在使っていない）
         """
         # chain_open_meteo = APIChain.from_llm_and_api_docs(
-        #     llm,
+        #     llm_3p5t,
         #     open_meteo_docs.OPEN_METEO_DOCS,
         #     limit_to_domains=["https://api.open-meteo.com/"],
         # )
@@ -142,9 +143,10 @@ class Langchain4Judge():
                 coroutine=LLMMathChain.from_llm(llm=llm_3p5t).arun,
             ),
 
-            # 天気（本厚木だとエラーになるので、ここはコメントアウトして、Searchを使うようにする）
+
+            # 天気 （本厚木だとエラーになるので、ここはコメントアウトして、Searchを使うようにする）
             OpenWeatherMapQueryRun(),
-            # # こっちの天気でもできる
+            # こっちの天気でもできる
             # Tool(
             #     name="Open-Meteo-API",
             #     description="Useful for when you want to get weather information from the OpenMeteo API. The input should be a question in natural language that this API can answer.",
@@ -176,7 +178,7 @@ class Langchain4Judge():
 
             # なぜか省略事実引数ならいける（通常の引数だとエラー）
             RouteSearchQueryRun(dt_now_arg = dt_now), # RouteSearchQueryRun(),
-
+            
             MusicPlaybackQueryRun(),
 
             # LocalizationQueryRun(), # 2024/05/30 一旦コメントアウト
@@ -263,7 +265,7 @@ class Langchain4Judge():
             verbose=True,
             handle_parsing_errors=True, # パースエラーを例外処理で回避
 
-            max_iterations=10 # これがあるとagentのイタレーションに制限をかけられる
+            max_iterations=10 # 5 # これがあるとagentのイタレーションに制限をかけられる
         )
 
         return agent
@@ -348,10 +350,10 @@ if __name__ == "__main__":
     
 
     
-    from SuggestToolOutlook.Within5min import CheckScheduleTime
-    from SuggestToolOutlook.GeneratePrompt import GeneratePromptbyTool
-    from SuggestToolOutlook.RecommendToolbyOutlook import RecommendTool
-    from SuggestToolOutlook.TriggerByEdgeAI import Trigger
+    # from SuggestToolOutlook.Within5min import CheckScheduleTime
+    from SuggestToolTimeAction.GeneratePrompt import GeneratePromptbyTool
+    from SuggestToolTimeAction.RecommendToolbyTimeAction import RecommendTool
+    from SuggestToolTimeAction.TriggerByEdgeAI import Trigger
     import requests
     import json
     import spotipy
@@ -361,31 +363,21 @@ if __name__ == "__main__":
     """
     trigger = Trigger()
 
-    # # これらはデモアプリ起動のために使う
-    # # dt_now = datetime.datetime(2024, 5, 24, 8, 30)
-    # # dt_now = datetime.datetime(2024, 5, 24, 11, 55) # 会議(walk:restaurant, stable:music)
+    """
+    デモするユースケースに応じて手動で時刻を設定する
+    """
+    # これらはデモアプリ起動のために使う
+    # dt_now = datetime.datetime(2024, 5, 24, 8, 30)
 
-    # dt_now = datetime.datetime(2024, 5, 24, 7, 55) # 出勤(walk:route, stable:music)
-    # # dt_now = datetime.datetime(2024, 5, 24, 10, 55) # 定例
-    # dt_now = datetime.datetime(2024, 5, 24, 12, 5) # 昼食(walk:restaurant, stable:music)
 
-    
-    # 5分前後じゃないとアプリが起動しないことに注意
-    # dt_now = datetime.datetime(2024, 6, 12, 19, 5) # ジム(run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
-    # # dt_now = datetime.datetime(2024, 6, 12, 12, 5) # 昼食（ゆっくり休みたい）                          # リラックスモード
-    # dt_now = datetime.datetime(2024, 6, 12, 8, 00) # 出勤（気分上げたい）                                # アップテンポモード
-
-    # # 5分前後じゃないとアプリが起動しないことに注意
-    # dt_now = datetime.datetime(2024, 6, 13, 19, 5) # ジム(run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
-    # # dt_now = datetime.datetime(2024, 6, 13, 12, 5) # 昼食（ゆっくり休みたい）                          # リラックスモード
-    # # dt_now = datetime.datetime(2024, 6, 13, 8, 00) # 出勤（気分上げたい）                              # アップテンポモード
-    
+    # # dt_now = datetime.datetime(2024, 5, 24, 7, 55) # 天気(walk:route, stable:music)
+    # dt_now = datetime.datetime(2024, 5, 24, 8, 15) # 出勤(walk:route, stable:music)
+    # dt_now = datetime.datetime(2024, 5, 24, 10, 55) # 定例
+    # dt_now = datetime.datetime(2024, 5, 24, 11, 55) # 昼食(walk:restaurant, stable:music)
+    # """
+    # デモするユースケースに応じて手動で時刻を設定する
+    # """
     # # runningは基本的に運動中と認識されやすい
-    # dt_now = datetime.datetime(2024, 6, 13, 8, 00)    # 出勤(stable:楽曲再生[house-music], walking:経路検索)
-    # # dt_now = datetime.datetime(2024, 6, 13, 10, 55) # 定例(stable, walk:会議情報)
-    # # dt_now = datetime.datetime(2024, 6, 13, 12, 5)  # 昼食(walk:restaurant, stable:music[relax-music])
-    # # dt_now = datetime.datetime(2024, 6, 13, 19, 5)  # ジム(run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
-
     # # dt_now = datetime.datetime(2024, 6, 17, 7, 10)    # 天気情報（今日より前の日付だとエラーになるかも）
     # dt_now = datetime.datetime(2024, 6, 17, 8, 00)    # 出勤(stable:楽曲再生[house-music], walking:経路検索)
     # # dt_now = datetime.datetime(2024, 6, 17, 10, 55) # 定例(stable, walk:会議情報)
@@ -397,19 +389,27 @@ if __name__ == "__main__":
 
 
     
-    check_schedule = CheckScheduleTime(dt_now)
+    # check_schedule = CheckScheduleTime(dt_now)
+    """
+    ここにGoogleColab\main_PredUserNeeds_by_VectorStore_to_Chain_Direct_Timing.py
+    """
     # recommend_tool = RecommendTool(UserActionState)
     # generate_prompt = GeneratePromptbyTool(suggested_tool)
     
     
 
     for i in range(1): # 2):
-        is5min = False
-        is5min = check_schedule.isScheduleStartWithin5min() # LLMデモアプリ起動
+        # is5min = False
+        # is5min = check_schedule.isScheduleStartWithin5min() # LLMデモアプリ起動
+        """
+        ここにGoogleColab\main_PredUserNeeds_by_VectorStore_to_Chain_Direct_Timing.pyで取得した時刻で実行するようにする
+        """
+        isTrigger = True
+
         prompt_answer = ""
 
-        if is5min: # アプリ起動のトリガー：5分以内に予定の開始を検知
-            print("5分以内に次の予定が始まります。デモアプリ起動。")
+        if isTrigger:
+            print("デモアプリ起動。")
 
             
             
@@ -422,9 +422,9 @@ if __name__ == "__main__":
             # 2周目、検出された行動が変われば機能も変わることを示す
 
             print("***** センシング中 *****")
-            # UserActionState = trigger.run() # センシング：結果取得開始
+            # UserActionState = trigger.run()
             UserActionState = "WALKING" # テスト用
-            # UserActionState = "STABLE" # テスト用（通勤時と昼食時に楽曲再生するデモ）
+            # UserActionState = "STABLE" # テスト用
             print("DNN検出結果：", UserActionState)
             print("***** センシング終了 *****")
 
@@ -465,13 +465,18 @@ if __name__ == "__main__":
 
             
 
-            recommend_tool = RecommendTool(UserActionState)
-            UserTrend = recommend_tool.getUserTrends() # ユーザーの傾向を取得：DB参照
-
-            suggested_tool = recommend_tool.getToolAnswer(check_schedule) # 機能提案：傾向と現在の予定、行動状態から予測
-            # （A. 予定を使うバージョン・ユーザーの傾向から機能を決定（db[予定/行動/機能]から傾向取得、現在時刻から予定取得、行動状態→入力））
+            # recommend_tool = RecommendTool(UserActionState)
+            # UserTrend = recommend_tool.getUserTrends()
+            # suggested_tool = recommend_tool.getToolAnswer(check_schedule)
+            # # suggested_tool, UserTrend = recommend_tool.getToolAnswer(check_schedule)
             
-            # suggested_tool, UserTrend = recommend_tool.getToolAnswer(check_schedule)
+            dt_now_for_time_action = datetime.timedelta(hours=dt_now.hour, minutes=dt_now.minute) # 経路案内 # datetime.timedelta(hours=17, minutes=58) # 経路案内
+            print("\n\n【テスト】現在時刻：", dt_now_for_time_action)
+            # UserActionState = "WALKING"
+            recommend_tool_time_action = RecommendTool(dt_now_for_time_action, UserActionState)
+            recommend_tool_time_action.getUserTrends()
+            suggested_tool = recommend_tool_time_action.getToolAnswer()
+
             isMusicPlayback = False
 
             if suggested_tool:
@@ -484,14 +489,16 @@ if __name__ == "__main__":
                     isMusicPlayback = True
 
                     """
-                    2024/6/13
+                    2024/6/17
                     ここでユーザーの傾向からプレイリストを決定する処理を追加
                     """
-                    from SuggestToolOutlook.RecommendPlaylist import RecommendSpotifyPlaylist
-                    check_schedule = CheckScheduleTime(dt_now)
-                    recommend_playlist = RecommendSpotifyPlaylist(UserActionState)
-                    recommend_playlist.getUserTrends()
-                    suggested_playlist = recommend_playlist.getToolAnswer(check_schedule)
+                    from SuggestToolTimeAction.RecommendPlaylistTimeAction import RecommendSpotifyPlaylist
+
+                    dt_now_for_time_action = datetime.timedelta(hours=dt_now.hour, minutes=dt_now.minute) # 経路案内 # datetime.timedelta(hours=17, minutes=58) # 経路案内
+                    print("\n\n【テスト】現在時刻：", dt_now_for_time_action)
+                    recommend_playlist_time_action = RecommendSpotifyPlaylist(dt_now_for_time_action, UserActionState)
+                    recommend_playlist_time_action.getUserTrends()
+                    suggested_playlist = recommend_tool_time_action.getToolAnswer()
                     # a 予定を使うバージョン
                     # ・ユーザーの傾向から再生モードを決定（db[予定/行動/機能]から傾向取得、現在時刻から予定取得、行動状態→入力）
 
@@ -517,7 +524,7 @@ if __name__ == "__main__":
                 else:
                     isMusicPlayback = False
 
-                    generate_prompt = GeneratePromptbyTool(suggested_tool) # 機能からプロンプト生成（楽曲再生以外）
+                    generate_prompt = GeneratePromptbyTool(suggested_tool)
                     isExecuteTool = generate_prompt.getJudgeResult()
                     if isExecuteTool:
                         # A
@@ -534,8 +541,8 @@ if __name__ == "__main__":
                 
                     # # A
                     #     # PreInfo = f"行動状態は{UserActionState}です。ユーザーに関する情報が足りない場合は予定を参照して。"
-                    # PreInfo = "ユーザーに関する情報が足りない場合は予定を参照して。"
-                    # # PreInfo = "楽曲再生以外を実行する際のみ、ユーザーに関する情報が足りない場合は予定を参照して。"
+                    # # PreInfo = "ユーザーに関する情報が足りない場合は予定を参照して。"
+                    # PreInfo = "楽曲再生以外を実行する際のみ、ユーザーに関する情報が足りない場合は予定を参照して。"
                     #     # PreInfo = "ユーザーに関する情報が足りない場合は予定を参照して。" + "楽曲再生以外を実行する場合はまず楽曲再生を停止して。"
                     #     # PreInfo = f"""
                     #     #         ユーザーの傾向は「{UserTrend}」です。 # ループになる
@@ -549,7 +556,7 @@ if __name__ == "__main__":
                     # # text = "現在時刻は" + str(dt_now) + "です。" + PreInfo + prompt_answer
 
                     # C
-                    text = "現在時刻は" + str(dt_now) + "です。" + prompt_answer # 現在時刻＋プロンプトを入力（楽曲再生以外）
+                    text = "現在時刻は" + str(dt_now) + "です。" + prompt_answer
                     
                     if text:
                         print(" >> Waiting for response from Agent...")
@@ -573,7 +580,7 @@ if __name__ == "__main__":
                 # text = f"{suggested_tool}を一回だけ実行して。一回実行したら終了して。"
 
                 # """
-                # 2024/6/13
+                # 2024/6/17
                 # ここでユーザーの傾向からプレイリストを決定する処理を追加
                 # """
                 
@@ -595,7 +602,7 @@ if __name__ == "__main__":
                     # #     print("\n##################################################\nERROR! ERROR! ERROR!\n##################################################")
                     # #     print("もう一度入力してください。")
         else:
-            print("5分以内に始まる予定はありません。処理を終了します。")
+            print("処理を終了します。")
 
 
 

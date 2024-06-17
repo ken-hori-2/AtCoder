@@ -2,7 +2,6 @@
 import requests
 from bs4 import BeautifulSoup
 import strip
-import datetime
 
 # #出発駅の入力
 # departure_station = input("出発駅を入力してください：")
@@ -13,64 +12,12 @@ from langchain.tools.base import BaseTool
 
 class RouteSearch(): # BaseTool): # BaseToolの記述がなくても動く
     
-    # def run(self, departure_station, destination_station,     shinkansen, serach_results_priority): # オプションの引数ありバージョン
-    def run(self, dt_now_arg, departure_station, destination_station,     shinkansen, serach_results_priority): # オプションの引数ありバージョン
+    def run(self, departure_station, destination_station,     shinkansen, serach_results_priority): # オプションの引数ありバージョン
         #経路の取得先URL
         # route_url = "https://transit.yahoo.co.jp/search/print?from="+departure_station+"&flatlon=&to="+ destination_station
 
-        """
-        # 以前の現在時刻で検索する方法（日時指定なし）
         # オプションの引数ありバージョン
         route_url = "https://transit.yahoo.co.jp/search/print?from="+departure_station+"&flatlon=&to="+destination_station+"&shin="+shinkansen +"&s="+serach_results_priority # 0 or 1 or 2
-        """
-
-        
-        
-        
-        #############################
-        # 2024/6/17 日時指定version #
-        #############################
-        # dt_now = datetime.datetime(2024, 6, 17, 8, 00) # 30)
-        # # dt_now = datetime.datetime(2024, 6, 7, 18, 00)
-        # dt_now = dt_now_arg
-        dt_now = datetime.datetime.strptime(dt_now_arg, "%Y-%m-%d %H:%M:%S") # 文字列からdatetime型
-        start_date = datetime.datetime(dt_now.year, dt_now.month, dt_now.day, dt_now.hour, dt_now.minute)
-        print("Boarding Date and Time:", start_date)
-        # yearは4桁になるので大丈夫
-        yyyy = f'{dt_now.year}'
-        """"""
-        # 0を追加してエラー回避 # 1桁では挙動がおかしくなる（時刻がずれる）
-        if len(f'{dt_now.month}') > 1:
-            mm = f'{dt_now.month}'
-        else:
-            mm = f'0{dt_now.month}'
-        
-        if len(f'{dt_now.day}') > 1:
-            dd = f'{dt_now.day}'
-        else:
-            dd = f'0{dt_now.day}'
-
-        if len(f'{dt_now.hour}') > 1:
-            hh = f'{dt_now.hour}'
-        else:
-            hh = f'0{dt_now.hour}' # 0を追加してエラー回避（18時は018時でもOK） # hh = f'{dt_now.hour}' # 1桁ではエラーになる
-        """"""
-        # minuteは2桁になるので大丈夫
-        m1 = f'{int(dt_now.minute/10)}'
-        m2 = f'{int(dt_now.minute%10)}'
-        # # print("test:", dt_now.minute, dt_now.minute/10, dt_now.minute%10)
-        # print(yyyy, mm, dd, hh, m1, m2)
-        # # print(len(yyyy), len(mm), len(dd), len(hh), len(m1), len(m2))
-        # https://transit.yahoo.co.jp/?from=玉川学園前&flatlon=&to=大崎&via=&viacode=&y=2024&m=06&d=17&hh=08&m1=3&m2=1&type=1&s=0&ws=3&expkind=1&ticket=ic&no=1&fromgid=&togid=&tlatlon=&userpass=1&al=1&shin=1&ex=1&hb=1&lb=1&sr=1
-        route_url = "https://transit.yahoo.co.jp/search/print?from="+departure_station+"&flatlon=&to="+destination_station+"&via=&viacode=&y="+yyyy+"&m="+mm+"&d="+dd+"&hh="+hh+"&m1="+m1+"&m2="+m2 + "&shin="+shinkansen +"&s="+serach_results_priority
-        #############################
-        # 2024/6/17 日時指定version #
-        #############################
-
-
-        
-
-
         # print(route_url)
         #Requestsを利用してWebページを取得する
         route_response = requests.get(route_url)
@@ -180,23 +127,11 @@ class RouteSearch(): # BaseTool): # BaseToolの記述がなくても動く
         return "\n\n".join(ret)[: 300]
 
 if __name__ == "__main__":
-
-    # test
-    # https://transit.yahoo.co.jp/search/result?from=玉川学園前&to=大崎&fromgid=
-    # &togid=&flatlon=%2C%2C22804&tlatlon=%2C%2C22559
-    # &via=&viacode=&y=2024&m=06&d=17&hh=08&m1=2&m2=9
-    # &type=1&ticket=ic&expkind=1
-    # &userpass=1&ws=3
-    # &s=0&al=1&shin=1&ex=1&hb=1&lb=1&sr=1
-
     #出発駅の入力
     departure_station = input("出発駅を入力してください：")
     #到着駅の入力
     destination_station = input("到着駅を入力してください：")
 
     yahoo_serach = RouteSearch() # departure_station, destination_station)
-    # result = yahoo_serach.run(departure_station, destination_station)
-    dt_now = str(datetime.datetime(2024, 6, 17, 8, 00))
-    # dt_now = datetime.datetime(2024, 6, 17, 8, 00)
-    result = yahoo_serach.run(dt_now, departure_station, destination_station,     "0", "0")
+    result = yahoo_serach.run(departure_station, destination_station)
     print(result)
