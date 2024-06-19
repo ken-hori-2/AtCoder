@@ -90,7 +90,22 @@ engine.setProperty('voice', "com.apple.ttsbundle.Kyoko-premium")
 from UIModel_copy import UserInterfaceModel # ユーザーとのやり取りをするモデル
 userinterface = UserInterfaceModel()
 # from langchain_community.tools.human.tool import HumanInputRun
+import datetime
 
+# """
+# SCO DEMO (6/19)
+# """
+# YYYY = 2024
+# MM = 6
+# DD = 19
+# # dt_now = datetime.datetime(YYYY, MM, DD, 7, 10)        # 天気情報 (今日より前の日付だとエラーになるかも)
+# dt_now = datetime.datetime(YYYY, MM, DD, 8, 00) # 30)    # 出勤     (stable:楽曲再生[house-music], walking:経路検索)
+# # dt_now = datetime.datetime(YYYY, MM, DD, 10, 55)         # 定例     (stable:何もしない, walk:会議情報)
+# # # dt_now = datetime.datetime(YYYY, MM, DD, 12, 5)        # 昼食     (walk:restaurant, stable:music[relax-music])
+# # dt_now = datetime.datetime(YYYY, MM, DD, 19, 5)          # ジム     (run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
+from WebAPI.DateTime.WhatTimeIsItNow import SetTime
+set_time = SetTime()
+dt_now = set_time.run()
 
 
 class Langchain4Judge():
@@ -203,7 +218,11 @@ class Langchain4Judge():
             #     description="Use the Listen Notes Podcast API to search all podcasts or episodes. The input should be a question in natural language that this API can answer.",
             #     func=chain.run,
             # )
+            # なぜか省略事実引数ならいける（通常の引数だとエラー）
             RouteSearchQueryRun(),
+            # RouteSearchQueryRun(dt_now_arg = dt_now), # RouteSearchQueryRun(),
+
+
             MusicPlaybackQueryRun(),
             # LocalizationQueryRun(), # エラー回避
             RestaurantSearchQueryRun(),
@@ -361,14 +380,15 @@ if __name__ == "__main__":
     credentials_file = "WebAPI\\Secret\\credentials.json"
     agent = model.run(credentials_file)
     
-    import datetime
+    # import datetime
     from TriggerHeadGesture import Trigger
     """
     EdgeAIによるトリガーの定義
     """
     trigger = Trigger()
 
-    for i in range(5):
+    LOOPNUM = 1 # 5
+    for i in range(LOOPNUM): # 5):
         print("***** センシング中 *****")
         # UserActionState = trigger.run()
         UserActionState = "HeadGesture"
@@ -383,23 +403,24 @@ if __name__ == "__main__":
 
             text = ""
             question = ""
-            """
-            デモするユースケースに応じて手動で時刻を設定する
-            """
-            # # dt_now = datetime.datetime.now()
-            # # dt_now = datetime.datetime(2024, 5, 24, 8, 30)
+            # """
+            # デモするユースケースに応じて手動で時刻を設定する
+            # """
+            # # # dt_now = datetime.datetime.now()
+            # # # dt_now = datetime.datetime(2024, 5, 24, 8, 30)
 
-            # 部定例デモ
-            # dt_now = datetime.datetime(2024, 6, 3, 8, 30)
+            # # 部定例デモ
+            # # dt_now = datetime.datetime(2024, 6, 3, 8, 30)
 
-            dt_now = datetime.datetime(2024, 6, 12, 19, 5) # ジム(run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
-            # dt_now = datetime.datetime(2024, 6, 12, 12, 5) # 昼食（ゆっくり休みたい）                          # リラックスモード
-            dt_now = datetime.datetime(2024, 6, 12, 8, 00) # 出勤（気分上げたい）                                # アップテンポモード
-            """
-            デモするユースケースに応じて手動で時刻を設定する
-            """
+            # dt_now = datetime.datetime(2024, 6, 12, 19, 5) # ジム(run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
+            # # dt_now = datetime.datetime(2024, 6, 12, 12, 5) # 昼食（ゆっくり休みたい）                          # リラックスモード
+            # dt_now = datetime.datetime(2024, 6, 12, 8, 00) # 出勤（気分上げたい）                                # アップテンポモード
+            # """
+            # デモするユースケースに応じて手動で時刻を設定する
+            # """
+            
 
-            for i in range(5):
+            for i in range(LOOPNUM): # 5):
                 # ##### 音声入力デモ
                 # # 音声認識関数の呼び出し（現在時刻のみ事前に入力する）
                 # # text += userinterface.recognize_speech() # 音声認識をする場合
@@ -411,7 +432,7 @@ if __name__ == "__main__":
                 # text = "現在の日本の総理大臣は？"
                 # text = "今日の東京の天気は？"
                 # text = "次の予定を教えて。" + "何分後にどこに向かえばいい？"
-                # text = "今日の経路情報を簡潔に教えて。" # 駅名を指定してもOK
+                text = "今日の経路情報を簡潔に教えて。" # 駅名を指定してもOK
                 # text = "今日のおすすめのレストラン3つ教えて"
 
                 # text = "ランニングに合う楽曲を再生して。"

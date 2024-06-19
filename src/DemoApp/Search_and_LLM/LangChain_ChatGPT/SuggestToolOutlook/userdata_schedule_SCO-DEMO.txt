@@ -20,7 +20,7 @@
 
 昼食, WALKING, レストラン検索
 
-定例, STABLE, 何もしない
+定例, STABLE, 会議情報
 
 帰宅, WALKING, 経路検索
 

@@ -14,7 +14,10 @@ from langchain.tools.base import BaseTool
 class RouteSearch(): # BaseTool): # BaseToolの記述がなくても動く
     
     # def run(self, departure_station, destination_station,     shinkansen, serach_results_priority): # オプションの引数ありバージョン
-    def run(self, dt_now_arg, departure_station, destination_station,     shinkansen, serach_results_priority): # オプションの引数ありバージョン
+    
+    # dt_now_arg を引数に指定しない場合はコメントアウトにする
+    # def run(self, dt_now_arg, departure_station, destination_station,     shinkansen, serach_results_priority): # オプションの引数ありバージョン
+    def run(self, dt_now, departure_station, destination_station,     shinkansen, serach_results_priority): # オプションの引数ありバージョン
         #経路の取得先URL
         # route_url = "https://transit.yahoo.co.jp/search/print?from="+departure_station+"&flatlon=&to="+ destination_station
 
@@ -33,7 +36,12 @@ class RouteSearch(): # BaseTool): # BaseToolの記述がなくても動く
         # dt_now = datetime.datetime(2024, 6, 17, 8, 00) # 30)
         # # dt_now = datetime.datetime(2024, 6, 7, 18, 00)
         # dt_now = dt_now_arg
-        dt_now = datetime.datetime.strptime(dt_now_arg, "%Y-%m-%d %H:%M:%S") # 文字列からdatetime型
+
+        # dt_now_arg を引数に指定しない場合はコメントアウトにする
+        # dt_now = datetime.datetime.strptime(dt_now_arg, "%Y-%m-%d %H:%M:%S") # 文字列からdatetime型
+        # start_date = datetime.datetime(dt_now.year, dt_now.month, dt_now.day, dt_now.hour, dt_now.minute)
+
+
         start_date = datetime.datetime(dt_now.year, dt_now.month, dt_now.day, dt_now.hour, dt_now.minute)
         print("Boarding Date and Time:", start_date)
         # yearは4桁になるので大丈夫

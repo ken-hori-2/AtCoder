@@ -1,0 +1,97 @@
+09:10, WALKING, 楽曲再生
+
+10:30, WALKING, 会議情報
+
+12:30, STABLE, 楽曲再生
+
+15:30, WALKING, 会議情報
+
+17:45, WALKING, 楽曲再生
+
+
+07:30, STABLE, 天気情報
+
+11:58, STABLE, レストラン検索
+
+12:45, STABLE, 会議情報
+
+19:00, RUNNING, 楽曲再生
+
+20:00, STABLE, 動画視聴
+
+
+07:15, STABLE, ニュース閲覧
+
+12:10, WALKING, レストラン検索
+
+12:30, STABLE, 楽曲再生
+
+19:20, RUNNING, 楽曲再生
+
+20:00, STABLE, 動画視聴
+
+
+07:30, STABLE, ニュース閲覧
+
+12:50, STABLE, 会議情報
+
+19:50, RUNNING, 楽曲再生
+
+20:00, STABLE, 動画視聴
+
+
+12:01, STABLE, レストラン検索
+
+12:30, STABLE, 楽曲再生
+
+19:00, RUNNING, 楽曲再生
+
+20:00, STABLE, 動画視聴
+
+
+07:30, STABLE, ニュース閲覧
+
+12:02, STABLE, レストラン検索
+
+12:30, STABLE, 楽曲再生
+
+19:00, RUNNING, 楽曲再生
+
+20:00, STABLE, 動画視聴
+
+
+08:00, WALKING, 経路検索
+
+08:45, WALKING, 経路検索
+
+8:15, WALKING, 経路検索
+
+12:05, WALKING, レストラン検索
+
+17:30, WALKING, 経路検索
+
+18:00, WALKING, 経路検索
+
+
+08:25, WALKING, 経路検索
+
+09:00, STABLE, 楽曲再生
+
+09:10, STABLE, 楽曲再生
+
+12:08, WALKING, レストラン検索
+
+19:35, RUNNING, 楽曲再生
+
+19:25, RUNNING, 楽曲再生
+
+
+08:15, WALKING, 経路検索
+
+09:57, STABLE, 会議情報
+
+10:55, STABLE, 会議情報
+
+12:08, WALKING, レストラン検索
+
+14:55, STABLE, 会議情報

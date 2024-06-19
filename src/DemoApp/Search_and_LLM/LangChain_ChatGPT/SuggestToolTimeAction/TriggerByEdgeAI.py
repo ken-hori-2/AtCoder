@@ -152,11 +152,13 @@ class Trigger():
                     # 同じ状態が継続しているか判別するために1つ前に検出された状態を格納する
                     Pre_RecieveData = RecieveData
                     
-                    if run_comp_running in RecieveData:
+                    # if run_comp_running in RecieveData:
+                    if run_comp_walking in RecieveData:
                         action_result = 'WALKING'
                         return action_result
                     
-                    if run_comp_walking in RecieveData:
+                    # if run_comp_walking in RecieveData:
+                    if run_comp_running in RecieveData:
                         action_result = 'RUNNING'
                         return action_result
                     

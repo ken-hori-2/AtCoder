@@ -76,12 +76,31 @@ userinterface = UserInterfaceModel()
 """
 デモするユースケースに応じて手動で時刻を設定する
 """
-# runningは基本的に運動中と認識されやすい
-# dt_now = datetime.datetime(2024, 6, 17, 7, 10)    # 天気情報（今日より前の日付だとエラーになるかも）
-dt_now = datetime.datetime(2024, 6, 17, 8, 00) # 30)    # 出勤(stable:楽曲再生[house-music], walking:経路検索)
-dt_now = datetime.datetime(2024, 6, 17, 10, 55) # 定例(stable, walk:会議情報)
-# dt_now = datetime.datetime(2024, 6, 17, 12, 5)  # 昼食(walk:restaurant, stable:music[relax-music])
-dt_now = datetime.datetime(2024, 6, 17, 19, 5)  # ジム(run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
+# # runningは基本的に運動中と認識されやすい
+# # dt_now = datetime.datetime(2024, 6, 17, 7, 10)    # 天気情報（今日より前の日付だとエラーになるかも）
+# dt_now = datetime.datetime(2024, 6, 17, 8, 00) # 30)    # 出勤(stable:楽曲再生[house-music], walking:経路検索)
+# dt_now = datetime.datetime(2024, 6, 17, 10, 55) # 定例(stable:何もしない, walk:会議情報)
+# # dt_now = datetime.datetime(2024, 6, 17, 12, 5)  # 昼食(walk:restaurant, stable:music[relax-music])
+# dt_now = datetime.datetime(2024, 6, 17, 19, 5)  # ジム(run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
+
+
+# """
+# SCO DEMO (6/19)
+# """
+# YYYY = 2024
+# MM = 6
+# DD = 19
+# # dt_now = datetime.datetime(YYYY, MM, DD, 7, 10)        # 天気情報 (今日より前の日付だとエラーになるかも)
+# dt_now = datetime.datetime(YYYY, MM, DD, 8, 00) # 30)    # 出勤     (stable:楽曲再生[house-music], walking:経路検索)
+# # dt_now = datetime.datetime(YYYY, MM, DD, 10, 55)         # 定例     (stable:何もしない, walk:会議情報)
+# # # dt_now = datetime.datetime(YYYY, MM, DD, 12, 5)        # 昼食     (walk:restaurant, stable:music[relax-music])
+# # dt_now = datetime.datetime(YYYY, MM, DD, 19, 5)          # ジム     (run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
+
+from WebAPI.DateTime.WhatTimeIsItNow import SetTime
+set_time = SetTime()
+dt_now = set_time.run()
+
+
 
 class Langchain4Judge():
 
@@ -175,7 +194,8 @@ class Langchain4Judge():
 
 
             # なぜか省略事実引数ならいける（通常の引数だとエラー）
-            RouteSearchQueryRun(dt_now_arg = dt_now), # RouteSearchQueryRun(),
+            RouteSearchQueryRun(),
+            # RouteSearchQueryRun(dt_now_arg = dt_now), # RouteSearchQueryRun(),
 
             MusicPlaybackQueryRun(),
 
@@ -422,8 +442,8 @@ if __name__ == "__main__":
             # 2周目、検出された行動が変われば機能も変わることを示す
 
             print("***** センシング中 *****")
-            # UserActionState = trigger.run() # センシング：結果取得開始
-            UserActionState = "WALKING" # テスト用
+            UserActionState = trigger.run() # センシング：結果取得開始
+            # UserActionState = "WALKING" # テスト用
             # UserActionState = "STABLE" # テスト用（通勤時と昼食時に楽曲再生するデモ）
             print("DNN検出結果：", UserActionState)
             print("***** センシング終了 *****")
@@ -478,6 +498,10 @@ if __name__ == "__main__":
                 print("\n--------------------------------------------------")
                 print(suggested_tool)
                 print("--------------------------------------------------")
+
+                if "何もしない" in suggested_tool:
+                    print("ユーザーの邪魔をしないようにします。")
+                    break
 
                 if "楽曲再生" in suggested_tool:
                     print("**********\n楽曲再生なので、ガイダンス処理は実行しません。\n直接楽曲再生に移行します。\n**********")

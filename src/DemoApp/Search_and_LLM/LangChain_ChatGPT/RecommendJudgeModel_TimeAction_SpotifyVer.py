@@ -73,15 +73,19 @@ llm_3p5t=ChatOpenAI(
 userinterface = UserInterfaceModel()
 
 
-"""
-デモするユースケースに応じて手動で時刻を設定する
-"""
-# runningは基本的に運動中と認識されやすい
+# """
+# デモするユースケースに応じて手動で時刻を設定する
+# """
+# # runningは基本的に運動中と認識されやすい
 # dt_now = datetime.datetime(2024, 6, 17, 7, 10)    # 天気情報（今日より前の日付だとエラーになるかも）
-dt_now = datetime.datetime(2024, 6, 17, 8, 30)    # 出勤(stable:楽曲再生[house-music], walking:経路検索)
-# dt_now = datetime.datetime(2024, 6, 17, 10, 55) # 定例(stable, walk:会議情報)
-# dt_now = datetime.datetime(2024, 6, 17, 12, 5)  # 昼食(walk:restaurant, stable:music[relax-music])
-dt_now = datetime.datetime(2024, 6, 17, 19, 5)  # ジム(run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
+# # dt_now = datetime.datetime(2024, 6, 17, 8, 30)    # 出勤(stable:楽曲再生[house-music], walking:経路検索)
+# # # dt_now = datetime.datetime(2024, 6, 17, 10, 55) # 定例(stable, walk:会議情報)
+# # # dt_now = datetime.datetime(2024, 6, 17, 12, 5)  # 昼食(walk:restaurant, stable:music[relax-music])
+# # dt_now = datetime.datetime(2024, 6, 17, 19, 5)  # ジム(run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
+
+from WebAPI.DateTime.WhatTimeIsItNow import SetTime
+set_time = SetTime()
+dt_now = set_time.run()
 
 
 class Langchain4Judge():
@@ -177,7 +181,8 @@ class Langchain4Judge():
 
 
             # なぜか省略事実引数ならいける（通常の引数だとエラー）
-            RouteSearchQueryRun(dt_now_arg = dt_now), # RouteSearchQueryRun(),
+            RouteSearchQueryRun(),
+            # RouteSearchQueryRun(dt_now_arg = dt_now), # RouteSearchQueryRun(),
             
             MusicPlaybackQueryRun(),
 

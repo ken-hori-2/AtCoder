@@ -14,6 +14,8 @@ from langchain_core.tools import BaseTool
 # from langchain_community.utilities.openweathermap import OpenWeatherMapAPIWrapper
 from RouteSearch.route_search_Lib import RouteSearch
 
+from DateTime.WhatTimeIsItNow import SetTime
+
 class RouteSearchQueryRun(BaseTool):
     """Tool that queries the Route Search API."""
 
@@ -55,7 +57,9 @@ class RouteSearchQueryRun(BaseTool):
 
     def _run(
         self, 
-        dt_now_arg, # エラーになる可能性がある（省略事実引数を使うとエラー回避できる）
+
+        # dt_now_arg, # エラーになる可能性がある（省略事実引数を使うとエラー回避できる）
+
         departure_station: str,
         destination_station: str, 
         
@@ -67,7 +71,23 @@ class RouteSearchQueryRun(BaseTool):
         """Use the Route Search tool."""
         # return self.api_wrapper.run(location)
         # dt_now_arg = self.dt_now_arg
-        return self.yahoo_search.run(dt_now_arg, departure_station, destination_station,     shinkansen, search_results_priority) # オプションの引数ありバージョン
+        # return self.yahoo_search.run(dt_now_arg, departure_station, destination_station,     shinkansen, search_results_priority) # オプションの引数ありバージョン
+
+        # """
+        # SCO DEMO (6/19)
+        # """
+        # import datetime
+        # YYYY = 2024
+        # MM = 6
+        # DD = 19
+        # # dt_now = datetime.datetime(YYYY, MM, DD, 7, 10)        # 天気情報 (今日より前の日付だとエラーになるかも)
+        # dt_now = datetime.datetime(YYYY, MM, DD, 8, 00) # 30)    # 出勤     (stable:楽曲再生[house-music], walking:経路検索)
+        # # dt_now = datetime.datetime(YYYY, MM, DD, 10, 55)         # 定例     (stable:何もしない, walk:会議情報)
+        # # # dt_now = datetime.datetime(YYYY, MM, DD, 12, 5)        # 昼食     (walk:restaurant, stable:music[relax-music])
+        # # dt_now = datetime.datetime(YYYY, MM, DD, 19, 5)          # ジム     (run:up tempo, walk:slow tempo, stable:stop)   # 行動検出と連動モード
+        set_time = SetTime()
+        dt_now = set_time.run()
+        return self.yahoo_search.run(dt_now, departure_station, destination_station,     shinkansen, search_results_priority) # オプションの引数ありバージョン
     
     
     # これがないと動かない
