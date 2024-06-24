@@ -387,7 +387,7 @@ if __name__ == "__main__":
     """
     trigger = Trigger()
 
-    LOOPNUM = 1 # 5
+    LOOPNUM = 5 # 1 # 5
     for i in range(LOOPNUM): # 5):
         print("***** センシング中 *****")
         # UserActionState = trigger.run()
@@ -426,14 +426,14 @@ if __name__ == "__main__":
                 # # text += userinterface.recognize_speech() # 音声認識をする場合
                 # userinterface.text_to_speach("Please Speak in 3 seconds\n")
                 print("入力してください。\n")
-                # text = userinterface.recognize_speech() # 音声認識をする場合
-                text = "楽曲再生して。" # "アップテンポな曲を再生して。"
+                text = userinterface.recognize_speech() # 音声認識をする場合
+                # text = "楽曲再生して。" # "アップテンポな曲を再生して。"
                 
-                # text = "現在の日本の総理大臣は？"
-                # text = "今日の東京の天気は？"
-                # text = "次の予定を教えて。" + "何分後にどこに向かえばいい？"
-                text = "今日の経路情報を簡潔に教えて。" # 駅名を指定してもOK
-                # text = "今日のおすすめのレストラン3つ教えて"
+                # # text = "現在の日本の総理大臣は？"
+                # # text = "今日の東京の天気は？"
+                # # text = "次の予定を教えて。" + "何分後にどこに向かえばいい？"
+                # text = "今日の経路情報を簡潔に教えて。" # 駅名を指定してもOK
+                # # text = "今日のおすすめのレストラン3つ教えて"
 
                 # text = "ランニングに合う楽曲を再生して。"
 

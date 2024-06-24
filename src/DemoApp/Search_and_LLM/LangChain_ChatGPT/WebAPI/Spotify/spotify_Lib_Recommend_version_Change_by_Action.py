@@ -72,6 +72,8 @@ class MusicPlayback(): # BaseTool): # BaseToolの記述がなくても動く
 
                 # 次回Todo (Done)
                 if (detect_headgesture_horizontal in RecieveData):
+                    print("\n\n**********\nHead Gesture Detection!\n**********")
+                    print("楽曲再生を終了します。")
                     # 終了時に楽曲を一時停止する場合
                     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/ActionDetection_Play.py', 'STABLE'])
                     return "Success"
@@ -171,6 +173,8 @@ class MusicPlayback(): # BaseTool): # BaseToolの記述がなくても動く
                 print(RecieveData)
 
                 if (detect_headgesture_horizontal in RecieveData):
+                    print("\n\n**********\nHead Gesture Detection!\n**********")
+                    print("楽曲再生を終了します。")
                     # 終了時に楽曲を一時停止する場合
                     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/ActionDetection_Play.py', 'STABLE'])
                     return "Success"
@@ -198,6 +202,8 @@ class MusicPlayback(): # BaseTool): # BaseToolの記述がなくても動く
                 print(RecieveData)
 
                 if (detect_headgesture_horizontal in RecieveData):
+                    print("\n\n**********\nHead Gesture Detection!\n**********")
+                    print("楽曲再生を終了します。")
                     # 終了時に楽曲を一時停止する場合
                     subprocess.run(['C:/Users/0107409377/.pyenv/pyenv-win/versions/3.12.0/python.exe', 'C:/Users/0107409377/Desktop/code/AtCoder/src/DemoApp/Spotify_API/ActionDetection_Play.py', 'STABLE'])
                     return "Success"
