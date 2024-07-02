@@ -1,0 +1,43 @@
+出勤, WALKING, 経路検索
+
+出勤, STABLE, 楽曲再生
+
+定例, WALKING, 会議情報
+
+昼食, WALKING, レストラン検索
+
+昼食, STABLE, 楽曲再生
+
+定例, WALKING, 会議情報
+
+帰宅, WALKING, 経路検索
+
+運動, WALKING, 楽曲再生
+
+出勤, WALKING, 経路検索
+
+出勤, STABLE, 楽曲再生
+
+昼食, WALKING, レストラン検索
+
+定例, STABLE, 何もしない
+
+帰宅, WALKING, 経路検索
+
+運動, RUNNING, 楽曲再生
+
+出勤, WALKING, 経路検索
+
+出勤, STABLE, 楽曲再生
+
+昼食, STABLE, 楽曲再生
+
+昼食, WALKING, レストラン検索
+
+昼食, STABLE, 楽曲再生
+
+帰宅, WALKING, 経路検索
+
+運動, RUNNING, 楽曲再生
+
+昼食, WALKING, レストラン検索

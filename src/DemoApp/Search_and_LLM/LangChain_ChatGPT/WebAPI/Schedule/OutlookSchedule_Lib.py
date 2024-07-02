@@ -41,8 +41,13 @@ class OutlookSchedule(): # BaseTool): # BaseToolの記述がなくても動く
         #############################
         # 2024/6/17 日時指定version #
         #############################
-        dt_now = datetime.datetime.strptime(dt_now_arg, "%Y-%m-%d %H:%M:%S") # 文字列からdatetime型
-        # dt_now = dt_now_arg # 参照したい日付だけ知れればいい
+        # dt_now = datetime.datetime.strptime(dt_now_arg, "%Y-%m-%d %H:%M:%S") # 文字列からdatetime型
+        # # dt_now = datetime.datetime.strptime(dt_now_arg, "%Y-%m-%d-%H:%M:%S") # 2024/07/01
+        # # dt_now = dt_now_arg # 参照したい日付だけ知れればいい
+        try:
+            dt_now = datetime.datetime.strptime(dt_now_arg, "%Y-%m-%d %H:%M:%S") # 文字列からdatetime型
+        except:
+            dt_now = datetime.datetime.strptime(dt_now_arg, "%Y-%m-%dT%H:%M:%S") # 文字列からdatetime型
         #############################
         # 2024/6/17 日時指定version #
         #############################
@@ -192,7 +197,9 @@ class OutlookSchedule(): # BaseTool): # BaseToolの記述がなくても動く
         meeting_contents = ""
         # mask_list = ["SoC", "BLANC", "昼食"] # 社外秘情報は伏せる
         # mask_list = ["SoC", "BLANC", "昼食", "出社", "AUD", "外販"] # 出社を追加
-        mask_list = ["SoC", "BLANC", "昼食", "出社", "AUD", "外販"]
+        # mask_list = ["SoC", "BLANC", "昼食", "出社", "AUD", "外販"] # SCOデモ(6/19)
+        mask_list = ["SoC", "BLANC", "昼食", "出社", "AUD", "外販", "本採用"] # お披露目会デモ(7/1)
+        mask_list_ok = ["出勤", "新人研修相談", "定例会議1", "顧客定例2", "ブレスト定例", "LLMデモンストレーション", "帰宅", "運動"] # 入力していい情報のみ通す
 
         time_zone = []
         meeting_list = [] # より具体的な内容
@@ -205,9 +212,18 @@ class OutlookSchedule(): # BaseTool): # BaseToolの記述がなくても動く
             # # if working_start < meeting_time < working_end: # < としているのは、出社という件名を含まないため
             # if self.working_start <= meeting_time < self.working_end: # <= にするならmask_listに出社を追加
                 
+            """
             # 社外秘情報は伏せる
-            # mask_listに出社を追加
-            if (not (mask_list[0] in select_item.subject)) and (not (mask_list[1] in select_item.subject)) and (not (mask_list[2] in select_item.subject)) and (not (mask_list[3] in select_item.subject)) and (not (mask_list[4] in select_item.subject)) and (not (mask_list[5] in select_item.subject)):
+            """
+            # # mask_listに出社を追加
+            # if (not (mask_list[0] in select_item.subject)) and (not (mask_list[1] in select_item.subject)) and (not (mask_list[2] in select_item.subject)) and (not (mask_list[3] in select_item.subject)) and (not (mask_list[4] in select_item.subject)) and (not (mask_list[5] in select_item.subject)):
+            # 入力していい情報のみ通す場合
+            is_inputok = False
+            for subject in mask_list_ok:
+                if subject in select_item.subject:
+                    is_inputok = True
+            # if (mask_list_ok[0] in select_item.subject) or (mask_list_ok[1] in select_item.subject) or (mask_list_ok[2] in select_item.subject) or (mask_list_ok[3] in select_item.subject) or (mask_list_ok[4] in select_item.subject) or (mask_list_ok[5] in select_item.subject) or (mask_list_ok[6] in select_item.subject) or (mask_list_ok[7] in select_item.subject):
+            if is_inputok:
 
                 meeting_contents += "\n件名：" + select_item.subject
                 meeting_contents += "\n場所：" + select_item.location
@@ -335,8 +351,9 @@ if __name__ == "__main__":
     
     outlook_schedule = OutlookSchedule()
     # result = 
-    dt_now = str(datetime.datetime(2024, 6, 17, 8, 00))
+    # dt_now = str(datetime.datetime(2024, 6, 17, 8, 00))
     # dt_now = datetime.datetime(2024, 6, 17, 8, 00)
+    dt_now = str(datetime.datetime(2024, 7, 1, 8, 00))
     outlook_schedule.run(dt_now)
     # print(result)
     print("-----")

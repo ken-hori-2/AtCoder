@@ -87,6 +87,8 @@ from WebAPI.DateTime.WhatTimeIsItNow import SetTime
 set_time = SetTime()
 dt_now = set_time.run()
 
+dt_now_str = dt_now.strftime("%Y-%m-%d %H:%M:%S") # 2024/07/01
+
 
 class Langchain4Judge():
 
@@ -478,9 +480,14 @@ if __name__ == "__main__":
             dt_now_for_time_action = datetime.timedelta(hours=dt_now.hour, minutes=dt_now.minute) # 経路案内 # datetime.timedelta(hours=17, minutes=58) # 経路案内
             print("\n\n【テスト】現在時刻：", dt_now_for_time_action)
             # UserActionState = "WALKING"
-            recommend_tool_time_action = RecommendTool(dt_now_for_time_action, UserActionState)
-            recommend_tool_time_action.getUserTrends()
-            suggested_tool = recommend_tool_time_action.getToolAnswer()
+            # """ # RAG version """
+            # recommend_tool_time_action = RecommendTool(dt_now_for_time_action, UserActionState)
+            # recommend_tool_time_action.getUserTrends()
+            # suggested_tool = recommend_tool_time_action.getToolAnswer()
+            """ # Prediction Tool version """
+            from PredictionTool4TimeAction import PredctionModel
+            predictionmodel = PredctionModel()
+            suggested_tool = predictionmodel.run(str(dt_now_for_time_action), UserActionState)
 
             isMusicPlayback = False
 

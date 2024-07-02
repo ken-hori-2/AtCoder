@@ -100,6 +100,8 @@ from WebAPI.DateTime.WhatTimeIsItNow import SetTime
 set_time = SetTime()
 dt_now = set_time.run()
 
+dt_now_str = dt_now.strftime("%Y-%m-%d-%H:%M:%S") # 2024/07/01
+
 
 
 class Langchain4Judge():
@@ -206,7 +208,8 @@ class Langchain4Judge():
             # HumanInputRun(), # ユーザーに入力を求める
 
             # なぜか省略事実引数ならいける（通常の引数だとエラー）
-            ScheduleQueryRun(dt_now_arg = dt_now) # ScheduleQueryRun() # 2024/05/28 追加
+            # ScheduleQueryRun(dt_now_arg = dt_now_str) # ScheduleQueryRun() # 2024/05/28 追加
+            ScheduleQueryRun(dt_now_arg = dt_now)
 
         ]
         # agent が使用する memory の作成
@@ -442,8 +445,8 @@ if __name__ == "__main__":
             # 2周目、検出された行動が変われば機能も変わることを示す
 
             print("***** センシング中 *****")
-            UserActionState = trigger.run() # センシング：結果取得開始
-            # UserActionState = "WALKING" # テスト用
+            # UserActionState = trigger.run() # センシング：結果取得開始
+            UserActionState = "WALKING" # テスト用
             # UserActionState = "STABLE" # テスト用（通勤時と昼食時に楽曲再生するデモ）
             print("DNN検出結果：", UserActionState)
             print("***** センシング終了 *****")
