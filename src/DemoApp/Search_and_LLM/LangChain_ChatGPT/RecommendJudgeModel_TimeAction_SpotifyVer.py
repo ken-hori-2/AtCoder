@@ -195,7 +195,7 @@ class Langchain4Judge():
             # HumanInputRun(), # ユーザーに入力を求める
 
             # なぜか省略事実引数ならいける（通常の引数だとエラー）
-            ScheduleQueryRun(dt_now_arg = dt_now) # ScheduleQueryRun() # 2024/05/28 追加
+            ScheduleQueryRun() # dt_now_arg = dt_now) # ScheduleQueryRun() # 2024/05/28 追加
 
         ]
         # agent が使用する memory の作成
@@ -480,14 +480,14 @@ if __name__ == "__main__":
             dt_now_for_time_action = datetime.timedelta(hours=dt_now.hour, minutes=dt_now.minute) # 経路案内 # datetime.timedelta(hours=17, minutes=58) # 経路案内
             print("\n\n【テスト】現在時刻：", dt_now_for_time_action)
             # UserActionState = "WALKING"
-            # """ # RAG version """
-            # recommend_tool_time_action = RecommendTool(dt_now_for_time_action, UserActionState)
-            # recommend_tool_time_action.getUserTrends()
-            # suggested_tool = recommend_tool_time_action.getToolAnswer()
+            """ # RAG version """
+            recommend_tool_time_action = RecommendTool(dt_now_for_time_action, UserActionState)
+            recommend_tool_time_action.getUserTrends()
+            suggested_tool = recommend_tool_time_action.getToolAnswer()
             """ # Prediction Tool version """
-            from PredictionTool4TimeAction import PredctionModel
-            predictionmodel = PredctionModel()
-            suggested_tool = predictionmodel.run(str(dt_now_for_time_action), UserActionState)
+            # from PredictionTool4TimeAction import PredctionModel
+            # predictionmodel = PredctionModel()
+            # suggested_tool = predictionmodel.run(str(dt_now_for_time_action), UserActionState)
 
             isMusicPlayback = False
 

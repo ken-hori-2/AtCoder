@@ -31,6 +31,15 @@ class MusicPlaybackQueryRun(BaseTool):
     description: str = (
         "This function is useful for playing back music."
 
+        # 2024/07/01 追加
+        "I often use it when I exercise, concentrate, or am on a train."
+        # 2024/07/01 追加
+
+
+
+
+
+
         # 提案デモ用に引数を指定させるような説明を追加（楽曲再生モード指定...モードを三つ作成）
         "Input should be a playback_mode string (e.g. LinkedActionsMode, HouseMusicMode, RelaxMusicMode)."
 
@@ -94,6 +103,9 @@ class MusicPlaybackQueryRun(BaseTool):
     
     
     # これがないと動かない
-    async def _arun(self, action_detection: str) -> str: # オプションの引数ありバージョン
-        """Use the Route Search tool asynchronously."""
-        raise NotImplementedError("RouteSearchQueryRun does not support async")
+    # async def _arun(self, action_detection: str) -> str: # オプションの引数ありバージョン
+    #     """Use the Route Search tool asynchronously."""
+    #     raise NotImplementedError("RouteSearchQueryRun does not support async")
+    async def _arun(self, playback_mode: str) -> str: # オプションの引数ありバージョン
+        """Use the Music Playback tool asynchronously."""
+        raise NotImplementedError("MusicPlaybackQueryRun does not support async")

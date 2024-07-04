@@ -44,10 +44,15 @@ class OutlookSchedule(): # BaseTool): # BaseToolの記述がなくても動く
         # dt_now = datetime.datetime.strptime(dt_now_arg, "%Y-%m-%d %H:%M:%S") # 文字列からdatetime型
         # # dt_now = datetime.datetime.strptime(dt_now_arg, "%Y-%m-%d-%H:%M:%S") # 2024/07/01
         # # dt_now = dt_now_arg # 参照したい日付だけ知れればいい
+
+        
+        
+        """ # dt_nowをOutlookSchedule_api.py内で取得するときは既にdatetime型なのでいらない """
         try:
             dt_now = datetime.datetime.strptime(dt_now_arg, "%Y-%m-%d %H:%M:%S") # 文字列からdatetime型
         except:
             dt_now = datetime.datetime.strptime(dt_now_arg, "%Y-%m-%dT%H:%M:%S") # 文字列からdatetime型
+        # dt_now = dt_now_arg # dt_nowをOutlookSchedule_api.py内で取得する場合
         #############################
         # 2024/6/17 日時指定version #
         #############################

@@ -127,14 +127,18 @@ class RecommendTool():
             "time" : self.dt_now_for_time_action,
             "UserAction" : self.UserActionState,
         })
-        print("\n--------------------------------------------------")
+        RED = '\033[31m'
+        YELLOW = '\033[33m'
+        END = '\033[0m'
+        BOLD = '\033[1m'
+        print(BOLD + YELLOW + "\n--------------------------------------------------")
         print("User Needs: \n", response['UserNeeds'])
         print("\n--------------------------------------------------")
         print("time: ", response['time'])
         print("User Action: ", response['UserAction'])
         print("\n--------------------------------------------------")
         print("Output: ", response['output'])
-        print("\n--------------------------------------------------")
+        print("\n--------------------------------------------------" + END)
 
         Suggested_Tool = response['output']
 

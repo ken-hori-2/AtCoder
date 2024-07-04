@@ -24,6 +24,12 @@ class RestaurantSearchQueryRun(BaseTool):
     name: str = "restaurant_search"
     description: str = (
         "This function is useful for locating restaurants by location."
+
+        # 2024/07/01 追加
+        "It is often used for lunch."
+        # 2024/07/01 追加
+
+
         "The input must be a string of two character type numbers, latitude and longitude, representing the location information, and one keyword about the restaurant. (e.g. 35.4394083, 139.3644221, ramen)."
         "So a total of three must be passed as input."
         "Restaurant selection criteria should be based on the highest rated restaurants that are close to the keyword(s)."
@@ -40,10 +46,14 @@ class RestaurantSearchQueryRun(BaseTool):
     ) -> str:
         """Use the Route Search tool."""
         # return self.api_wrapper.run(location)
-        return self.restaurant_search.run(latitude, longitude, keyword) # オプションの引数ありバージョン
+        # 2024/07/02 ここでreturnする前に音声ガイダンスしてしまってもいいかも
+        return self.restaurant_search.run(latitude, longitude, keyword) # , "Success" # オプションの引数ありバージョン
     
     
     # これがないと動かない
+    # async def _arun(self, latitude: str, longitude: str, keyword: str) -> str: # オプションの引数ありバージョン
+    #     """Use the Route Search tool asynchronously."""
+    #     raise NotImplementedError("RestaurantSearchQueryRun does not support async")
     async def _arun(self, latitude: str, longitude: str, keyword: str) -> str: # オプションの引数ありバージョン
-        """Use the Route Search tool asynchronously."""
+        """Use the Restaurant Search tool asynchronously."""
         raise NotImplementedError("RestaurantSearchQueryRun does not support async")

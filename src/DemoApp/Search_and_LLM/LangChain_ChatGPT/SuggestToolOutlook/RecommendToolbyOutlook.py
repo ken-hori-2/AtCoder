@@ -150,14 +150,18 @@ class RecommendTool():
             # "UserAction" : "STABLE",
             "UserAction" : self.UserActionState, # 行動検出をAgentに組み込めば統合できる
         })
-        print("\n--------------------------------------------------")
+        RED = '\033[31m'
+        YELLOW = '\033[33m'
+        END = '\033[0m'
+        BOLD = '\033[1m'
+        print(BOLD + YELLOW + "\n--------------------------------------------------")
         print("User Needs: \n", response['UserNeeds'])
         print("\n--------------------------------------------------")
         print("schedule: ", response['schedule'])
         print("User Action: ", response['UserAction'])
         print("\n--------------------------------------------------")
         print("Output: ", response['output'])
-        print("\n--------------------------------------------------")
+        print("\n--------------------------------------------------" + END)
 
         Suggested_Tool = response['output']
 

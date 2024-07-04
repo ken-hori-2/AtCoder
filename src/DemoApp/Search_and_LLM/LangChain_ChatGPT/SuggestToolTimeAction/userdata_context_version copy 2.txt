@@ -1,0 +1,105 @@
+
+Date:Monday, 7:20, UserActionState:STABLE, UsedApp:天気情報を使用し、会社周辺の天気を調査
+
+Date:Monday, 8:00, UserActionState:WALKING, UsedApp:経路検索を使用し、玉川学園前から本厚木を検索
+
+Date:Monday, 10:51, UserActionState:WALKING, UsedApp:会議情報を使用し、次の会議室の場所を確認
+
+Date:Monday, 11:58, UserActionState:STABLE, UsedApp:レストラン検索を使用し、現在地周辺を検索
+
+Date:Monday, 12:45, UserActionState:STABLE, UsedApp:会議情報を使用し、次の会議室の場所を確認
+
+Date:Monday, 19:00, UserActionState:RUNNING, UsedApp:楽曲再生を使用し、PlaybackLinkedToActionsを再生
+
+Date:Monday, 8:25, UserActionState:WALKING, UsedApp:経路検索を使用し、玉川学園前から本厚木を検索
+
+Date:Monday, 9:00, UserActionState:STABLE, UsedApp:楽曲再生を使用し、HouseMusicを再生
+
+Date:Monday, 9:10, UserActionState:STABLE, UsedApp:楽曲再生を使用し、HouseMusicを再生
+
+Date:Monday, 12:08, UserActionState:WALKING, UsedApp:レストラン検索を使用し、現在地周辺を検索
+
+Date:Monday, 14:00, UserActionState:WALKING, UsedApp:会議情報を使用し、次の会議室の場所を確認
+
+Date:Monday, 19:35, UserActionState:RUNNING, UsedApp:楽曲再生を使用し、PlaybackLinkedToActionsを再生
+
+Date:Monday, 19:25, UserActionState:RUNNING, UsedApp:楽曲再生を使用し、PlaybackLinkedToActionsを再生
+
+
+Date:Tuesday, 8:15, UserActionState:WALKING, UsedApp:経路検索を使用し、玉川学園前から大崎を検索
+
+Date:Tuesday, 9:57, UserActionState:STABLE, UsedApp:会議情報を使用し、次の会議室の場所を確認
+
+Date:Tuesday, 10:55, UserActionState:STABLE, UsedApp:会議情報を使用し、次の会議室の場所を確認
+
+Date:Tuesday, 12:08, UserActionState:WALKING, UsedApp:レストラン検索を使用し、現在地周辺を検索
+
+Date:Tuesday, 14:55, UserActionState:STABLE, UsedApp:会議情報を使用し、次の会議室の場所を確認
+
+Date:Tuesday, 7:00, UserActionState:STABLE, UsedApp:天気情報を使用し、会社周辺の天気を調査
+
+Date:Tuesday, 11:00, UserActionState:WALKING, UsedApp:会議情報を使用し、次の会議室の場所を確認
+
+Date:Tuesday, 12:02, UserActionState:STABLE, UsedApp:レストラン検索を使用し、現在地周辺を検索
+
+Date:Tuesday, 12:30, UserActionState:STABLE, UsedApp:楽曲再生を使用し、RelaxMusicを再生
+
+Date:Tuesday, 14:00, UserActionState:WALKING, UsedApp:会議情報を使用し、次の会議室の場所を確認
+
+Date:Tuesday, 19:00, UserActionState:RUNNING, UsedApp:楽曲再生を使用し、PlaybackLinkedToActionsを再生
+
+Date:Tuesday 8:45, UserActionState:WALKING, UsedApp:経路検索を使用し、玉川学園前から大崎を検索
+
+Date:Tuesday, 9:10, UserActionState:WALKING, UsedApp:楽曲再生を使用し、HouseMusicを再生
+
+Date:Tuesday, 10:30, UserActionState:WALKING, UsedApp:会議情報を使用し、次の会議室の場所を確認
+
+Date:Tuesday, 12:30, UserActionState:STABLE, UsedApp:楽曲再生を使用し、RelaxMusicを再生
+
+Date:Tuesday, 15:30, UserActionState:WALKING, UsedApp:会議情報を使用し、次の会議室の場所を確認
+
+Date:Tuesday, 17:45, UserActionState:WALKING, UsedApp:楽曲再生を使用し、HouseMusicを再生
+
+
+Date:Wednesday, 7:10, UserActionState:STABLE, UsedApp:天気情報を使用し、会社周辺の天気を調査
+
+Date:Wednesday, 8:15, UserActionState:WALKING, UsedApp:経路検索を使用し、玉川学園前から本厚木を検索
+
+Date:Wednesday, 10:00, UserActionState:WALKING, UsedApp:会議情報を使用し、次の会議室の場所を確認
+
+Date:Wednesday, 12:50, UserActionState:STABLE, UsedApp:会議情報を使用し、次の会議室の場所を確認
+
+Date:Wednesday, 19:50, UserActionState:RUNNING, UsedApp:楽曲再生を使用し、PlaybackLinkedToActionsを再生
+
+
+Date:Wednesday, 12:30, UserActionState:STABLE, UsedApp:楽曲再生を使用し、RelaxMusicを再生
+
+Date:Wednesday, 19:00, UserActionState:RUNNING, UsedApp:楽曲再生を使用し、PlaybackLinkedToActionsを再生
+
+
+Date:Thursday, 7:15, UserActionState:STABLE, UsedApp:天気情報を使用し、会社周辺の天気を調査
+
+Date:Thursday, 8:20, UserActionState:WALKING, UsedApp:経路検索を使用し、玉川学園前から大崎を検索
+
+Date:Thursday, 12:10, UserActionState:WALKING, UsedApp:レストラン検索を使用し、現在地周辺を検索
+
+Date:Thursday, 12:30, UserActionState:STABLE, UsedApp:楽曲再生を使用し、RelaxMusicを再生
+
+Date:Thursday, 19:20, UserActionState:RUNNING, UsedApp:楽曲再生を使用し、PlaybackLinkedToActionsを再生
+
+Date:Thursday, 12:01, UserActionState:STABLE, UsedApp:レストラン検索を使用し、現在地周辺を検索
+
+
+Date:Friday, 8:00, UserActionState:WALKING, UsedApp:経路検索を使用し、玉川学園前から本厚木を検索
+
+Date:Friday, 10:50, UserActionState:STABLE, UsedApp:会議情報を使用し、次の会議室の場所を確認
+
+Date:Friday, 12:05, UserActionState:WALKING, UsedApp:レストラン検索を使用し、現在地周辺を検索
+
+Date:Friday, 13:50, UserActionState:WALKING, UsedApp:会議情報を使用し、次の会議室の場所を確認
+
+Date:Friday, 17:30, UserActionState:WALKING, UsedApp:経路検索を使用し、本厚木から玉川学園前を検索
+
+Date:Friday, 18:00, UserActionState:WALKING, UsedApp:経路検索を使用し、本厚木から玉川学園前を検索
+
+

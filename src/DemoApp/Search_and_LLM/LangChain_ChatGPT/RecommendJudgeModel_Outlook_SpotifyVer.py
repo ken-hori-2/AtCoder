@@ -209,7 +209,7 @@ class Langchain4Judge():
 
             # なぜか省略事実引数ならいける（通常の引数だとエラー）
             # ScheduleQueryRun(dt_now_arg = dt_now_str) # ScheduleQueryRun() # 2024/05/28 追加
-            ScheduleQueryRun(dt_now_arg = dt_now)
+            ScheduleQueryRun() # dt_now_arg = dt_now)
 
         ]
         # agent が使用する memory の作成
