@@ -274,4 +274,7 @@ if __name__ == "__main__":
     print("現在時刻：", dt_now_for_time_action)
     UserAction = "WALKING"
     # predictionmodel.run(str_td, UserAction)
-    predictionmodel.run(str(dt_now_for_time_action), UserAction)
+    ret = predictionmodel.run(str(dt_now_for_time_action), UserAction)
+
+    print(ret[0])
+    print(type(ret[0]))

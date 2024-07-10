@@ -122,12 +122,13 @@ class RouteSearchQueryRun(BaseTool):
         
         # dt_nowをroute_api.py内で取得する場合に必要
         # OutlookSchedule_api.pyでは、現在時刻を引数指定することで受け取っているが、出発地や目的地も受け取っているので、多くなりすぎてしまうので、route_api.py内で取得するようにしている
+        # というより、多くても引数の受け渡しはできたが、Yahoo!経路案内の引数が特殊で一旦変換しないといけないので、今回はroute_api.py内でdt_nowを取得している
         set_time = SetTime()
         dt_now = set_time.run()
 
         # 2024/07/02 ここでreturnする前に音声ガイダンスしてしまってもいいかも
         return self.yahoo_search.run(dt_now, departure_station, destination_station,     shinkansen, search_results_priority) # , "Success" # オプションの引数ありバージョン
-        # dt_nowをroute_api.py内で取得する場合に必要
+        # dt_nowをroute_api.py内で取得する場合は使わない
         # return self.yahoo_search.run(dt_now_arg, departure_station, destination_station,     shinkansen, search_results_priority) # , "Success" # オプションの引数ありバージョン
     
     
