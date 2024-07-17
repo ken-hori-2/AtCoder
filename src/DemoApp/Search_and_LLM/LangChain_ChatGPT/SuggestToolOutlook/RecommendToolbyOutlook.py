@@ -34,6 +34,7 @@ llm_3p5t=ChatOpenAI(
     temperature=0 # 出力する単語のランダム性（0から2の範囲） 0であれば毎回返答内容固定
 ) # チャット特化型モデル
 
+
 class RecommendTool():
     def __init__(self, UserActionState):
 
@@ -54,7 +55,7 @@ class RecommendTool():
         )
         self.index = VectorstoreIndexCreator(
             vectorstore_cls=Chroma, # Default
-            embedding=OpenAIEmbeddings(), # Default
+            embedding=OpenAIEmbeddings(), # Default # Context_withTrends.pyのやり方にした方がいいかも
             text_splitter=text_splitter, # text_splitterのインスタンスを使っている
         ).from_loaders([loader])
 
@@ -107,7 +108,7 @@ class RecommendTool():
 
                     現在の予定が{schedule}、ユーザーの行動状態が{UserAction}の場合、どの機能を提案するかこのユーザーの傾向を加味して最終的な提案(Final Answer:)のみを教えて。
                     あなたが提案できる機能は、
-                    "会議情報", "楽曲再生", "経路検索", "リアルタイム情報検索", "レストラン検索", "ニュース情報", "天気情報",      "何もしない"
+                    "会議情報", "楽曲再生", "経路検索", "リアルタイム情報検索", "レストラン検索", "ニュース情報", "天気情報",     "何もしない"
                     です。
                     ###
                     Final Answer:
@@ -116,8 +117,11 @@ class RecommendTool():
             ユーザーの傾向がないとあまり精度良くない
             """
         )
-        chain_2 = LLMChain(llm=llm_4o, prompt=prompt_2, output_key="output") # chain_2 = prompt_2 | llm_4o # 新しいやり方
-        self.overall_chain = SequentialChain(
+        chain_2 = LLMChain(llm=llm_4o, prompt=prompt_2, output_key="output")
+        # chain_2 = prompt_2 | llm_4o # 新しいやり方
+
+        # self.overall_chain = SequentialChain(
+        overall_chain = SequentialChain(
             chains=[chain_2],
             input_variables=["UserNeeds", "schedule", "UserAction"],
             # output_variables=["response"], # あくまで辞書型のなんていう要素に出力が格納されるかの変数
@@ -134,7 +138,8 @@ class RecommendTool():
             print("現在の予定：", schedule_contents)
         
 
-        response = self.overall_chain({
+        # response = self.overall_chain({
+        response = overall_chain({
             "UserNeeds" : self.UserTrendAnswer, # ただ、こっちはAgent化できないかも(VectorStoreを使うことを考えた場合)
             # ただ、ユーザーの傾向だけ別のLLMで出力させて、その結果とEdgeの検出結果をAgentに入力すればできそう
 

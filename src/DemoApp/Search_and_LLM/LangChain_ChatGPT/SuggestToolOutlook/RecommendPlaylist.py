@@ -55,7 +55,7 @@ class RecommendSpotifyPlaylist():
         )
         self.index_playlist = VectorstoreIndexCreator(
             vectorstore_cls=Chroma, # Default
-            embedding=OpenAIEmbeddings(), # Default
+            embedding=OpenAIEmbeddings(), # Default # Context_withTrends.pyのやり方にした方がいいかも
             text_splitter=text_splitter, # text_splitterのインスタンスを使っている
         ).from_loaders([loader_playlist])
 
@@ -105,7 +105,8 @@ class RecommendSpotifyPlaylist():
             """
         )
         chain_2 = LLMChain(llm=llm_4o, prompt=prompt_2, output_key="output") # chain_2 = prompt_2 | llm_4o # 新しいやり方
-        self.overall_chain = SequentialChain(
+        # self.overall_chain = SequentialChain(
+        overall_chain = SequentialChain(
             chains=[chain_2],
             input_variables=["UserNeeds", "schedule", "UserAction"],
             # output_variables=["response"], # あくまで辞書型のなんていう要素に出力が格納されるかの変数
@@ -122,7 +123,8 @@ class RecommendSpotifyPlaylist():
             print("現在の予定：", schedule_contents)
         
 
-        response = self.overall_chain({
+        # response = self.overall_chain({
+        response = overall_chain({
             "UserNeeds" : self.UserTrendAnswer, # ただ、こっちはAgent化できないかも(VectorStoreを使うことを考えた場合)
             # ただ、ユーザーの傾向だけ別のLLMで出力させて、その結果とEdgeの検出結果をAgentに入力すればできそう
 

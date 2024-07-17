@@ -20,6 +20,9 @@ from langchain.chains import SequentialChain
 # 2024/05/30
 # LangChain_ChatGPT\Generate_Text\GoogleColab\main_PredUserNeeds_by_VectorStore_to_Chain.py のクラス化
 
+"""
+モデルもどこか一か所にまとめる
+"""
 llm_4o=ChatOpenAI(
     model="gpt-4o",
     # model="gpt-3.5-turbo",
@@ -37,6 +40,7 @@ class RecommendTool():
         # loader = TextLoader('./UserAction2_mini_loop.txt', encoding='utf8')
         loader = TextLoader('./SuggestToolTimeAction/userdata.txt', encoding='utf8')
         # loader = TextLoader('./userdata.txt', encoding='utf8') # 単体テスト用
+
         # 100文字のチャンクで区切る
         text_splitter = CharacterTextSplitter(        
             separator = "\n\n",
@@ -46,13 +50,13 @@ class RecommendTool():
         )
         self.index = VectorstoreIndexCreator(
             vectorstore_cls=Chroma, # Default
-            embedding=OpenAIEmbeddings(), # Default
+            embedding=OpenAIEmbeddings(), # Default # Context_withTrends.pyのやり方にした方がいいかも
             text_splitter=text_splitter, # text_splitterのインスタンスを使っている
         ).from_loaders([loader])
 
         self.dt_now_for_time_action = dt_now_for_time_action
         self.UserActionState = UserActionState # "WALKING"
-        
+
     def getUserTrends(self):
         query = """
                 あなたはニーズを予測する専門家です。以下に答えて。
@@ -92,7 +96,7 @@ class RecommendTool():
 
                     現在が{time}、ユーザーの行動状態が{UserAction}の場合、どの機能を提案するかこのユーザーの傾向を加味して最終的な提案(Final Answer:)のみを教えて。
                     あなたが提案できる機能は、
-                    "会議情報", "楽曲再生", "経路検索", "リアルタイム情報検索", "レストラン検索", "ニュース情報", "天気情報"
+                    "会議情報", "楽曲再生", "経路検索", "リアルタイム情報検索", "レストラン検索", "ニュース情報", "天気情報",     "何もしない"
                     です。
                     ###
                     Final Answer:
@@ -116,6 +120,7 @@ class RecommendTool():
         chain_2 = LLMChain(llm=llm_4o, prompt=prompt_2, output_key="output")
         # chain_2 = prompt_2 | llm_4o # 新しいやり方
 
+        # self.overall_chain = SequentialChain(
         overall_chain = SequentialChain(
             chains=[chain_2],
             input_variables=["UserNeeds", "time", "UserAction"],

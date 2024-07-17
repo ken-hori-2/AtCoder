@@ -41,6 +41,8 @@ class RecommendSpotifyPlaylist():
         sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
         # loader = TextLoader('./SuggestToolOutlook/userdata_schedule.txt', encoding='utf8')
         # # loader = TextLoader('./userdata_schedule.txt', encoding='utf8') # 単体テスト用 (SuggestToolOutlook\GeneratePrompt_具体的な提案の検討.py)
+        
+        
         loader_playlist = TextLoader('./SuggestToolTimeAction/userdata_spotify_playlist.txt', encoding='utf8')
         # loader_playlist = TextLoader('./userdata_spotify_playlist.txt', encoding='utf8') # 単体テスト用
 
@@ -53,13 +55,13 @@ class RecommendSpotifyPlaylist():
         )
         self.index_playlist = VectorstoreIndexCreator(
             vectorstore_cls=Chroma, # Default
-            embedding=OpenAIEmbeddings(), # Default
+            embedding=OpenAIEmbeddings(), # Default # Context_withTrends.pyのやり方にした方がいいかも
             text_splitter=text_splitter, # text_splitterのインスタンスを使っている
         ).from_loaders([loader_playlist])
 
         self.dt_now_for_time_action = dt_now_for_time_action
         self.UserActionState = UserActionState # "WALKING"
-        
+
     def getUserTrends(self):
         query = """
                 あなたは楽曲再生プレイリストのニーズを予測する専門家です。以下に答えて。
@@ -111,7 +113,8 @@ class RecommendSpotifyPlaylist():
             """
         )
         chain_2 = LLMChain(llm=llm_4o, prompt=prompt_2, output_key="output") # chain_2 = prompt_2 | llm_4o # 新しいやり方
-        self.overall_chain = SequentialChain(
+        # self.overall_chain = SequentialChain(
+        overall_chain = SequentialChain(
             chains=[chain_2],
             input_variables=["UserNeeds", "time", "UserAction"],
             # output_variables=["response"], # あくまで辞書型のなんていう要素に出力が格納されるかの変数
@@ -121,7 +124,8 @@ class RecommendSpotifyPlaylist():
 
         
 
-        response = self.overall_chain({
+        # response = self.overall_chain({
+        response = overall_chain({
             "UserNeeds" : self.UserTrendAnswer,
             "time" : self.dt_now_for_time_action,
             "UserAction" : self.UserActionState,
@@ -134,7 +138,7 @@ class RecommendSpotifyPlaylist():
         print("\n--------------------------------------------------")
         print("Output: ", response['output'])
         print("\n--------------------------------------------------")
-
+        
         Suggested_Tool = response['output']
 
         return Suggested_Tool

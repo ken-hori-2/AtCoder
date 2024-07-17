@@ -100,8 +100,7 @@ from WebAPI.DateTime.WhatTimeIsItNow import SetTime
 set_time = SetTime()
 dt_now = set_time.run()
 
-dt_now_str = dt_now.strftime("%Y-%m-%d-%H:%M:%S") # 2024/07/01
-
+# dt_now_str = dt_now.strftime("%Y-%m-%d-%H:%M:%S") # 2024/07/01
 
 
 class Langchain4Judge():
@@ -111,7 +110,7 @@ class Langchain4Judge():
         天気用のツール（二つ目なので現在使っていない）
         """
         # chain_open_meteo = APIChain.from_llm_and_api_docs(
-        #     llm,
+        #     llm_3p5t,
         #     open_meteo_docs.OPEN_METEO_DOCS,
         #     limit_to_domains=["https://api.open-meteo.com/"],
         # )
@@ -162,7 +161,7 @@ class Langchain4Judge():
                 func=LLMMathChain.from_llm(llm=llm_3p5t).run,
                 coroutine=LLMMathChain.from_llm(llm=llm_3p5t).arun,
             ),
-
+            
             # 天気（本厚木だとエラーになるので、ここはコメントアウトして、Searchを使うようにする）
             OpenWeatherMapQueryRun(),
             # # こっちの天気でもできる
@@ -286,7 +285,7 @@ class Langchain4Judge():
             verbose=True,
             handle_parsing_errors=True, # パースエラーを例外処理で回避
 
-            max_iterations=10 # これがあるとagentのイタレーションに制限をかけられる
+            max_iterations=10 # 5 # これがあるとagentのイタレーションに制限をかけられる
         )
 
         return agent
@@ -488,6 +487,7 @@ if __name__ == "__main__":
 
             
 
+            """ # RAG version # Context_withTrends.pyのやり方にした方がいいかも """
             recommend_tool = RecommendTool(UserActionState)
             UserTrend = recommend_tool.getUserTrends() # ユーザーの傾向を取得：DB参照
 

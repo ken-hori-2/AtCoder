@@ -87,7 +87,7 @@ from WebAPI.DateTime.WhatTimeIsItNow import SetTime
 set_time = SetTime()
 dt_now = set_time.run()
 
-dt_now_str = dt_now.strftime("%Y-%m-%d %H:%M:%S") # 2024/07/01
+# dt_now_str = dt_now.strftime("%Y-%m-%d %H:%M:%S") # 2024/07/01
 
 
 class Langchain4Judge():
@@ -148,18 +148,17 @@ class Langchain4Judge():
                 func=LLMMathChain.from_llm(llm=llm_3p5t).run,
                 coroutine=LLMMathChain.from_llm(llm=llm_3p5t).arun,
             ),
-
-
-            # 天気 （本厚木だとエラーになるので、ここはコメントアウトして、Searchを使うようにする）
+            
+            # 天気（本厚木だとエラーになるので、ここはコメントアウトして、Searchを使うようにする）
             OpenWeatherMapQueryRun(),
-            # こっちの天気でもできる
+            # # こっちの天気でもできる
             # Tool(
             #     name="Open-Meteo-API",
             #     description="Useful for when you want to get weather information from the OpenMeteo API. The input should be a question in natural language that this API can answer.",
             #     func=chain_open_meteo.run,
             # ),
 
-
+            
             WikipediaQueryRun(),
             
             
@@ -480,7 +479,7 @@ if __name__ == "__main__":
             dt_now_for_time_action = datetime.timedelta(hours=dt_now.hour, minutes=dt_now.minute) # 経路案内 # datetime.timedelta(hours=17, minutes=58) # 経路案内
             print("\n\n【テスト】現在時刻：", dt_now_for_time_action)
             # UserActionState = "WALKING"
-            """ # RAG version """
+            """ # RAG version # Context_withTrends.pyのやり方にした方がいいかも """
             recommend_tool_time_action = RecommendTool(dt_now_for_time_action, UserActionState)
             recommend_tool_time_action.getUserTrends()
             suggested_tool = recommend_tool_time_action.getToolAnswer()
@@ -495,6 +494,10 @@ if __name__ == "__main__":
                 print("\n--------------------------------------------------")
                 print(suggested_tool)
                 print("--------------------------------------------------")
+
+                if "何もしない" in suggested_tool:
+                    print("ユーザーの邪魔をしないようにします。")
+                    break
 
                 if "楽曲再生" in suggested_tool:
                     print("**********\n楽曲再生なので、ガイダンス処理は実行しません。\n直接楽曲再生に移行します。\n**********")
