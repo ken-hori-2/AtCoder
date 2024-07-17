@@ -429,9 +429,9 @@ if __name__ == "__main__":
             # 2周目、検出された行動が変われば機能も変わることを示す
 
             print("***** センシング中 *****")
-            # UserActionState = trigger.run()
+            # UserActionState = trigger.run() # センシング：結果取得開始
             UserActionState = "WALKING" # テスト用
-            # UserActionState = "STABLE" # テスト用
+            # UserActionState = "STABLE" # テスト用（通勤時と昼食時に楽曲再生するデモ）
             print("DNN検出結果：", UserActionState)
             print("***** センシング終了 *****")
 
@@ -536,7 +536,7 @@ if __name__ == "__main__":
                 else:
                     isMusicPlayback = False
 
-                    generate_prompt = GeneratePromptbyTool(suggested_tool)
+                    generate_prompt = GeneratePromptbyTool(suggested_tool) # 機能からプロンプト生成（楽曲再生以外）
                     isExecuteTool = generate_prompt.getJudgeResult()
                     if isExecuteTool:
                         # A
@@ -568,7 +568,7 @@ if __name__ == "__main__":
                     # # text = "現在時刻は" + str(dt_now) + "です。" + PreInfo + prompt_answer
 
                     # C
-                    text = "現在時刻は" + str(dt_now) + "です。" + prompt_answer
+                    text = "現在時刻は" + str(dt_now) + "です。" + prompt_answer # 現在時刻＋プロンプトを入力（楽曲再生以外）
                     
                     if text:
                         print(" >> Waiting for response from Agent...")
