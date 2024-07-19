@@ -73,6 +73,7 @@ class CheckScheduleTime():
     def getScheduleContents(self):
         # mask_list = ["SoC", "BLANC", "昼食", "出社", "AUD", "外販"] # 出社を追加
         mask_list = ["SoC", "BLANC", "出社", "AUD", "外販"] # 出社を追加
+        mask_list_ok = ["出勤", "新人研修相談", "定例会議1", "顧客定例2", "ブレスト定例", "LLMデモンストレーション", "帰宅", "運動", "昼食"] # 入力していい情報のみ通す
 
         margin = 5
         margin = datetime.timedelta(minutes=margin)
@@ -86,9 +87,17 @@ class CheckScheduleTime():
             # if working_start < meeting_time < working_end: # < としているのは、出社という件名を含まないため
             if meeting_time_start - margin <= self.dt_now < meeting_time_end + margin: # <= にするならmask_listに出社を追加
                 
+                """
                 # 社外秘情報は伏せる
-                # mask_listに出社を追加
-                if (not (mask_list[0] in select_item.subject)) and (not (mask_list[1] in select_item.subject)) and (not (mask_list[2] in select_item.subject)) and (not (mask_list[3] in select_item.subject)):
+                """
+                # # mask_listに出社を追加
+                # if (not (mask_list[0] in select_item.subject)) and (not (mask_list[1] in select_item.subject)) and (not (mask_list[2] in select_item.subject)) and (not (mask_list[3] in select_item.subject)):
+                # 入力していい情報のみ通す場合
+                is_inputok = False
+                for subject in mask_list_ok:
+                    if subject in select_item.subject:
+                        is_inputok = True
+                if is_inputok:
                     self.meeting_contents += "\n件名：" + select_item.subject
 
         print("#####")
@@ -103,6 +112,10 @@ if __name__ == "__main__":
     # dt_now = datetime.datetime(2024, 5, 24, 8, 30)
     dt_now = datetime.datetime(2024, 5, 24, 10, 50)
     dt_now = datetime.datetime(2024, 5, 24, 10, 55)
+
+    dt_now = datetime.datetime(2024, 7, 17, 10, 55)
+
+
     check_schedule = CheckScheduleTime(dt_now)
     is5min = check_schedule.isScheduleStartWithin5min()
 

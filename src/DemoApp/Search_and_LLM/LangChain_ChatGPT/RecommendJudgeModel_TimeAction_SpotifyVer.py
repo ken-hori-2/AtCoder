@@ -364,6 +364,9 @@ if __name__ == "__main__":
     import json
     import spotipy
     import spotipy.util as util
+
+    from SuggestToolTimeAction.RecommendToolbyTimeAction import RecommendTool_Context_withTrends_Ver
+    
     """
     EdgeAIによるトリガーの定義
     """
@@ -479,10 +482,26 @@ if __name__ == "__main__":
             dt_now_for_time_action = datetime.timedelta(hours=dt_now.hour, minutes=dt_now.minute) # 経路案内 # datetime.timedelta(hours=17, minutes=58) # 経路案内
             print("\n\n【テスト】現在時刻：", dt_now_for_time_action)
             # UserActionState = "WALKING"
-            """ # RAG version # Context_withTrends.pyのやり方にした方がいいかも """
-            recommend_tool_time_action = RecommendTool(dt_now_for_time_action, UserActionState)
-            recommend_tool_time_action.getUserTrends()
-            suggested_tool = recommend_tool_time_action.getToolAnswer()
+            """ 以前のやり方 (A) """ # RAG version # Context_withTrends.pyのやり方にした方がいいかも """
+            # recommend_tool_time_action = RecommendTool(dt_now_for_time_action, UserActionState)
+            # recommend_tool_time_action.getUserTrends()
+            # suggested_tool = recommend_tool_time_action.getToolAnswer()
+
+            
+            
+            
+            """ 今回のやり方 (B) """
+            # ユーザーの傾向はContext_withTrends.pyにしたバージョン
+            # RAG.pyのやり方では類似度検索できていなかったので、これまでのやり方に戻した
+            # 変更点はgetContextDirectly()を加えた部分
+            """ 2024/7/18現在、suggested_toolにはねぎらいのコメントも含まれている"""
+            recommend_tool_time_action_context = RecommendTool_Context_withTrends_Ver(dt_now_for_time_action, UserActionState)
+            recommend_tool_time_action_context.getUserTrends() # ユーザーの傾向を取得：DB参照 # RAG.pyのやり方では類似度検索できていなかったので、これまでのやり方に戻した
+            suggested_tool = recommend_tool_time_action_context.getToolAnswer()
+
+            # B 直接コンテキストを生成して、プロンプトにする方法 # 2024/7/18 test(下のelse文にも追記)
+            context_test_res = recommend_tool_time_action_context.getContextDirectly() # これを使う場合は下のelse文のなかで　Bを使う
+
             """ # Prediction Tool version """
             # from PredictionTool4TimeAction import PredctionModel
             # predictionmodel = PredctionModel()
@@ -492,7 +511,8 @@ if __name__ == "__main__":
 
             if suggested_tool:
                 print("\n--------------------------------------------------")
-                print(suggested_tool)
+                # print(suggested_tool)
+                userinterface.text_to_speach(suggested_tool)
                 print("--------------------------------------------------")
 
                 if "何もしない" in suggested_tool:
@@ -539,15 +559,23 @@ if __name__ == "__main__":
                 else:
                     isMusicPlayback = False
 
-                    generate_prompt = GeneratePromptbyTool(suggested_tool) # 機能からプロンプト生成（楽曲再生以外）
-                    isExecuteTool = generate_prompt.getJudgeResult()
-                    if isExecuteTool:
-                        # A
-                        prompt_answer = generate_prompt.getGeneratedPrompt() # 機能からプロンプト生成する場合
+                    """ 以前のやり方 (A) """
+                    # A 機能を提案してからプロンプトを生成するこれまでの方法
+                    # generate_prompt = GeneratePromptbyTool(suggested_tool) # 機能からプロンプト生成（楽曲再生以外）
+                    # isExecuteTool = generate_prompt.getJudgeResult()
+                    # if isExecuteTool:
+                    #     # A
+                    #     prompt_answer = generate_prompt.getGeneratedPrompt() # 機能からプロンプト生成する場合
 
-                        # B
-                        # # prompt_answer = suggested_tool + "を実行して。" # プロンプトに機能をそのまま入力する場合
-                        # prompt_answer = suggested_tool + "して。" # プロンプトに機能をそのまま入力する場合
+                    #     # B
+                    #     # # prompt_answer = suggested_tool + "を実行して。" # プロンプトに機能をそのまま入力する場合
+                    #     # prompt_answer = suggested_tool + "して。" # プロンプトに機能をそのまま入力する場合
+                    
+                    """ 今回のやり方 (B) """
+                    # B 直接コンテキストを生成して、プロンプトにする方法 # 2024/7/18 test
+                    # prompt_answer = context_test_res + "最も必要な機能なToolを一つだけ実行して。" + "経路やレストランの検索など、場所の情報が必要な場合は、ユーザーに関する情報が足りない場合は予定を参照し出社場所を取得して。検索結果が複数ある場合は3件までにして。"
+                    prompt_answer = context_test_res + "実行できるToolはユーザーに最も必要と考えられる一つだけでなければならない。" + "経路やレストランの検索など、場所の情報が必要な場合は、ユーザーに関する情報が足りない場合は予定を参照し出社場所を取得して。検索結果が複数ある場合は3件までにして。"
+                    # "最も必要な機能なToolを一つだけ実行して。"が複数実行されないためのポイント(破られることもあるので、プロンプト入力の段階で一つのみの要求にした方がいいかも)
 
         
             if not isMusicPlayback:

@@ -204,7 +204,8 @@ class OutlookSchedule(): # BaseTool): # BaseToolの記述がなくても動く
         # mask_list = ["SoC", "BLANC", "昼食", "出社", "AUD", "外販"] # 出社を追加
         # mask_list = ["SoC", "BLANC", "昼食", "出社", "AUD", "外販"] # SCOデモ(6/19)
         mask_list = ["SoC", "BLANC", "昼食", "出社", "AUD", "外販", "本採用"] # お披露目会デモ(7/1)
-        mask_list_ok = ["出勤", "新人研修相談", "定例会議1", "顧客定例2", "ブレスト定例", "LLMデモンストレーション", "帰宅", "運動"] # 入力していい情報のみ通す
+        # mask_list_ok = ["出勤", "新人研修相談", "定例会議1", "顧客定例2", "ブレスト定例", "LLMデモンストレーション", "帰宅", "運動"] # 入力していい情報のみ通す(昼食無しver)
+        mask_list_ok = ["出勤", "新人研修相談", "定例会議1", "顧客定例2", "ブレスト定例", "LLMデモンストレーション", "帰宅", "運動", "昼食"] # 入力していい情報のみ通す(昼食ありver)
 
         time_zone = []
         meeting_list = [] # より具体的な内容
@@ -358,7 +359,9 @@ if __name__ == "__main__":
     # result = 
     # dt_now = str(datetime.datetime(2024, 6, 17, 8, 00))
     # dt_now = datetime.datetime(2024, 6, 17, 8, 00)
-    dt_now = str(datetime.datetime(2024, 7, 1, 8, 00))
+    # dt_now = str(datetime.datetime(2024, 7, 1, 8, 00))
+    dt_now = str(datetime.datetime(2024, 7, 17, 8, 00))
+
     outlook_schedule.run(dt_now)
     # print(result)
     print("-----")

@@ -128,7 +128,11 @@ class RecommendTool():
         ).from_loaders([self.loader])
         
 
-        results = self.index.vectorstore.similarity_search(f"The txt file is a user trend. If the current day and time is {time} and the user's action state is {UserAction}, what are the possible needs?", k=4)
+        # これまで
+        # results = self.index.vectorstore.similarity_search(f"The txt file is a user trend. If the current day and time is {time} and the user's action state is {UserAction}, what are the possible needs?", k=4)
+        # 今回 (2024/7/18)
+        results = self.index.vectorstore.similarity_search(f"The txt file is a user trend. If the current day and time is {time} and the user's action state is {UserAction}, What possible needs are there?", k=4) #  Generate a context that represents the user's situation in as much detail as possible.", k=4)
+
         context = "\n".join([document.page_content for document in results])
         # print(f"{context}")
         template = """
@@ -141,7 +145,11 @@ class RecommendTool():
         """
         prompt = PromptTemplate(template=template, input_variables=["context", "question"]).partial(context=context)
         llm_chain = LLMChain(prompt=prompt, llm=llm_4o)
-        response = llm_chain.invoke(f"The txt file is a user trend. If the current day and time is {time} and the user's action state is {UserAction}, what are the possible needs?")
+        # これまで
+        # response = llm_chain.invoke(f"The txt file is a user trend. If the current day and time is {time} and the user's action state is {UserAction}, what are the possible needs?")
+        # 今回 (2024/7/18)
+        response = llm_chain.invoke(f"If the current day and time is {time} and the user's action state is {UserAction}, What possible needs are there? Generate a context that represents the user's situation in as much detail as possible.")
+
         # print(response['text'])
 
         return response['text']
