@@ -25,7 +25,9 @@ class ScheduleQueryRun(BaseTool):
     # )
     outlook_schedule = OutlookSchedule()
 
-    name: str = "schedule_information"
+    # name: str = "schedule_information"
+    name: str = "Schedule-Information"
+
     description: str = (
         "This function is useful for retrieving schedule information from a specified outlook appointment list."
         "Get information about the next meeting."

@@ -27,7 +27,9 @@ class MusicPlaybackQueryRun(BaseTool):
     # )
     music_playback = MusicPlayback()
 
-    name: str = "music-playback"
+    # name: str = "music-playback"
+    name: str = "Music-Playback"
+
     description: str = (
         "This function is useful for playing back music."
 

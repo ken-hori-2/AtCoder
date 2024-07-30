@@ -25,7 +25,7 @@ from langchain.chains import SequentialChain
 """
 llm_4o=ChatOpenAI(
     model="gpt-4o",
-    # model="gpt-3.5-turbo",
+    # model="gpt-4o-mini",
     temperature=0 # 出力する単語のランダム性（0から2の範囲） 0であれば毎回返答内容固定
 ) # チャット特化型モデル
 llm_3p5t=ChatOpenAI(
@@ -174,6 +174,9 @@ class RecommendTool_Context_withTrends_Ver():
             "time" : self.dt_now_for_time_action,
             "UserAction" : self.UserActionState,
         })
+
+        self.ContextDirectly_Answer = context_test_res['text']
+        
         return context_test_res['text'] # ['ContextResponse']
         # 2024/7/18 test
     
@@ -240,6 +243,131 @@ class RecommendTool_Context_withTrends_Ver():
         Suggested_Tool = response['output']
 
         return Suggested_Tool
+    
+    def getToolAnswer_after_getContext(self): # ほぼねぎらいの言葉のために使っている # 2024/7/29
+        prompt_2 = PromptTemplate(
+            input_variables=["ContextDirectlyAnswer"],
+            
+            # 最終的に機能のみ提案するプロンプト
+            # template = """
+            #         あなたはユーザーに合う機能を提案する専門家です。
+            #         ユーザーの傾向は「{UserNeeds}」です。
+
+            #         現在が{time}、ユーザーの行動状態が{UserAction}の場合、どの機能を提案するかこのユーザーの傾向を加味して最終的な提案(Final Answer:)のみを教えて。
+            #         あなたが提案できる機能は、
+            #         "会議情報", "楽曲再生", "経路検索", "リアルタイム情報検索", "レストラン検索", "ニュース情報", "天気情報",     "何もしない"
+            #         です。
+            #         ###
+            #         Final Answer:
+            #         """
+            # 2024/7/18
+            # template = """
+            #         あなたはユーザーを気に掛ける親友であり、ユーザーの現在状況に合う機能を提案する専門家です。
+            
+            
+            
+            
+            # ***** 2024/7/29 *****
+            # 以前のやり方
+            # template = """
+            #         あなたはユーザーに寄り添う秘書であり、ユーザーの現在状況に合う機能を提案する専門家です。
+            #         ユーザーの情報が{ContextDirectlyAnswer}の場合、ユーザーの気分がよくなるようなねぎらいの声をかけて。その後、どの機能を提案するかこのユーザーの傾向を加味して最終的な提案(Final Answer:)のみを教えて。
+            #         あなたが提案できる機能は、
+            #         "会議情報", "楽曲再生", "経路検索", "リアルタイム情報検索", "レストラン検索", "ニュース情報", "天気情報",     "何もしない"
+            #         です。
+            #         ###
+            #         Final Answer:
+            #         """
+            template = """
+                    あなたはユーザーに寄り添う秘書であり、ユーザーの現在状況に合う機能を提案する専門家です。
+                    ユーザーの情報が{ContextDirectlyAnswer}の場合、ユーザーの気分がよくなるようなねぎらいの声をかけて。その後、どの機能を提案するかこのユーザーの傾向を加味して最終的な提案(Final Answer:)のみを教えて。
+                    """
+                    # また、楽曲再生が必要かどうかの判定フラグ[is_musicplayback:]をTrueかFalseで返して。
+            # ***** 2024/7/29 *****
+
+
+        )
+
+        chain_2 = LLMChain(llm=llm_4o, prompt=prompt_2, output_key="output")
+        # chain_2 = prompt_2 | llm_4o # 新しいやり方
+
+        # self.overall_chain = SequentialChain(
+        overall_chain = SequentialChain(
+            chains=[chain_2],
+            input_variables=["ContextDirectlyAnswer"],
+            # output_variables=["response"], # あくまで辞書型のなんていう要素に出力が格納されるかの変数
+            verbose=True,
+        )
+        response = overall_chain({
+            "ContextDirectlyAnswer" : self.ContextDirectly_Answer
+        })
+        RED = '\033[31m'
+        YELLOW = '\033[33m'
+        END = '\033[0m'
+        BOLD = '\033[1m'
+        print(BOLD + YELLOW + "\n--------------------------------------------------")
+        print("User ContextDirectlyAnswer: \n", response['ContextDirectlyAnswer'])
+        print("\n--------------------------------------------------" + END)
+
+        Suggested_Tool = response['output']
+
+        return Suggested_Tool # 以前のやり方
+
+
+        # 一旦保留
+        # """ 2024/7/29 """
+        # # ***** 2024/7/29 *****
+        # prompt_3 = PromptTemplate(
+        #     input_variables=["SuggestedToolAns"],
+        #     template = """
+        #             あなたはis_musicplaybackのみを回答しなければならない。
+        #             {SuggestedToolAns}を実行する場合、楽曲再生が必要かどうかの判定フラグをTrueかFalseのBool型のみを返して。
+        #             is_musicplayback:
+        #             """
+        # )
+        # chain_3 = LLMChain(llm=llm_4o, prompt=prompt_3, output_key="output")
+        # # overall_chain_3 = SequentialChain(
+        # #     chains=[chain_3],
+        # #     input_variables=["SuggestedToolAns"],
+        # #     verbose=True,
+        # # )
+        # # response_flag = overall_chai_3n({
+        # #     "SuggestedToolAns" : self.ContextDirectly_Answer
+        # # })
+        # # RED = '\033[31m'
+        # # YELLOW = '\033[33m'
+        # # END = '\033[0m'
+        # # BOLD = '\033[1m'
+        # # print(BOLD + YELLOW + "\n--------------------------------------------------")
+        # # print("User Suggested Tool Answer: \n", response_flag['SuggestedToolAns'])
+        # # print("\n--------------------------------------------------" + END)
+        # response_flag = chain_3.invoke(Suggested_Tool) # 引数が一つの場合はこっちでOK
+        # is_MusicPlayback = response_flag['output']
+        # print("*****\n[Before] User Suggested Tool Answer: \n", response_flag['output'])
+        # if ('True' in is_MusicPlayback) or ('true' in is_MusicPlayback):
+        #     is_MusicPlayback = True
+        # else:
+        #     is_MusicPlayback = False
+        # print("*****\n[After] User Suggested Tool Answer: \n", is_MusicPlayback)
+        # print("*****\n[After] User Suggested Tool Answer: \n", type(is_MusicPlayback))
+        # return Suggested_Tool, is_MusicPlayback # 2024/7/29
+        # # # ***** 2024/7/29 *****
+        # # """ 2024/7/29 """
+
+        # # prompt_4 = PromptTemplate(
+        # #     input_variables=["info"],
+        # #     template = """
+        # #             あなたが保持するToolの一覧を出力して。
+        # #             Tool List:
+        # #             また、{info}を実行する場合、Tool ListのうちどのToolが最も適切か教えて。
+        # #             Tool:
+        # #             """
+        # # )
+        # # chain_4 = LLMChain(llm=llm_4o, prompt=prompt_4, output_key="output")
+        # # response_tool = chain_4.invoke(Suggested_Tool) # Suggested_Tool)
+        # # print("*****\n[Tool] \n", response_tool['output'])
+
+        # # return Suggested_Tool, is_MusicPlayback # 2024/7/29
     
 
     # コンテキスト生成
@@ -417,13 +545,11 @@ if __name__ == "__main__":
     recommend_tool = RecommendTool_Context_withTrends_Ver(dt_now_for_time_action, UserActionState)
 
     recommend_tool.getUserTrends()
+    # A 機能提案が先
     suggested_tool = recommend_tool.getToolAnswer()
-
     print("\n--------------------------------------------------")
     print(suggested_tool)
     print("--------------------------------------------------")
-
-
 
     # # Context_withTrends.pyから移植
     # context = recommend_tool.getContext()
@@ -431,4 +557,10 @@ if __name__ == "__main__":
     context_test_res = recommend_tool.getContextDirectly()
     print("\n---------------------- [test response] ----------------------------")
     print(context_test_res)
+    print("--------------------------------------------------")
+
+    # B 機能提案は後
+    suggested_tool = recommend_tool.getToolAnswer_after_getContext()
+    print("\n--------------------------------------------------")
+    print(suggested_tool)
     print("--------------------------------------------------")

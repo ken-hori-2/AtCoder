@@ -60,7 +60,7 @@ import datetime
 """
 llm_4o=ChatOpenAI(
     model="gpt-4o",
-    # model="gpt-3.5-turbo",
+    # model="gpt-4o-mini",
     temperature=0 # 出力する単語のランダム性（0から2の範囲） 0であれば毎回返答内容固定
 )
 llm_3p5t=ChatOpenAI(
@@ -414,6 +414,7 @@ if __name__ == "__main__":
         ここにGoogleColab\main_PredUserNeeds_by_VectorStore_to_Chain_Direct_Timing.pyで取得した時刻で実行するようにする
         """
         isTrigger = True
+        # isTrigger = False
 
         prompt_answer = ""
 
@@ -433,6 +434,7 @@ if __name__ == "__main__":
             print("***** センシング中 *****")
             # UserActionState = trigger.run() # センシング：結果取得開始
             UserActionState = "WALKING" # テスト用
+            # UserActionState = "RUNNING"
             # UserActionState = "STABLE" # テスト用（通勤時と昼食時に楽曲再生するデモ）
             print("DNN検出結果：", UserActionState)
             print("***** センシング終了 *****")
@@ -497,31 +499,62 @@ if __name__ == "__main__":
             """ 2024/7/18現在、suggested_toolにはねぎらいのコメントも含まれている"""
             recommend_tool_time_action_context = RecommendTool_Context_withTrends_Ver(dt_now_for_time_action, UserActionState)
             recommend_tool_time_action_context.getUserTrends() # ユーザーの傾向を取得：DB参照 # RAG.pyのやり方では類似度検索できていなかったので、これまでのやり方に戻した
-            suggested_tool = recommend_tool_time_action_context.getToolAnswer()
+            # # A 機能提案が先
+            # suggested_tool = recommend_tool_time_action_context.getToolAnswer() # 2024/7/22 コメントアウト
 
             # B 直接コンテキストを生成して、プロンプトにする方法 # 2024/7/18 test(下のelse文にも追記)
             context_test_res = recommend_tool_time_action_context.getContextDirectly() # これを使う場合は下のelse文のなかで　Bを使う
+            # -> Context生成してからSuggest_toolを実行してもいいかも(ContextからSuggest_toolを予測させる) 2024/7/22
+            
+            
+            # B 機能提案は後
+            """ 2024/7/29 """
+            suggested_tool = recommend_tool_time_action_context.getToolAnswer_after_getContext() # 2024/7/22 追加
+            # a このやり方か
+            # suggested_tool, is_MusicPlayback_judge = recommend_tool_time_action_context.getToolAnswer_after_getContext() # 2024/7/29 追加
+            """ 2024/7/29 """
+            # b このやり方
+            is_MusicPlayback_judge = False
+            response = agent.invoke(f'あなたが保持するToolの中から、「{suggested_tool}」に最も適切なToolを選定し、Tool名のみ答えて。')
+            res = response['output']
+            judge_flag= agent.invoke(f'{res}が楽曲再生ならTrueのみを、そうでないならFalseのみを返して。')
+            if ('True' in judge_flag['output']) or ('true' in judge_flag['output']):
+                print("Spotify再生")
+                is_MusicPlayback_judge = True
+            else:
+                print('ガイダンス再生')
+                is_MusicPlayback_judge = False
+            """ 2024/7/30 """
+
+
+
+
+
 
             """ # Prediction Tool version """
             # from PredictionTool4TimeAction import PredctionModel
             # predictionmodel = PredctionModel()
             # suggested_tool = predictionmodel.run(str(dt_now_for_time_action), UserActionState)
 
-            isMusicPlayback = False
+            # isMusicPlayback = False
 
             if suggested_tool:
                 print("\n--------------------------------------------------")
                 # print(suggested_tool)
                 userinterface.text_to_speach(suggested_tool)
-                print("--------------------------------------------------")
+                print("\n--------------------------------------------------")
 
                 if "何もしない" in suggested_tool:
                     print("ユーザーの邪魔をしないようにします。")
                     break
 
-                if "楽曲再生" in suggested_tool:
+                """ 2024/7/29 """
+                # if "楽曲再生" in suggested_tool:
+                if is_MusicPlayback_judge: # 2024/7/29
+                    """ 2024/7/29 """
+                    
                     print("**********\n楽曲再生なので、ガイダンス処理は実行しません。\n直接楽曲再生に移行します。\n**********")
-                    isMusicPlayback = True
+                    # isMusicPlayback = True
 
                     """
                     2024/6/17
@@ -557,7 +590,7 @@ if __name__ == "__main__":
                         print("該当するプレイリストはありません。")
                     
                 else:
-                    isMusicPlayback = False
+                    # isMusicPlayback = False
 
                     """ 以前のやり方 (A) """
                     # A 機能を提案してからプロンプトを生成するこれまでの方法
@@ -578,7 +611,11 @@ if __name__ == "__main__":
                     # "最も必要な機能なToolを一つだけ実行して。"が複数実行されないためのポイント(破られることもあるので、プロンプト入力の段階で一つのみの要求にした方がいいかも)
 
         
-            if not isMusicPlayback:
+            """ 2024/7/29 """
+            # if not isMusicPlayback:
+            if not is_MusicPlayback_judge: # 2024/7/29
+                """ 2024/7/29 """
+
                 if prompt_answer:
                     print("プロンプト：", prompt_answer)
                 
@@ -610,6 +647,7 @@ if __name__ == "__main__":
                         # try:
                         response = agent.invoke(text) # できた(その後エラーはあるが)
                         # text_to_speach(final_response)
+                        print('2024/7/30 test: ', response)
 
                         print("\n\n******************** [AI Answer] ********************\n")
                         # model.text_to_speach(response['output'])
@@ -637,6 +675,7 @@ if __name__ == "__main__":
                     # try:
                     response = agent.invoke(text) # できた(その後エラーはあるが)
                     # text_to_speach(final_response)
+                    # print('2024/7/30 test: ', response)
 
                     # print("\n\n******************** [AI Answer] ********************\n")
                     # # model.text_to_speach(response['output'])
@@ -646,6 +685,22 @@ if __name__ == "__main__":
                     # #     print("もう一度入力してください。")
         else:
             print("処理を終了します。")
+
+            # 2024/7/30 test
+            UserNeeds = '経路検索して。'
+            UserNeeds = '楽曲再生して。'
+            text = 'あなたが保持するToolの一覧を教えて。'#  + f'そのうち、{UserNeeds}に最も適切なToolを選定して。(Tool:)'
+            text = f'あなたが保持するToolの中から、「{UserNeeds}」に最も適切なToolを選定し、Tool名のみ答えて。' # (The tool used is *)' # text = f'あなたが保持するToolの中から、{UserNeeds}に最も適切なToolを選定し、Tool名を答えて。(The tool used is *)'
+            response = agent.invoke(text)
+            # Local_execution_required = ['Music-Playback', 'Music', 'Playback'] # ['Playback']
+            # if response['output'] in Local_execution_required:
+            #     print("Spotify再生")
+            res = response['output']
+            text = f'{res}が楽曲再生ならTrueのみを、そうでないならFalseのみを返して。'
+            judge_flag= agent.invoke(text)
+            # print('judge:', judge_flag)
+            if judge_flag['output'] in 'True':
+                print("Spotify再生")
 
 
 

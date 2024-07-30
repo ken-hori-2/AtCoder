@@ -21,7 +21,9 @@ class RestaurantSearchQueryRun(BaseTool):
     # )
     restaurant_search = RestaurantSearch()
 
-    name: str = "restaurant_search"
+    # name: str = "restaurant_search"
+    name: str = "Restaurant-Search"
+
     description: str = (
         "This function is useful for locating restaurants by location."
 

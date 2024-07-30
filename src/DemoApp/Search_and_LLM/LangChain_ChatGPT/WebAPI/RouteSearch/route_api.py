@@ -24,7 +24,9 @@ class RouteSearchQueryRun(BaseTool):
     # )
     yahoo_search = RouteSearch()
 
-    name: str = "route_search"
+    # name: str = "route_search"
+    name: str = "Route-Search"
+
     description: str = (
         "This function is useful to get station routing information from a specified station."
 
