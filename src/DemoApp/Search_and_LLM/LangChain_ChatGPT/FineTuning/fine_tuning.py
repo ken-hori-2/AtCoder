@@ -32,4 +32,7 @@ def csv_to_jsonl(input_file, output_file):
 
 # csv_to_jsonl('user_data.csv', 'user_data.jsonl')
 # csv_to_jsonl('user_data_NotRecommend.csv', 'user_data_NotRecommend.jsonl')
-csv_to_jsonl('user_data_details_2.csv', 'user_data_details.jsonl')
+
+# generate prompt
+# csv_to_jsonl('user_data_details_2.csv', 'user_data_details.jsonl')
+csv_to_jsonl('user_data_details_3.csv', 'user_data_details_3.jsonl')

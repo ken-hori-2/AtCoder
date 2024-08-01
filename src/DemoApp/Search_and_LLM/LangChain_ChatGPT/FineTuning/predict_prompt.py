@@ -80,21 +80,21 @@ from langchain_openai import ChatOpenAI
 
 time = '8:30' # 00'
 time = '9:10' # 30'
-time = '10:50'
-time = '12:05'
-time = '17:30'
-time = '19:30'
+# time = '10:50'
+# time = '12:05'
+# time = '17:30'
+# time = '19:30'
 # time = '20:00'
 # time = '23:00'
 # time = '0:00'
 
 status = 'WALKING'
 # status = 'STABLE'
-status = 'RUNNNING'
+# status = 'RUNNNING'
 
 
 # OpenAIのモデルのインスタンスを作成
-llm = ChatOpenAI(model_name="ft:gpt-3.5-turbo-1106:personal:generateprompt:9qcfcS6N", temperature=0)
+llm = ChatOpenAI(model_name="ft:gpt-3.5-turbo-1106:personal:generateprompt:9qcfcS6N", temperature=0) # prompt version (以前のやつ)
 
 # プロンプトのテンプレート文章を定義
 template = """
@@ -104,11 +104,19 @@ template = """
         Also, add one most likely user request to the output.
 """
 
+# llm = ChatOpenAI(model_name="ft:gpt-3.5-turbo-1106:personal:genpromptdetails:9r0E1Bvv", temperature=0) # より詳細なデータにしたバージョン
+# template = """
+#             Here is what you know about the user.
+#             [The current date and time is {time}, and The current user action state is {status}.]
+#             Predict and generate only sentences that describe the user's situation in as much detail as possible. (e.g., The user is doing XXX and has needs like XX)
+#            """
+
 # テンプレート文章にあるチェック対象の単語を変数化
 prompt = ChatPromptTemplate.from_messages([
     ("system", "You are the user's secretary. You are the expert who takes the user's potential needs and proposes solutions."),
     ("user", template)
 ])
+print(f"input: The current date and time is {time}, and The current user action state is {status}.\n************************************************************")
 
 # チャットメッセージを文字列に変換するための出力解析インスタンスを作成
 output_parser = StrOutputParser()
