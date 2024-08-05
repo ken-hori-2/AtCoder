@@ -8,3 +8,7 @@
 
 # こっちでも大丈夫
 Secret/
+
+
+# Fine tuning内のGemini API Key用
+.env

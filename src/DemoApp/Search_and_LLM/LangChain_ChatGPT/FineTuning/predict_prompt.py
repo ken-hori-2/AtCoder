@@ -81,7 +81,7 @@ from langchain_openai import ChatOpenAI
 time = '8:30' # 00'
 time = '9:10' # 30'
 # time = '10:50'
-# time = '12:05'
+time = '12:05'
 # time = '17:30'
 # time = '19:30'
 # time = '20:00'
@@ -94,8 +94,7 @@ status = 'WALKING'
 
 
 # OpenAIのモデルのインスタンスを作成
-llm = ChatOpenAI(model_name="ft:gpt-3.5-turbo-1106:personal:generateprompt:9qcfcS6N", temperature=0) # prompt version (以前のやつ)
-
+llm_demo = ChatOpenAI(model_name="ft:gpt-3.5-turbo-1106:personal:generateprompt:9qcfcS6N", temperature=0) # prompt version (以前のやつ)
 # プロンプトのテンプレート文章を定義
 template = """
         Here is what you know about the user.
@@ -103,6 +102,15 @@ template = """
         Predict and generate only sentences that describe the user's situation in as much detail as possible. (e.g., The user is doing XXX and has needs like XX)
         Also, add one most likely user request to the output.
 """
+# # Flagも返させるように追加
+# template = """
+#         Here is what you know about the user.
+#         [The current date and time is {time}, and The current user action state is {status}.]
+#         Predict and generate only sentences that describe the user's situation in as much detail as possible. (e.g., The user is doing XXX and has needs like XX)
+#         Also, add one most likely user request to the output.
+        
+#         Also, answer True if the user wants the Music Playback, and False otherwise.
+# """
 
 # llm = ChatOpenAI(model_name="ft:gpt-3.5-turbo-1106:personal:genpromptdetails:9r0E1Bvv", temperature=0) # より詳細なデータにしたバージョン
 # template = """
@@ -122,7 +130,85 @@ print(f"input: The current date and time is {time}, and The current user action 
 output_parser = StrOutputParser()
 
 # OpenAIのAPIにこのプロンプトを送信するためのチェーンを作成
-chain = prompt | llm | output_parser
+chain1 = prompt | llm_demo | output_parser
 
+# それぞれ単独で実行する場合
 # チェーンを実行し、結果を表示
-print(chain.invoke({"time": time, "status": status}))
+res = chain1.invoke({"time": time, "status": status})
+print(res)
+
+
+# 2024/8/2
+print("**********")
+# # response = chain.invoke({"time": time, "status": status})
+# # # 回答を解析してテキスト部分とフラグ部分を分離
+# lines = response.strip().split('\n')
+# reason = lines[0]  # 最初の行を理由として取得
+# flag_text = lines[-1].strip().lower()  # 最後の行をフラグとして取得
+
+# # # フラグをbool型に変換
+# # # is_positive = flag_text == "true"
+# is_positive = "true" in flag_text
+
+# print("lines[0]:", reason)
+# print("lines[-1]:", flag_text)
+# print("Playback:", is_positive)
+
+
+# カスタムchainでまとめる場合
+# from langchain.prompts import PromptTemplate
+# llm3p5t = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0) # 通常のモデル
+# prompt2 = PromptTemplate(
+#     input_variables=["text"],
+#     # template="このテキストが楽曲再生ならTrueのみを、そうでないならFalseのみを返して。{text}"
+#     # template="Return only True if this text is a song playback, otherwise return only False. {text}" # song playback
+#     template="Return only True if this text is a music playback, otherwise return only False. {text}" # music playback
+# )
+# # どっちでも適切に回答してくれる（Fine-Tuningしていないモデルの方が安いのでそっちを使う）
+# # chain2 = prompt2 | llm3p5t | output_parser
+# chain2 = prompt2 | llm_demo | output_parser
+# # is_playback = chain2.invoke(res) # f'{res}が楽曲再生ならTrueのみを、そうでないならFalseのみを返して。')
+# # print(is_playback)
+
+# from langchain.chains.base import Chain
+
+# class CustomChain(Chain):
+#     def __init__(self, chain1, chain2):
+#         self.chain1 = chain1
+#         self.chain2 = chain2
+    
+#     @property
+#     def input_keys(self):
+#         # チェーン1の入力キーを返す
+#         return ["text"]
+
+#     @property
+#     def output_keys(self):
+#         # チェーン2の出力キーを返す
+#         return ["output"]
+
+#     def _call(self, inputs):
+#         # チェーン1を実行
+#         response1 = self.chain1.invoke(inputs)
+        
+#         # # チェーン1の出力を解析して理由を抽出
+#         # lines = response1.strip().split('\n')
+#         # reason = lines[0]  # 最初の行を理由として取得
+        
+#         # # チェーン2を実行
+#         # response2 = self.chain2.invoke({"reason": reason})
+#         return response1
+#         # チェーン2を実行
+#         response2 = self.chain2.invoke({"text":response1}) # {"reason": reason})
+        
+#         # return response2
+#         return {"output": response2}
+
+# # カスタムチェーンを作成
+# custom_chain = CustomChain(chain1, chain2)
+
+# # テキストを入力として渡す
+# # response = custom_chain.run({"text": text})
+# final_response = custom_chain.invoke({"time": time, "status": status})
+
+# print("カスタムチェーンの出力:", final_response)

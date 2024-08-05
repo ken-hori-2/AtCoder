@@ -85,15 +85,46 @@ import os
 load_dotenv()
 client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
 
-res = client.files.create(
-  file=open("user_data.jsonl", "rb"),
-  purpose="fine-tune"
-)
 
-print( res.id )
+import openai
+import time
+# 全モデルの再学習
+def full_retraining(base_model, data):
+    # 全データで再学習（OpenAI APIの仕組み上、全モデルの再学習もファインチューニングとして扱います）
+    print("Full retraining with all data")
+    # OpenAIのファインチューニングエンドポイントを使用してモデルを再学習
+    response = openai.FineTune.create(
+        training_file=data['text'].to_list(),
+        model=base_model
+    )
+    fine_tune_id = response['id']
 
-res = client.fine_tuning.jobs.create(
-  training_file=res.id, # "file-xxxxxxxxxxxxxxxxxxxx", # ここに file ID をコピー
-  model="gpt-3.5-turbo"
-)
-print( res.id )
+    # ファインチューニングが完了するまで待機
+    while True:
+        status_response = openai.FineTune.retrieve(id=fine_tune_id)
+        if status_response['status'] == 'succeeded':
+            model = status_response['fine_tuned_model']
+            break
+        elif status_response['status'] == 'failed':
+            raise Exception("Fine-tuning failed")
+        time.sleep(60)  # 1分ごとにステータスを確認
+
+    return model
+
+# res = client.files.create(
+#   file=open("user_data.jsonl", "rb"),
+#   purpose="fine-tune"
+# )
+
+# print( res.id )
+
+# res = client.fine_tuning.jobs.create(
+#   training_file=res.id, # "file-xxxxxxxxxxxxxxxxxxxx", # ここに file ID をコピー
+#   model="gpt-3.5-turbo"
+# )
+# print( res.id )
+
+base_model = 'gpt-3.5-turbo'
+model = base_model
+model = full_retraining(base_model, data)
+# evaluate_model(model, test_dataset)
